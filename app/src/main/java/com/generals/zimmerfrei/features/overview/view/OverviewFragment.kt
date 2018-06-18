@@ -1,18 +1,32 @@
 package com.generals.zimmerfrei.features.overview.view
 
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.generals.zimmerfrei.R
+import com.generals.zimmerfrei.ZimmerFreiApplication
+import com.generals.zimmerfrei.features.overview.viewmodel.OverviewViewModel
 import com.generals.zimmerfrei.model.Day
 import kotlinx.android.synthetic.main.fragment_overview.*
-import java.text.SimpleDateFormat
-import java.util.*
+import javax.inject.Inject
 
 class OverviewFragment : Fragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var viewModel: OverviewViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let { ZimmerFreiApplication.applicationComponent(it).inject(this) }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -22,14 +36,13 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val calendarHaolder = Calendar.getInstance()
-        val numOfDays = calendarHaolder.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val dateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
-        val days: List<Day> = MutableList(numOfDays, { index: Int ->
-            calendarHaolder.set(Calendar.DAY_OF_MONTH, index)
-            Day(dateFormat.format(calendarHaolder.time))
+        viewModel.days.observe(this, android.arch.lifecycle.Observer { days: List<Day>? ->
+            days?.let { calendar.bind(days) }
         })
-        calendar.bind(days)
+
+        if(savedInstanceState == null) {
+            viewModel.start()
+        }
     }
 
 

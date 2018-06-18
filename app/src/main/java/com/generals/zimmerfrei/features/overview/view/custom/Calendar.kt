@@ -31,7 +31,7 @@ class Calendar : FrameLayout {
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context).inflate(R.layout.widget_calendar, this, true)
 
-        recyclerView = findViewById(R.id.recylcer_view)
+        recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 4)
     }
 

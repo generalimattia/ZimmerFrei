@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.generals.zimmerfrei.features.overview.usecase.OverviewUseCase
-import com.generals.zimmerfrei.model.Day
+import com.generals.overview.model.Day
 
 import javax.inject.Inject
 

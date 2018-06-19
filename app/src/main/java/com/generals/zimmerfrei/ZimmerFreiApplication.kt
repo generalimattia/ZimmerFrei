@@ -3,6 +3,7 @@ package com.generals.zimmerfrei
 import android.app.Application
 import android.content.Context
 import com.generals.zimmerfrei.inject.ApplicationComponent
+import com.generals.zimmerfrei.inject.ApplicationModule
 import com.generals.zimmerfrei.inject.DaggerApplicationComponent
 
 class ZimmerFreiApplication : Application() {
@@ -17,6 +18,7 @@ class ZimmerFreiApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        component = DaggerApplicationComponent.builder().build()
+        component = DaggerApplicationComponent.builder()
+                .applicationModule(ApplicationModule(this)).build()
     }
 }

@@ -3,7 +3,7 @@ package com.generals.zimmerfrei.features.overview.view.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.generals.zimmerfrei.features.overview.view.custom.DayView
-import com.generals.zimmerfrei.model.Day
+import com.generals.overview.model.Day
 
 class DaysAdapter(private val days: List<Day>) : RecyclerView.Adapter<DaysAdapter.DayViewHolder>() {
 

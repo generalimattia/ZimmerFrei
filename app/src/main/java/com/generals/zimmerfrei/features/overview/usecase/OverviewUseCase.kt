@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.features.overview.usecase
 
-import com.generals.zimmerfrei.model.Day
+import com.generals.overview.model.Day
 
 interface OverviewUseCase {
 

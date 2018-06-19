@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.model
+package com.generals.overview.model
 
 import java.util.*
 

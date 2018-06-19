@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.generals.zimmerfrei.R
-import com.generals.zimmerfrei.model.Day
+import com.generals.overview.model.Day
 
 class DayView : FrameLayout {
 

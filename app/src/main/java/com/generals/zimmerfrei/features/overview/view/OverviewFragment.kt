@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.generals.zimmerfrei.R
 import com.generals.zimmerfrei.ZimmerFreiApplication
 import com.generals.zimmerfrei.features.overview.viewmodel.OverviewViewModel
-import com.generals.zimmerfrei.model.Day
+import com.generals.overview.model.Day
 import kotlinx.android.synthetic.main.fragment_overview.*
 import javax.inject.Inject
 

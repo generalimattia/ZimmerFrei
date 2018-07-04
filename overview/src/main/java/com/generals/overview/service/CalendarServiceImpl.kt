@@ -17,7 +17,7 @@ class CalendarServiceImpl @Inject constructor() : CalendarService {
         return MutableList(numOfDays) { index: Int ->
             calendarHaolder.set(Calendar.DAY_OF_MONTH, index)
             val num: Int = index + 1
-            Day("""$num ${dayFormat.format(calendarHaolder.time).toUpperCase()}""")
+            Day("$num ${dayFormat.format(calendarHaolder.time).toUpperCase()}")
         }
     }
 }

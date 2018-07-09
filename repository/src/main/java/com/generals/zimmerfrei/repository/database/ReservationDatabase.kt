@@ -5,14 +5,17 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
-import com.generals.zimmerfrei.repository.dao.RoomReservationDAO
+import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
 import com.generals.zimmerfrei.repository.entities.Reservation
 import com.generals.zimmerfrei.repository.entities.ReservationsTypeConverters
 
 
-@Database(entities = [Reservation::class, Room::class], version = 1)
+@Database(
+    entities = [Reservation::class, com.generals.zimmerfrei.repository.entities.Room::class],
+    version = 1
+)
 @TypeConverters(ReservationsTypeConverters::class)
-abstract class ReservationDatabase : RoomDatabase() {
+internal abstract class ReservationDatabase : RoomDatabase() {
 
     abstract fun reservationDAO(): RoomReservationDAO
 

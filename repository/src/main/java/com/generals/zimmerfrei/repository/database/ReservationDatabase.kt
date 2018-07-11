@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
+import com.generals.zimmerfrei.repository.dao.room.RoomRoomDAO
 import com.generals.zimmerfrei.repository.entities.Reservation
 import com.generals.zimmerfrei.repository.entities.ReservationsTypeConverters
 
@@ -18,6 +19,8 @@ import com.generals.zimmerfrei.repository.entities.ReservationsTypeConverters
 internal abstract class ReservationDatabase : RoomDatabase() {
 
     abstract fun reservationDAO(): RoomReservationDAO
+
+    abstract fun roomDAO(): RoomRoomDAO
 
     companion object {
 

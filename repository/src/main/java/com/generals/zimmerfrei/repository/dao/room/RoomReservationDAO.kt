@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.repository.dao.room
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
@@ -12,7 +13,10 @@ interface RoomReservationDAO {
     fun insert(reservation: Reservation)
 
     @Query("SELECT * FROM reservations")
-    fun getAllReservations(): List<Reservation>
+    fun getAllReservations(): LiveData<List<Reservation>>
+
+    @Query("SELECT * FROM reservations WHERE roomId LIKE :roomId")
+    fun findReservationsByRoom(roomId: String): LiveData<List<Reservation>>
 
     @Query("DELETE FROM reservations")
     fun deleteAll()

@@ -29,7 +29,8 @@ class ReservationTest {
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getTargetContext()
-        database = Room.inMemoryDatabaseBuilder(context, ReservationDatabase::class.java).build()
+        database = Room.inMemoryDatabaseBuilder(context, ReservationDatabase::class.java)
+            .allowMainThreadQueries().build()
 
         reservationDAO = database.reservationDAO()
         roomDAO = database.roomDAO()
@@ -107,8 +108,7 @@ class ReservationTest {
 
         val reservationsBySecondRoom: LiveData<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoomAndDateBetweenStartDateAndEndDate(
-                "2",
-                OffsetDateTime.of(2018, 7, 12, 0, 0, 0, 0, ZoneOffset.UTC)
+                "2", OffsetDateTime.of(2018, 7, 12, 0, 0, 0, 0, ZoneOffset.UTC)
             )
 
         assertEquals(0, reservationsBySecondRoom.getValueImmediately().size)

@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.inject
 
+import com.generals.overview.inject.OverviewModule
 import com.generals.zimmerfrei.features.overview.OverviewBuilder
 import com.generals.zimmerfrei.features.overview.view.OverviewFragment
 import com.generals.zimmerfrei.repository.inject.DatabaseModule
@@ -8,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [ApplicationModule::class, ViewModelBuilder::class, OverviewBuilder::class, DatabaseModule::class]
+    modules = [ApplicationModule::class, ViewModelBuilder::class, OverviewBuilder::class, DatabaseModule::class, OverviewModule::class]
 )
 interface ApplicationComponent {
 

@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.features.overview.usecase
+package com.generals.overview.usecase
 
 import com.generals.overview.model.Day
 

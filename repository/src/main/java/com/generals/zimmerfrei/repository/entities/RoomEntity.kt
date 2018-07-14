@@ -4,6 +4,6 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "rooms")
-data class Room(
+data class RoomEntity(
     @PrimaryKey var name: String
 )

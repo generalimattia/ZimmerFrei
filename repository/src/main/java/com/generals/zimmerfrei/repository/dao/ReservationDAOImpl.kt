@@ -1,8 +1,8 @@
 package com.generals.zimmerfrei.repository.dao
 
-import android.arch.lifecycle.LiveData
 import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
+import io.reactivex.Flowable
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
@@ -14,17 +14,17 @@ class ReservationDAOImpl @Inject constructor(
         dao.insert(reservation)
     }
 
-    override fun getAllReservations(): LiveData<List<ReservationEntity>> = dao.getAllReservations()
+    override fun getAllReservations(): Flowable<List<ReservationEntity>> = dao.getAllReservations()
 
-    override fun findReservationsByRoom(roomId: String): LiveData<List<ReservationEntity>> =
+    override fun findReservationsByRoom(roomId: String): Flowable<List<ReservationEntity>> =
         dao.findReservationsByRoom(roomId)
 
-    override fun findReservationsByDate(date: OffsetDateTime): LiveData<List<ReservationEntity>> =
+    override fun findReservationsByDate(date: OffsetDateTime): Flowable<List<ReservationEntity>> =
         dao.findReservationsByDate(date)
 
     override fun findReservationsByRoomAndDateBetweenStartDateAndEndDate(
         roomId: String, date: OffsetDateTime
-    ): LiveData<List<ReservationEntity>> =
+    ): Flowable<List<ReservationEntity>> =
         dao.findReservationsByRoomAndDateBetweenStartDateAndEndDate(roomId, date)
 
     override fun deleteAll() {

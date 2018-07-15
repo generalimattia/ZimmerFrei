@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.repository
 
-import android.arch.lifecycle.LiveData
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -9,15 +9,15 @@ import com.generals.zimmerfrei.repository.dao.room.RoomRoomDAO
 import com.generals.zimmerfrei.repository.database.ReservationDatabase
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import com.generals.zimmerfrei.repository.entities.RoomEntity
-import junit.framework.Assert.assertEquals
+import io.reactivex.Flowable
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.ZoneOffset
 import java.io.IOException
-
 
 @RunWith(AndroidJUnit4::class)
 class ReservationTest {
@@ -25,6 +25,9 @@ class ReservationTest {
     private lateinit var database: ReservationDatabase
     private lateinit var reservationDAO: RoomReservationDAO
     private lateinit var roomDAO: RoomRoomDAO
+
+    @get:Rule
+    val executor = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
@@ -46,91 +49,121 @@ class ReservationTest {
     fun shouldFetchAllReservations() {
         populateDatabase()
 
-        val reservations: LiveData<List<ReservationEntity>> = reservationDAO.getAllReservations()
+        val reservations: Flowable<List<ReservationEntity>> = reservationDAO.getAllReservations()
 
-        assertEquals(3, reservations.getValueImmediately().size)
+        reservations.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 3
+        }
     }
 
     @Test
     fun shouldFetchAllRooms() {
         populateDatabase()
 
-        val rooms: LiveData<List<com.generals.zimmerfrei.repository.entities.RoomEntity>> =
-            roomDAO.getAllRooms()
+        val rooms: Flowable<List<RoomEntity>> = roomDAO.getAllRooms()
 
-        assertEquals(3, rooms.getValueImmediately().size)
+        rooms.test().assertValue { entities: List<RoomEntity> ->
+            entities.size == 3
+        }
     }
 
     @Test
     fun shouldFetchReservationsByRoomsAndDate() {
         populateDatabase()
 
-        val reservationsByFirstRoom: LiveData<List<ReservationEntity>> =
+        val reservationsByFirstRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("1")
-        assertEquals(2, reservationsByFirstRoom.getValueImmediately().size)
 
-        val reservationsBySecondRoom: LiveData<List<ReservationEntity>> =
+        reservationsByFirstRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 2
+        }
+
+        val reservationsBySecondRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("2")
-        assertEquals(1, reservationsBySecondRoom.getValueImmediately().size)
 
-        val reservationsByThirdRoom: LiveData<List<ReservationEntity>> =
+        reservationsBySecondRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 1
+        }
+
+        val reservationsByThirdRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("3")
-        assertEquals(0, reservationsByThirdRoom.getValueImmediately().size)
+
+        reservationsByThirdRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.isEmpty()
+        }
     }
 
     @Test
     fun shouldFetchReservationsByRooms() {
         populateDatabase()
 
-        val reservationsByFirstRoom: LiveData<List<ReservationEntity>> =
+        val reservationsByFirstRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("1")
-        assertEquals(2, reservationsByFirstRoom.getValueImmediately().size)
 
-        val reservationsBySecondRoom: LiveData<List<ReservationEntity>> =
+        reservationsByFirstRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 2
+        }
+
+        val reservationsBySecondRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("2")
-        assertEquals(1, reservationsBySecondRoom.getValueImmediately().size)
 
-        val reservationsByThirdRoom: LiveData<List<ReservationEntity>> =
+        reservationsBySecondRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 1
+        }
+
+        val reservationsByThirdRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoom("3")
-        assertEquals(0, reservationsByThirdRoom.getValueImmediately().size)
+
+        reservationsByThirdRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.isEmpty()
+        }
     }
 
     @Test
     fun shouldFetchReservationsByRoomAndDate() {
         populateDatabase()
 
-        val reservationsByFirstRoom: LiveData<List<ReservationEntity>> =
+        val reservationsByFirstRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoomAndDateBetweenStartDateAndEndDate(
                 "1", OffsetDateTime.of(2018, 7, 12, 0, 0, 0, 0, ZoneOffset.UTC)
             )
 
-        assertEquals(1, reservationsByFirstRoom.getValueImmediately().size)
+        reservationsByFirstRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 1
+        }
 
-        val reservationsBySecondRoom: LiveData<List<ReservationEntity>> =
+        val reservationsBySecondRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByRoomAndDateBetweenStartDateAndEndDate(
                 "2", OffsetDateTime.of(2018, 7, 12, 0, 0, 0, 0, ZoneOffset.UTC)
             )
 
-        assertEquals(0, reservationsBySecondRoom.getValueImmediately().size)
+        reservationsBySecondRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.isEmpty()
+        }
+
     }
 
     @Test
     fun shouldFetchReservationsByDate() {
         populateDatabase()
 
-        val reservationsByFirstRoom: LiveData<List<ReservationEntity>> =
+        val reservationsByFirstRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByDate(
                 OffsetDateTime.of(2018, 7, 12, 0, 0, 0, 0, ZoneOffset.UTC)
             )
 
-        assertEquals(1, reservationsByFirstRoom.getValueImmediately().size)
+        reservationsByFirstRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 1
+        }
 
-        val reservationsBySecondRoom: LiveData<List<ReservationEntity>> =
+        val reservationsBySecondRoom: Flowable<List<ReservationEntity>> =
             reservationDAO.findReservationsByDate(
                 OffsetDateTime.of(2018, 7, 21, 0, 0, 0, 0, ZoneOffset.UTC)
             )
 
-        assertEquals(2, reservationsBySecondRoom.getValueImmediately().size)
+        reservationsBySecondRoom.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 2
+        }
     }
 
     private fun populateDatabase() {

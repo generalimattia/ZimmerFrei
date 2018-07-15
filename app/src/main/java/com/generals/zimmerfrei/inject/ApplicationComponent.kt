@@ -1,9 +1,10 @@
 package com.generals.zimmerfrei.inject
 
-import com.generals.overview.inject.OverviewModule
-import com.generals.zimmerfrei.features.overview.OverviewBuilder
-import com.generals.zimmerfrei.features.overview.view.OverviewFragment
+import com.generals.zimmerfrei.overview.inject.OverviewModule
+import com.generals.zimmerfrei.overview.OverviewBuilder
+import com.generals.zimmerfrei.overview.view.OverviewFragment
 import com.generals.zimmerfrei.repository.inject.DatabaseModule
+import com.generals.zimmerfrei.common.inject.ViewModelBuilder
 import dagger.Component
 import javax.inject.Singleton
 

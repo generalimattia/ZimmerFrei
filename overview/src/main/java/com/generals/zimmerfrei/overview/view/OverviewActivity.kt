@@ -10,8 +10,10 @@ class OverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                                                          OverviewFragment.newInstance()
-        ).commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragment_container, OverviewFragment.newInstance()
+            )
+            .commitAllowingStateLoss()
     }
 }

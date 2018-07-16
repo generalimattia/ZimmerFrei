@@ -4,12 +4,19 @@ import com.generals.zimmerfrei.overview.service.calendar.CalendarService
 import com.generals.zimmerfrei.overview.service.calendar.CalendarServiceImpl
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationServiceImpl
+import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
+import com.generals.zimmerfrei.overview.usecase.OverviewUseCaseImpl
+import com.generals.zimmerfrei.overview.view.OverviewFragment
 import dagger.Binds
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import javax.inject.Singleton
 
 @Module
 abstract class OverviewModule {
+
+    @ContributesAndroidInjector
+    abstract fun bindOverviewFragmentInjectorFactory(): OverviewFragment
 
     @Binds
     @Singleton
@@ -17,4 +24,7 @@ abstract class OverviewModule {
 
     @Binds
     abstract fun bindReservationService(service: ReservationServiceImpl): ReservationService
+
+    @Binds
+    abstract fun bindOverviewUseCase(useCase: OverviewUseCaseImpl): OverviewUseCase
 }

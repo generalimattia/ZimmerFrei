@@ -1,24 +1,11 @@
 package com.generals.zimmerfrei
 
-import android.app.Application
-import android.content.Context
-import com.generals.zimmerfrei.inject.ApplicationComponent
-import com.generals.zimmerfrei.inject.ApplicationModule
 import com.generals.zimmerfrei.inject.DaggerApplicationComponent
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 
-class ZimmerFreiApplication : Application() {
+class ZimmerFreiApplication : DaggerApplication() {
 
-    lateinit var component: ApplicationComponent
-
-    companion object {
-
-        fun applicationComponent(context: Context): ApplicationComponent = (context.applicationContext as ZimmerFreiApplication).component
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
-        component = DaggerApplicationComponent.builder()
-                .applicationModule(ApplicationModule(this)).build()
-    }
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = DaggerApplicationComponent.builder()
+        .create(this)
 }

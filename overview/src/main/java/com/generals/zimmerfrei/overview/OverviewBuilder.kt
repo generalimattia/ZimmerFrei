@@ -19,9 +19,4 @@ abstract class OverviewBuilder {
     @ViewModelKey(OverviewViewModel::class)
     abstract fun bindOverviewViewModel(viewModel: OverviewViewModel): ViewModel
 
-    @Binds
-    abstract fun bindOverviewUseCase(useCase: OverviewUseCaseImpl): OverviewUseCase
-
-    @Binds
-    abstract fun bindCalendarService(service: CalendarServiceImpl): CalendarService
 }

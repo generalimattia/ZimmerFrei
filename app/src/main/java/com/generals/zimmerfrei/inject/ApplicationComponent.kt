@@ -4,7 +4,6 @@ import com.generals.zimmerfrei.ZimmerFreiApplication
 import com.generals.zimmerfrei.common.inject.ViewModelBuilder
 import com.generals.zimmerfrei.overview.OverviewBuilder
 import com.generals.zimmerfrei.overview.inject.OverviewModule
-import com.generals.zimmerfrei.repository.inject.DatabaseModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule

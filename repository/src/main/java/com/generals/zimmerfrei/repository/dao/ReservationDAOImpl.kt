@@ -1,18 +1,14 @@
 package com.generals.zimmerfrei.repository.dao
 
-import android.content.Context
 import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
-import com.generals.zimmerfrei.repository.database.ReservationDatabase
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import io.reactivex.Flowable
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
 class ReservationDAOImpl @Inject constructor(
-    context: Context
+    private val dao: RoomReservationDAO
 ) : ReservationDAO {
-
-    private val dao: RoomReservationDAO = ReservationDatabase.getDatabase(context).reservationDAO()
 
     override fun insert(reservation: ReservationEntity) {
         dao.insert(reservation)

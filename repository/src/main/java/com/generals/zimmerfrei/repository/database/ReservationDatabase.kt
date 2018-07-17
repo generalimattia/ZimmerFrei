@@ -16,7 +16,7 @@ import com.generals.zimmerfrei.repository.entities.ReservationsTypeConverters
     version = 1
 )
 @TypeConverters(ReservationsTypeConverters::class)
-internal abstract class ReservationDatabase : RoomDatabase() {
+abstract class ReservationDatabase : RoomDatabase() {
 
     abstract fun reservationDAO(): RoomReservationDAO
 

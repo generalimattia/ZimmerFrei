@@ -6,17 +6,22 @@ import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationServiceImpl
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCaseImpl
+import com.generals.zimmerfrei.overview.view.OverviewActivity
 import com.generals.zimmerfrei.overview.view.OverviewFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import javax.inject.Singleton
 
-@Module
+
+@Module(subcomponents = [OverviewFragmentSubcomponent::class])
 abstract class OverviewModule {
 
     @ContributesAndroidInjector
-    abstract fun bindOverviewFragmentInjectorFactory(): OverviewFragment
+    abstract fun contributeOverviewActivityInjector(): OverviewActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeOverviewFragmentInjector(): OverviewFragment
 
     @Binds
     @Singleton

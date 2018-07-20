@@ -14,7 +14,7 @@ import dagger.android.ContributesAndroidInjector
 import javax.inject.Singleton
 
 
-@Module(subcomponents = [OverviewFragmentSubcomponent::class])
+@Module
 abstract class OverviewModule {
 
     @ContributesAndroidInjector

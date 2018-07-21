@@ -1,10 +1,9 @@
 package com.generals.zimmerfrei.overview.usecase
 
-import android.arch.lifecycle.LiveData
-import com.generals.zimmerfrei.overview.model.Day
-import com.generals.zimmerfrei.overview.model.Reservation
+import com.generals.zimmerfrei.overview.model.DayWithReservations
+import io.reactivex.Observable
 
 interface OverviewUseCase {
 
-    fun loadCalendar(): LiveData<Pair<Day, List<Reservation>>>
+    fun loadCalendar(): Observable<DayWithReservations>
 }

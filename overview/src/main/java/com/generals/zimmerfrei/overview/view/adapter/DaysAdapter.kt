@@ -2,20 +2,22 @@ package com.generals.zimmerfrei.overview.view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.generals.zimmerfrei.overview.view.custom.DayView
 import com.generals.zimmerfrei.overview.model.Day
+import com.generals.zimmerfrei.overview.view.custom.DayView
 
-class DaysAdapter(private val days: List<Day>) : RecyclerView.Adapter<DaysAdapter.DayViewHolder>() {
+class DaysAdapter(
+    private val days: MutableList<Day>
+) : RecyclerView.Adapter<DaysAdapter.DayViewHolder>() {
 
     init {
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): DayViewHolder =
-        DayViewHolder(
-            DayView(parent.context)
-        )
+    override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): DayViewHolder = DayViewHolder(
+        DayView(parent.context)
+    )
 
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         holder.bind(days[position])
@@ -25,10 +27,14 @@ class DaysAdapter(private val days: List<Day>) : RecyclerView.Adapter<DaysAdapte
 
     override fun getItemId(position: Int): Long = days[position].hashCode().toLong()
 
-    class DayViewHolder(private val view: DayView) : RecyclerView.ViewHolder(
-            view) {
+    fun update(day: Day) {
+        days.add(day)
+        notifyDataSetChanged()
+    }
 
-
+    class DayViewHolder(
+        private val view: DayView
+    ) : RecyclerView.ViewHolder(view) {
         fun bind(day: Day) {
             view.bind(day)
         }

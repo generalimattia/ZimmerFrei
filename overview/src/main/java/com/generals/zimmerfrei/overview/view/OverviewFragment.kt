@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.overview.view
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -9,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.generals.zimmerfrei.overview.R
-import com.generals.zimmerfrei.overview.model.Day
+import com.generals.zimmerfrei.overview.model.DayWithReservations
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -41,8 +42,12 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.days.observe(this, android.arch.lifecycle.Observer { days: List<Day>? ->
-            days?.let { calendar.bind(days) }
+        calendar.bind(mutableListOf())
+
+        viewModel.days.observe(this, Observer { day: DayWithReservations? ->
+            day?.let {
+                calendar.update(it.day)
+            }
         })
 
         if (savedInstanceState == null) {

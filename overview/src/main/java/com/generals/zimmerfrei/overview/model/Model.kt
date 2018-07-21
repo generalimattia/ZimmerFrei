@@ -4,7 +4,9 @@ import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import org.threeten.bp.OffsetDateTime
 
 data class Day(
-    val title: String = "", val date: OffsetDateTime = OffsetDateTime.now()
+    val title: String = "",
+    val date: OffsetDateTime = OffsetDateTime.now(),
+    val monthDays: Int = 0
 )
 
 data class Reservation(
@@ -31,5 +33,9 @@ data class Room(
 )
 
 data class DayWithReservations(
-    val day: Day = Day(), val reservations: List<Reservation> = emptyList()
-)
+    val day: Day = Day(),
+    val reservations: List<Reservation> = emptyList()
+): Comparable<DayWithReservations> {
+
+    override fun compareTo(other: DayWithReservations): Int = this.day.date.compareTo(other.day.date)
+}

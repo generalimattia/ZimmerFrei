@@ -5,6 +5,8 @@ import io.reactivex.Observable
 
 interface CalendarService {
 
+    fun monthDays(): Int
+
     fun loadCalendar(): Observable<Day>
 
 }

@@ -8,6 +8,7 @@ import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 class OverviewUseCaseImpl @Inject constructor(
@@ -17,7 +18,7 @@ class OverviewUseCaseImpl @Inject constructor(
     override fun loadCalendar(): Observable<DayWithReservations> =
         Observable.create { emitter: ObservableEmitter<DayWithReservations> ->
 
-            var count = 0
+            val countDownLatch = CountDownLatch(calendarService.monthDays())
 
             calendarService.loadCalendar()
                 .subscribeOn(Schedulers.computation())
@@ -35,14 +36,16 @@ class OverviewUseCaseImpl @Inject constructor(
                                     emitter.onNext(
                                         DayWithReservations(day, it)
                                     )
+                                }
 
-                                    count += 1
-                                    if (count == day.monthDays) {
-                                        emitter.onComplete()
-                                    }
+                                countDownLatch.countDown()
+
+                                if (countDownLatch.count == 0.toLong()) {
+                                    emitter.onComplete()
                                 }
                             }
                     }
                 }
+
         }.sorted()
 }

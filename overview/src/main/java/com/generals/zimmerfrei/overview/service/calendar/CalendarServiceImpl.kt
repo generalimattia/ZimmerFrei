@@ -16,6 +16,12 @@ class CalendarServiceImpl @Inject constructor() : CalendarService {
         private const val DAY_NAME_PATTERN = "E"
     }
 
+    override fun monthDays(): Int {
+        val currentDate: LocalDate = LocalDate.now()
+        val currentMoth = currentDate.month
+        return currentMoth.length(currentDate.isLeapYear)
+    }
+
     override fun loadCalendar(): Observable<Day> {
         val currentDate: LocalDate = LocalDate.now()
         val currentMoth = currentDate.month

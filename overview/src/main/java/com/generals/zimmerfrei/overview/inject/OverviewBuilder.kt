@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.overview
+package com.generals.zimmerfrei.overview.inject
 
 import android.arch.lifecycle.ViewModel
 import com.generals.zimmerfrei.inject.ViewModelKey

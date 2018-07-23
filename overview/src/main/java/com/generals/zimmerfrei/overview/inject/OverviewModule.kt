@@ -13,7 +13,6 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import javax.inject.Singleton
 
-
 @Module
 abstract class OverviewModule {
 

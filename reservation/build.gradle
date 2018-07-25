@@ -29,8 +29,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(path: ':repository')
+    implementation project(path: ':repository')
     implementation project(path: ':common')
+    implementation project(path: ':model')
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'

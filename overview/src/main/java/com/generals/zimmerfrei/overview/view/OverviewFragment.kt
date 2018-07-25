@@ -9,8 +9,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.generals.zimmerfrei.model.DayWithReservations
 import com.generals.zimmerfrei.overview.R
-import com.generals.zimmerfrei.overview.model.DayWithReservations
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -52,6 +52,12 @@ class OverviewFragment : Fragment() {
 
         if (savedInstanceState == null) {
             viewModel.start()
+        }
+
+        add_fab.setOnClickListener {
+            activity?.let {
+                viewModel.onFABClick(it)
+            }
         }
     }
 

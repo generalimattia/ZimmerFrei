@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.overview.service.calendar
 
-import com.generals.zimmerfrei.overview.model.Day
+import com.generals.zimmerfrei.model.Day
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import org.threeten.bp.LocalDate

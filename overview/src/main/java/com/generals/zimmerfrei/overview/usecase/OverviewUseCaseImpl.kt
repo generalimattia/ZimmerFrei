@@ -1,8 +1,8 @@
 package com.generals.zimmerfrei.overview.usecase
 
-import com.generals.zimmerfrei.overview.model.Day
-import com.generals.zimmerfrei.overview.model.DayWithReservations
-import com.generals.zimmerfrei.overview.model.Reservation
+import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.DayWithReservations
+import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.overview.service.calendar.CalendarService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import io.reactivex.Observable

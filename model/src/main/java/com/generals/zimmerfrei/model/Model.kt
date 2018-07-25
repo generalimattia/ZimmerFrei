@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.overview.model
+package com.generals.zimmerfrei.model
 
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import org.threeten.bp.OffsetDateTime

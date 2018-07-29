@@ -7,6 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+    android:orientation="vertical"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:listitem="@layout/widget_room_day"
-    tools:spanCount="4"/>
+    />

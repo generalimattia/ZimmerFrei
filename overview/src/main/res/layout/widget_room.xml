@@ -3,20 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="70dp"
-    android:layout_height="23dp"
+    android:layout_height="70dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:background="@drawable/background_shape"
     android:padding="2dp">
 
     <TextView
-        android:id="@+id/day"
-        android:layout_width="match_parent"
+        android:id="@+id/room"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:gravity="center_horizontal"
-        android:textColor="@android:color/white"
-        android:text="Mercoledì"
-        tools:text="Mercoledì"/>
+        android:layout_gravity="center"
+        android:text="Camera 1"
+        android:textColor="@android:color/black"
+        tools:text="Camera 1"/>
 
 </FrameLayout>

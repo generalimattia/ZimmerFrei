@@ -1,7 +1,6 @@
 package com.generals.zimmerfrei.overview.view.custom
 
 import android.content.Context
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
@@ -10,7 +9,6 @@ import android.widget.FrameLayout
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.RoomsDaysAdapter
-import com.generals.zimmerfrei.overview.view.divider.CellDividerItemDecoration
 import com.generals.zimmerfrei.overview.view.layout.NotScrollableLayoutManager
 
 class SingleRoomPlan : FrameLayout {

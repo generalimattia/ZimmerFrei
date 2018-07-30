@@ -8,11 +8,11 @@ import android.widget.FrameLayout
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.AllRoomsAdapter
-import com.generals.zimmerfrei.overview.view.adapter.TimeAdapter
+import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 
 class AllRoomsPlan : FrameLayout {
 
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -36,8 +36,7 @@ class AllRoomsPlan : FrameLayout {
 
     }
 
-    fun bind(days: MutableList<Day>, onScrollListener: RecyclerView.OnScrollListener) {
-        recyclerView.addOnScrollListener(onScrollListener)
-        recyclerView.adapter = AllRoomsAdapter(days)
+    fun bind(days: MutableList<Day>, syncScroller: SyncScroller) {
+        recyclerView.adapter = AllRoomsAdapter(days, syncScroller)
     }
 }

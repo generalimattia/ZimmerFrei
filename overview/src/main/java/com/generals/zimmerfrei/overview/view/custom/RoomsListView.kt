@@ -1,20 +1,23 @@
 package com.generals.zimmerfrei.overview.view.custom
 
 import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.MotionEvent
+import android.view.View
 import android.widget.FrameLayout
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
-import com.generals.zimmerfrei.overview.view.adapter.TimeAdapter
-import com.generals.zimmerfrei.overview.view.layout.SyncScroller
+import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter
+import com.generals.zimmerfrei.overview.view.adapter.RoomsAdapter
+import com.generals.zimmerfrei.overview.view.adapter.RoomsDaysAdapter
+import com.generals.zimmerfrei.overview.view.layout.NotScrollableLayoutManager
 
-class TimePlan : FrameLayout {
+class RoomsListView : FrameLayout {
 
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -32,17 +35,13 @@ class TimePlan : FrameLayout {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(R.layout.widget_time_plan, this, true)
-
-        layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+            .inflate(R.layout.widget_rooms_list, this, true)
 
         recyclerView = findViewById(R.id.recycler_view)
 
     }
 
-    fun bind(days: MutableList<Day>, syncScroller: SyncScroller) {
-        syncScroller.bindSecond(recyclerView)
-            .sync()
-        recyclerView.adapter = TimeAdapter(days)
+    fun bind(days: MutableList<Day>) {
+        recyclerView.adapter = RoomsAdapter(days)
     }
 }

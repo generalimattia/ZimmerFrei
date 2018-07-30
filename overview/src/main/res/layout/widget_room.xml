@@ -2,8 +2,8 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="70dp"
-    android:layout_height="70dp"
+    android:layout_width="@dimen/row_height"
+    android:layout_height="@dimen/row_height"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"

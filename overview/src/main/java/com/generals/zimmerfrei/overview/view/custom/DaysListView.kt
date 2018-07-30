@@ -43,17 +43,6 @@ class DaysListView : FrameLayout {
     }
 
     fun bind(days: MutableList<Day>) {
-        recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener{
-            override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
-                return true
-            }
-
-            override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
-            }
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-            }
-        })
         recyclerView.adapter = DaysAdapter(days)
     }
 }

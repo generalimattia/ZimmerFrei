@@ -4,9 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.view.custom.TimePlan
+import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 
 class AllRoomsAdapter(
-    private val days: MutableList<Day>
+    private val days: MutableList<Day>,
+    private val syncScroller: SyncScroller
 ) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
 
     init {
@@ -20,7 +22,7 @@ class AllRoomsAdapter(
     )
 
     override fun onBindViewHolder(holder: AllRoomsViewHolder, position: Int) {
-        holder.bind(days)
+        holder.bind(days, syncScroller)
     }
 
     override fun getItemCount(): Int = 1
@@ -31,8 +33,8 @@ class AllRoomsAdapter(
         private val view: TimePlan
     ) : RecyclerView.ViewHolder(view) {
 
-        fun bind(days: MutableList<Day>) {
-            view.bind(days)
+        fun bind(days: MutableList<Day>, syncScroller: SyncScroller) {
+            view.bind(days, syncScroller)
         }
     }
 }

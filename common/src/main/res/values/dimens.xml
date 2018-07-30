@@ -5,4 +5,5 @@
     <dimen name="material_eight">64dp</dimen>
     <dimen name="elevation">4dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="row_height">70dp</dimen>
 </resources>

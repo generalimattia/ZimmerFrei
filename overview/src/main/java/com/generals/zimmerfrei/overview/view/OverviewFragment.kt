@@ -5,12 +5,12 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
+import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_time_plan.*
@@ -56,13 +56,16 @@ class OverviewFragment : Fragment() {
 
         val days = MutableList(20) { _: Int -> Day() }
 
-        plan.bind(days, object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                days_list_view.recyclerView.scrollBy(dx, dy)
-            }
-        })
+        SyncScroller().bindFirst(days_list_view.recyclerView)
+            .bindSecond(plan.recyclerView)
+            .sync()
+
+        val syncScroller = SyncScroller().bindFirst(rooms_list_view.recyclerView)
+
+        plan.bind(days, syncScroller)
         days_list_view.bind(days)
+
+        rooms_list_view.bind(days)
 
         add_fab.setOnClickListener {
             activity?.let {

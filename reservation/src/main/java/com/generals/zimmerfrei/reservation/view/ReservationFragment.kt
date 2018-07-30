@@ -54,11 +54,11 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        start_date_input_layout.setOnClickListener {
+        start_date.setOnClickListener {
             startDatePickerDialog.show()
         }
 
-        end_date_input_layout.setOnClickListener {
+        end_date.setOnClickListener {
             endDatePickerDialog.show()
         }
 

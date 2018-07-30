@@ -14,33 +14,20 @@ class TimeAdapter(
         setHasStableIds(true)
     }
 
-    companion object {
-        private const val DAY = 0
-        private const val ROOM = 1
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): RecyclerView.ViewHolder = if (viewType == DAY) {
-        DaysViewHolder(DaysListView(parent.context))
-    } else {
+    ): RecyclerView.ViewHolder =
         SingleRoomViewHolder(SingleRoomPlan(parent.context))
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SingleRoomViewHolder) {
             holder.bind(days)
-        } else if (holder is DaysViewHolder) {
-            holder.bind(days)
         }
     }
 
-    override fun getItemCount(): Int = days.size + 1
+    override fun getItemCount(): Int = days.size
 
-    override fun getItemId(position: Int): Long =
-        if (position > 0) days[position - 1].hashCode().toLong() else DAY.toLong()
-
-    override fun getItemViewType(position: Int): Int = if (position > 0) ROOM else DAY
+    override fun getItemId(position: Int): Long = days[position].hashCode().toLong()
 
     class DaysViewHolder(
         private val view: DaysListView

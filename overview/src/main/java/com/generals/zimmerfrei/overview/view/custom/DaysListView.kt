@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.widget.FrameLayout
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
@@ -14,7 +16,7 @@ import com.generals.zimmerfrei.overview.view.layout.NotScrollableLayoutManager
 
 class DaysListView : FrameLayout {
 
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -36,11 +38,22 @@ class DaysListView : FrameLayout {
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager =
-                NotScrollableLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
     }
 
     fun bind(days: MutableList<Day>) {
+        recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener{
+            override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
+                return true
+            }
+
+            override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+            }
+        })
         recyclerView.adapter = DaysAdapter(days)
     }
 }

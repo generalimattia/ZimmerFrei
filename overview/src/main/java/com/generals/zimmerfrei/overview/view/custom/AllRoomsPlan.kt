@@ -36,7 +36,8 @@ class AllRoomsPlan : FrameLayout {
 
     }
 
-    fun bind(days: MutableList<Day>) {
+    fun bind(days: MutableList<Day>, onScrollListener: RecyclerView.OnScrollListener) {
+        recyclerView.addOnScrollListener(onScrollListener)
         recyclerView.adapter = AllRoomsAdapter(days)
     }
 }

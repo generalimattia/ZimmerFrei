@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.overview.view
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
@@ -48,11 +50,14 @@ class OverviewFragment : Fragment() {
             day?.let {
                 calendar.update(it.day)
             }
-        })
+        })*/
 
-        if (savedInstanceState == null) {
-            viewModel.start()
-        }*/
+        viewModel.rooms.observe(this, Observer { rooms: List<Room>? ->
+            rooms?.let {
+                //rooms_list_view.bind(it)
+                rooms_list_view.bind(List(30) { index: Int -> Room("Camera $index") })
+            }
+        })
 
         val days = MutableList(20) { _: Int -> Day() }
 
@@ -65,12 +70,16 @@ class OverviewFragment : Fragment() {
         plan.bind(days, syncScroller)
         days_list_view.bind(days)
 
-        rooms_list_view.bind(days)
+
 
         add_fab.setOnClickListener {
             activity?.let {
                 viewModel.onFABClick(it)
             }
+        }
+
+        if (savedInstanceState == null) {
+            viewModel.start()
         }
     }
 

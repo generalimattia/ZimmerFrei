@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/row_height"
     android:layout_height="@dimen/row_height"
+    android:background="@drawable/background_shape"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:background="@drawable/background_shape"
     android:padding="2dp">
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Camera 1"
+        android:gravity="center"
         android:textColor="@android:color/black"
         tools:text="Camera 1"/>
 

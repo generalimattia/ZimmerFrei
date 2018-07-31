@@ -7,5 +7,5 @@ interface RoomDAO {
 
     fun insert(rooms: List<RoomEntity>)
 
-    fun getAllReservations(): Flowable<List<RoomEntity>>
+    fun getAllRooms(): Flowable<List<RoomEntity>>
 }

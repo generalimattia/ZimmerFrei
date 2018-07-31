@@ -1,12 +1,11 @@
 package com.generals.zimmerfrei.model
 
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
+import com.generals.zimmerfrei.repository.entities.RoomEntity
 import org.threeten.bp.OffsetDateTime
 
 data class Day(
-    val title: String = "",
-    val date: OffsetDateTime = OffsetDateTime.now(),
-    val monthDays: Int = 0
+    val title: String = "", val date: OffsetDateTime = OffsetDateTime.now(), val monthDays: Int = 0
 )
 
 data class Reservation(
@@ -30,12 +29,17 @@ data class Reservation(
 
 data class Room(
     val name: String = ""
-)
+) {
+
+    constructor(entity: RoomEntity) : this(
+        name = entity.name
+    )
+}
 
 data class DayWithReservations(
-    val day: Day = Day(),
-    val reservations: List<Reservation> = emptyList()
-): Comparable<DayWithReservations> {
+    val day: Day = Day(), val reservations: List<Reservation> = emptyList()
+) : Comparable<DayWithReservations> {
 
-    override fun compareTo(other: DayWithReservations): Int = this.day.date.compareTo(other.day.date)
+    override fun compareTo(other: DayWithReservations): Int =
+        this.day.date.compareTo(other.day.date)
 }

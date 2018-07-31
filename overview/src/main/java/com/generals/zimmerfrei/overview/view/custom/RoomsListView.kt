@@ -1,19 +1,13 @@
 package com.generals.zimmerfrei.overview.view.custom
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.overview.R
-import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter
 import com.generals.zimmerfrei.overview.view.adapter.RoomsAdapter
-import com.generals.zimmerfrei.overview.view.adapter.RoomsDaysAdapter
-import com.generals.zimmerfrei.overview.view.layout.NotScrollableLayoutManager
 
 class RoomsListView : FrameLayout {
 
@@ -41,7 +35,7 @@ class RoomsListView : FrameLayout {
 
     }
 
-    fun bind(days: MutableList<Day>) {
-        recyclerView.adapter = RoomsAdapter(days)
+    fun bind(rooms: List<Room>) {
+        recyclerView.adapter = RoomsAdapter(rooms)
     }
 }

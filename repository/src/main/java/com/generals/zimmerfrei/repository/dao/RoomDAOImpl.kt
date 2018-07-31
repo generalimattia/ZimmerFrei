@@ -13,5 +13,5 @@ class RoomDAOImpl @Inject constructor(
         dao.insert(rooms)
     }
 
-    override fun getAllReservations(): Flowable<List<RoomEntity>> = dao.getAllRooms()
+    override fun getAllRooms(): Flowable<List<RoomEntity>> = dao.getAllRooms()
 }

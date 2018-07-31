@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.overview.R
 
 class RoomView : FrameLayout {
@@ -33,7 +33,7 @@ class RoomView : FrameLayout {
         room = findViewById(R.id.room)
     }
 
-    fun bind(day: Day) {
-        this.room.text = day.title
+    fun bind(room: Room) {
+        this.room.text = room.name
     }
 }

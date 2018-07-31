@@ -1,20 +1,23 @@
 package com.generals.zimmerfrei.reservation.view
 
 import android.app.DatePickerDialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-
+import android.widget.TextView
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_reservation.*
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class ReservationFragment : Fragment() {
@@ -24,16 +27,20 @@ class ReservationFragment : Fragment() {
 
     private lateinit var viewModel: ReservationViewModel
 
+    private val currentDate: LocalDate = LocalDate.now()
+
     private val startDatePickerDialog: DatePickerDialog by lazy {
         DatePickerDialog(context, { _: DatePicker, year: Int, month: Int, day: Int ->
             viewModel.setStartDate(year, month, day)
-        }, 0, 0, 0)
+            start_date.setText("$day/$month/$year", TextView.BufferType.NORMAL)
+        }, currentDate.year, currentDate.month.value - 1, currentDate.dayOfMonth)
     }
 
     private val endDatePickerDialog: DatePickerDialog by lazy {
         DatePickerDialog(context, { _: DatePicker, year: Int, month: Int, day: Int ->
             viewModel.setEndDate(year, month, day)
-        }, 0, 0, 0)
+            end_date.setText("$day/$month/$year", TextView.BufferType.NORMAL)
+        }, currentDate.year, currentDate.month.value - 1, currentDate.dayOfMonth)
     }
 
     override fun onAttach(context: Context?) {
@@ -54,6 +61,12 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.color.observe(this, Observer { color: String? ->
+            color?.let {
+                color_view.setBackgroundColor(Color.parseColor(it))
+            }
+        })
+
         start_date.setOnClickListener {
             startDatePickerDialog.show()
         }
@@ -62,8 +75,16 @@ class ReservationFragment : Fragment() {
             endDatePickerDialog.show()
         }
 
+        color_container.setOnClickListener {
+            viewModel.generateNewColor()
+        }
+
         submit.setOnClickListener {
             viewModel.submit()
+        }
+
+        if (savedInstanceState == null) {
+            viewModel.start()
         }
     }
 

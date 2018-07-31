@@ -64,4 +64,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     testImplementation "android.arch.core:core-testing:$lifecycle_version"
     kapt "android.arch.lifecycle:compiler:$lifecycle_version"
+
+    implementation 'org.threeten:threetenbp:1.3.6'
 }

@@ -72,21 +72,60 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/person_count_input_layout"
-        android:layout_width="match_parent"
+        android:id="@+id/adult_count_input_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/material_double"
-        android:layout_marginStart="@dimen/material_double"
         android:layout_marginTop="@dimen/material_quad"
-        app:layout_constraintEnd_toEndOf="@id/name_input_layout"
+        app:layout_constraintEnd_toStartOf="@id/children_count_input_layout"
         app:layout_constraintStart_toStartOf="@id/name_input_layout"
         app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/person_count"
+            android:id="@+id/adult_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/person_count"/>
+            android:hint="@string/person_count"
+            android:inputType="number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/children_count_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/material_double"
+        android:layout_marginStart="@dimen/material_double"
+        android:layout_marginTop="@dimen/material_quad"
+        app:layout_constraintEnd_toStartOf="@id/babies_count_input_layout"
+        app:layout_constraintStart_toEndOf="@id/adult_count_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/name_input_layout">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/children_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/children_count"
+            android:inputType="number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/babies_count_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/material_double"
+        android:layout_marginTop="@dimen/material_quad"
+        app:layout_constraintEnd_toEndOf="@id/name_input_layout"
+        app:layout_constraintStart_toEndOf="@id/children_count_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/name_input_layout">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/babies_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/babies_count"
+            android:inputType="number"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -99,7 +138,7 @@
         android:layout_marginTop="@dimen/material_quad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/name_input_layout"
-        app:layout_constraintTop_toBottomOf="@id/person_count_input_layout">
+        app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/room"
@@ -109,11 +148,40 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/color_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_quad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/room_input_layout"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/material_double"
+        android:background="@drawable/background_shape">
+
+        <View
+            android:id="@+id/color_view"
+            android:layout_width="@dimen/material_quad"
+            android:layout_height="@dimen/material_quad"
+            tools:background="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_double"
+            android:text="@string/change"
+            app:layout_constraintBottom_toBottomOf="@id/color_view"
+            app:layout_constraintStart_toEndOf="@id/color_view"
+            app:layout_constraintTop_toTopOf="@id/color_view"/>
+
+    </android.support.constraint.ConstraintLayout>
+
     <Button
         android:id="@+id/submit"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginBottom="@dimen/material_double"
         android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"

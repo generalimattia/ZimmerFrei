@@ -5,44 +5,75 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.widget.FrameLayout
+import com.generals.zimmerfrei.common.custom.EndlessRecyclerViewScrollListener
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter
-import com.generals.zimmerfrei.overview.view.adapter.RoomsDaysAdapter
-import com.generals.zimmerfrei.overview.view.layout.NotScrollableLayoutManager
 
 class DaysListView : FrameLayout {
 
     lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
-        init(null, 0)
+        init(
+            null,
+            0
+        )
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
+    constructor(context: Context, attrs: AttributeSet) : super(
+        context,
+        attrs
+    ) {
+        init(
+            attrs,
+            0
+        )
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context, attrs, defStyle
+        context,
+        attrs,
+        defStyle
     ) {
-        init(attrs, defStyle)
+        init(
+            attrs,
+            defStyle
+        )
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(R.layout.widget_days_list, this, true)
+            .inflate(
+                R.layout.widget_days_list,
+                this,
+                true
+            )
 
         recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        recyclerView.layoutManager = layoutManager
 
     }
 
-    fun bind(days: MutableList<Day>) {
+    fun bind(days: List<Day>, loadMoreDays: () -> Unit) {
+
+        val scrollListener: EndlessRecyclerViewScrollListener = object :
+            EndlessRecyclerViewScrollListener(recyclerView.layoutManager as LinearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                loadMoreDays()
+            }
+        }
+        recyclerView.addOnScrollListener(scrollListener)
         recyclerView.adapter = DaysAdapter(days)
+    }
+
+    fun moreDays(days: List<Day>) {
+        (recyclerView.adapter as DaysAdapter).moreDays(days)
     }
 }

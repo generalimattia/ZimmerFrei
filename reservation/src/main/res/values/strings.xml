@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nome</string>
-    <string name="person_count">N° Persone</string>
+    <string name="adult_count">N° Adulti</string>
     <string name="children_count">N° Bambini</string>
     <string name="babies_count">N° Neonati</string>
     <string name="room">Camera</string>

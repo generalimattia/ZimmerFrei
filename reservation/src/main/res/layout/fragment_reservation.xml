@@ -85,7 +85,7 @@
             android:id="@+id/adult_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/person_count"
+            android:hint="@string/adult_count"
             android:inputType="number"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -153,12 +153,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_quad"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/room_input_layout"
+        android:background="@drawable/background_shape"
         android:foreground="?attr/selectableItemBackground"
         android:padding="@dimen/material_double"
-        android:background="@drawable/background_shape">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/room_input_layout">
 
         <View
             android:id="@+id/color_view"

@@ -37,12 +37,15 @@ class TimePlan : FrameLayout {
         layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
 
         recyclerView = findViewById(R.id.recycler_view)
-
     }
 
-    fun bind(days: MutableList<Day>, syncScroller: SyncScroller) {
+    fun bind(days: List<Day>, syncScroller: SyncScroller) {
         syncScroller.bindSecond(recyclerView)
             .sync()
         recyclerView.adapter = TimeAdapter(days)
+    }
+
+    fun moreDays(days: List<Day>) {
+        (recyclerView.adapter as TimeAdapter).moreDays(days)
     }
 }

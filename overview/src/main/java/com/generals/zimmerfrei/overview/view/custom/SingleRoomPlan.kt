@@ -16,30 +16,55 @@ class SingleRoomPlan : FrameLayout {
     private lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
-        init(null, 0)
+        init(
+            null,
+            0
+        )
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
+    constructor(context: Context, attrs: AttributeSet) : super(
+        context,
+        attrs
+    ) {
+        init(
+            attrs,
+            0
+        )
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context, attrs, defStyle
+        context,
+        attrs,
+        defStyle
     ) {
-        init(attrs, defStyle)
+        init(
+            attrs,
+            defStyle
+        )
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(R.layout.widget_single_room_plan, this, true)
+            .inflate(
+                R.layout.widget_single_room_plan,
+                this,
+                true
+            )
 
         recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager =
-                NotScrollableLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = NotScrollableLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
 
     }
 
-    fun bind(days: MutableList<Day>) {
+    fun bind(days: List<Day>) {
         recyclerView.adapter = RoomsDaysAdapter(days)
+    }
+
+    fun moreDays(days: List<Day>) {
+        (recyclerView.adapter as RoomsDaysAdapter).moreDays(days)
     }
 }

@@ -7,8 +7,10 @@ import com.generals.zimmerfrei.overview.view.custom.DayView
 import com.generals.zimmerfrei.overview.view.custom.EmptyView
 
 class DaysAdapter(
-    private val days: MutableList<Day>
+    days: List<Day>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val _days: MutableList<Day> = days.toMutableList()
 
     init {
         setHasStableIds(true)
@@ -28,17 +30,22 @@ class DaysAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        /*if (holder is DayViewHolder) {
-            holder.bind(days[position - 1])
-        }*/
+        if (holder is DayViewHolder) {
+            holder.bind(_days[position - 1])
+        }
     }
 
-    override fun getItemCount(): Int = days.size + 1
+    override fun getItemCount(): Int = _days.size + 1
 
     override fun getItemId(position: Int): Long =
-        if (position > 0) days[position - 1].hashCode().toLong() else EMPTY.toLong()
+        if (position > 0) _days[position - 1].hashCode().toLong() else EMPTY.toLong()
 
     override fun getItemViewType(position: Int): Int = if (position == 0) EMPTY else DAY
+
+    fun moreDays(moreDays: List<Day>) {
+        _days.addAll(moreDays)
+        notifyDataSetChanged()
+    }
 
     class EmptyViewHolder(
         view: EmptyView

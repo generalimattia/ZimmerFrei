@@ -51,8 +51,4 @@ class Calendar : FrameLayout {
     fun bind(days: MutableList<Day>) {
         recyclerView.adapter = RoomsDaysAdapter(days)
     }
-
-    fun update(day: Day) {
-        (recyclerView.adapter as RoomsDaysAdapter).update(day)
-    }
 }

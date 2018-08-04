@@ -32,14 +32,19 @@ class OverviewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        viewModel = ViewModelProviders.of(
+            this,
+            viewModelFactory
+        )
             .get(OverviewViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(
-        R.layout.fragment_time_plan, container, false
+        R.layout.fragment_time_plan,
+        container,
+        false
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,14 +57,37 @@ class OverviewFragment : Fragment() {
             }
         })*/
 
-        viewModel.rooms.observe(this, Observer { rooms: List<Room>? ->
-            rooms?.let {
-                //rooms_list_view.bind(it)
-                rooms_list_view.bind(List(30) { index: Int -> Room("Camera $index") })
-            }
-        })
+        viewModel.rooms.observe(this,
+                                Observer { rooms: List<Room>? ->
+                                    rooms?.let {
+                                        //rooms_list_view.bind(it)
+                                        rooms_list_view.bind(List(30) { index: Int -> Room("Camera $index") })
+                                    }
+                                })
 
-        val days = MutableList(20) { _: Int -> Day() }
+        viewModel.days.observe(this,
+                               Observer { days: List<Day>? ->
+                                   days?.let {
+                                       days_list_view.bind(it) { viewModel.loadMoreDays() }
+                                   }
+                               })
+
+        viewModel.month.observe(this,
+                                Observer { month: String? ->
+                                    month?.let {
+                                        month_and_year.text = it.capitalize()
+                                    }
+                                })
+
+        viewModel.moreDays.observe(this,
+                               Observer { days: List<Day>? ->
+                                   days?.let {
+                                       days_list_view.moreDays(it)
+                                       plan.moreDays(it)
+                                   }
+                               })
+
+        val days = MutableList(31) { _: Int -> Day() }
 
         SyncScroller().bindFirst(days_list_view.recyclerView)
             .bindSecond(plan.recyclerView)
@@ -67,10 +95,10 @@ class OverviewFragment : Fragment() {
 
         val syncScroller = SyncScroller().bindFirst(rooms_list_view.recyclerView)
 
-        plan.bind(days, syncScroller)
-        days_list_view.bind(days)
-
-
+        plan.bind(
+            days,
+            syncScroller
+        )
 
         add_fab.setOnClickListener {
             activity?.let {

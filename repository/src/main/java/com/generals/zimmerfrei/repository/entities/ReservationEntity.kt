@@ -15,8 +15,11 @@ data class ReservationEntity(
     var name: String = "",
     var startDate: OffsetDateTime = OffsetDateTime.now(),
     var endDate: OffsetDateTime = OffsetDateTime.now(),
-    var personCount: Int = 3,
-    var roomId: String = ""
+    var adults: Int = 0,
+    var children: Int = 0,
+    var babies: Int = 0,
+    var roomId: String = "",
+    var color: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

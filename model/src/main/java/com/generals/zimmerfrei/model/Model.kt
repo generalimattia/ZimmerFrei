@@ -13,7 +13,10 @@ data class Reservation(
     val name: String = "",
     val startDate: OffsetDateTime = OffsetDateTime.now(),
     val endDate: OffsetDateTime = OffsetDateTime.now(),
-    val personCount: Int = 3,
+    val adults: Int = 3,
+    val children: Int = 3,
+    val babies: Int = 3,
+    val color: String = "#546e7a",
     val room: Room = Room()
 ) {
 
@@ -22,7 +25,10 @@ data class Reservation(
         name = entity.name,
         startDate = entity.startDate,
         endDate = entity.endDate,
-        personCount = entity.personCount,
+        adults = entity.adults,
+        children = entity.children,
+        babies = entity.babies,
+        color = entity.color,
         room = Room(entity.roomId)
     )
 }

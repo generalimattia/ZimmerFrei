@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.view.custom.TimePlan
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
+import java.lang.ref.WeakReference
 
 class AllRoomsAdapter(
-    private val days: MutableList<Day>,
-    private val syncScroller: SyncScroller
+    private val days: MutableList<Day>, private val syncScroller: SyncScroller
 ) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
+
+    private val holders: MutableList<WeakReference<AllRoomsViewHolder>> = mutableListOf()
 
     init {
         setHasStableIds(true)
@@ -17,24 +19,45 @@ class AllRoomsAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): AllRoomsViewHolder = AllRoomsViewHolder(
-        TimePlan(parent.context)
-    )
+    ): AllRoomsViewHolder {
+        val holder = AllRoomsViewHolder(
+            TimePlan(parent.context)
+        )
+        holders.add(WeakReference(holder))
+        return holder
+    }
 
     override fun onBindViewHolder(holder: AllRoomsViewHolder, position: Int) {
-        holder.bind(days, syncScroller)
+        holder.bind(
+            days,
+            syncScroller
+        )
     }
 
     override fun getItemCount(): Int = 1
 
     override fun getItemId(position: Int): Long = position.toLong()
 
+    fun moreDays(days: List<Day>) {
+        holders.forEach {
+            it.get()
+                ?.moreDays(days)
+        }
+    }
+
     class AllRoomsViewHolder(
         private val view: TimePlan
     ) : RecyclerView.ViewHolder(view) {
 
-        fun bind(days: MutableList<Day>, syncScroller: SyncScroller) {
-            view.bind(days, syncScroller)
+        fun bind(days: List<Day>, syncScroller: SyncScroller) {
+            view.bind(
+                days,
+                syncScroller
+            )
+        }
+
+        fun moreDays(days: List<Day>) {
+            view.moreDays(days)
         }
     }
 }

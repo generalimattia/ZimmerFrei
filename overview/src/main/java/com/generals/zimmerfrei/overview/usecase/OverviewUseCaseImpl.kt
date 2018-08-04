@@ -1,7 +1,5 @@
 package com.generals.zimmerfrei.overview.usecase
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.DayWithReservations
 import com.generals.zimmerfrei.model.Reservation
@@ -11,8 +9,8 @@ import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.overview.service.room.RoomService
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.threeten.bp.LocalDate
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
@@ -21,6 +19,10 @@ class OverviewUseCaseImpl @Inject constructor(
     private val reservationService: ReservationService,
     private val roomService: RoomService
 ) : OverviewUseCase {
+
+    override fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>> = calendarService.loadDays(date)
+
+    override fun loadMoreDays(): Observable<Pair<List<Day>, String>> = calendarService.loadMoreDays()
 
     override fun loadRooms(): Observable<List<Room>> = roomService.fetchRooms().toObservable()
 

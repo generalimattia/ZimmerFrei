@@ -48,7 +48,7 @@ class Calendar : FrameLayout {
 
     }
 
-    fun bind(days: MutableList<Day>) {
+    /*fun bind(days: MutableList<Day>) {
         recyclerView.adapter = RoomsDaysAdapter(days)
-    }
+    }*/
 }

@@ -38,6 +38,7 @@ data class Room(
 ) {
 
     constructor(entity: RoomEntity) : this(
+
         name = entity.name
     )
 }
@@ -48,4 +49,13 @@ data class DayWithReservations(
 
     override fun compareTo(other: DayWithReservations): Int =
         this.day.date.compareTo(other.day.date)
+}
+
+sealed class RoomDay {
+
+    data class EmptyDay(val day: Day = Day()) : RoomDay()
+
+    data class BookedDay(
+        val day: Day = Day(), val reservation: Reservation = Reservation()
+    ) : RoomDay()
 }

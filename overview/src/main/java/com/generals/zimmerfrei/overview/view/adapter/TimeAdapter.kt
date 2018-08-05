@@ -2,15 +2,13 @@ package com.generals.zimmerfrei.overview.view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.SingleRoomPlan
-import java.lang.ref.WeakReference
 
 class TimeAdapter(
-    private val days: List<Day>
+    private val roomDays: List<Pair<Room, List<RoomDay>>>
 ) : RecyclerView.Adapter<TimeAdapter.SingleRoomViewHolder>() {
-
-    private val holders: MutableList<WeakReference<SingleRoomViewHolder>> = mutableListOf()
 
     init {
         setHasStableIds(true)
@@ -18,38 +16,22 @@ class TimeAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): SingleRoomViewHolder {
-        val holder = SingleRoomViewHolder(SingleRoomPlan(parent.context))
-        holders.add(WeakReference(holder))
-        return holder
-    }
+    ): SingleRoomViewHolder = SingleRoomViewHolder(SingleRoomPlan(parent.context))
 
     override fun onBindViewHolder(holder: SingleRoomViewHolder, position: Int) {
-        holder.bind(days)
+        holder.bind(roomDays[position].second)
     }
 
-    override fun getItemCount(): Int = days.size
+    override fun getItemCount(): Int = roomDays.size
 
-    override fun getItemId(position: Int): Long = days[position].hashCode().toLong()
-
-    fun moreDays(days: List<Day>) {
-        holders.forEach {
-            it.get()
-                ?.moreDays(days)
-
-        }
-    }
+    override fun getItemId(position: Int): Long = roomDays[position].first.hashCode().toLong()
 
     class SingleRoomViewHolder(
         private val view: SingleRoomPlan
     ) : RecyclerView.ViewHolder(view) {
 
-        fun bind(days: List<Day>) {
+        fun bind(days: List<RoomDay>) {
             view.bind(days)
-        }
-
-        fun moreDays(days: List<Day>) {
-            view.moreDays(days)
         }
     }
 }

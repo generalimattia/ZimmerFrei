@@ -61,15 +61,7 @@ class DaysListView : FrameLayout {
 
     }
 
-    fun bind(days: List<Day>, loadMoreDays: () -> Unit) {
-
-        val scrollListener: EndlessRecyclerViewScrollListener = object :
-            EndlessRecyclerViewScrollListener(recyclerView.layoutManager as LinearLayoutManager) {
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                loadMoreDays()
-            }
-        }
-        recyclerView.addOnScrollListener(scrollListener)
+    fun bind(days: List<Day>) {
         recyclerView.adapter = DaysAdapter(days)
     }
 

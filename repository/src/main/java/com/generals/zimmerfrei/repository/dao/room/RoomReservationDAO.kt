@@ -29,6 +29,11 @@ interface RoomReservationDAO {
         roomId: String, date: OffsetDateTime
     ): Flowable<List<ReservationEntity>>
 
+    @Query("SELECT * FROM reservations WHERE startDate BETWEEN :startDate AND :endDate OR endDate BETWEEN :startDate AND :endDate")
+    fun findReservationsFromDateToDate(
+        startDate: OffsetDateTime, endDate: OffsetDateTime
+    ): Flowable<List<ReservationEntity>>
+
     @Query("DELETE FROM reservations")
     fun deleteAll()
 

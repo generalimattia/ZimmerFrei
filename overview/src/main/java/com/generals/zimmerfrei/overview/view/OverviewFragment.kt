@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.overview.view
 
+import android.app.DatePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -9,13 +10,16 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_time_plan.*
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class OverviewFragment : Fragment() {
@@ -24,6 +28,19 @@ class OverviewFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: OverviewViewModel
+
+    private val currentDate: LocalDate = LocalDate.now()
+
+    private val datePickerDialog: DatePickerDialog by lazy {
+        DatePickerDialog(
+            context,
+            { _: DatePicker, year: Int, month: Int, day: Int ->
+            },
+            currentDate.year,
+            currentDate.month.value - 1,
+            currentDate.dayOfMonth
+        )
+    }
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -61,14 +78,14 @@ class OverviewFragment : Fragment() {
                                 Observer { rooms: List<Room>? ->
                                     rooms?.let {
                                         //rooms_list_view.bind(it)
-                                        rooms_list_view.bind(List(30) { index: Int -> Room("Camera $index") })
+                                        rooms_list_view.bind(List(30) { index: Int -> Room(index.toString()) })
                                     }
                                 })
 
         viewModel.days.observe(this,
                                Observer { days: List<Day>? ->
                                    days?.let {
-                                       days_list_view.bind(it) { viewModel.loadMoreDays() }
+                                       days_list_view.bind(it)
                                    }
                                })
 
@@ -79,15 +96,7 @@ class OverviewFragment : Fragment() {
                                     }
                                 })
 
-        viewModel.moreDays.observe(this,
-                               Observer { days: List<Day>? ->
-                                   days?.let {
-                                       days_list_view.moreDays(it)
-                                       plan.moreDays(it)
-                                   }
-                               })
-
-        val days = MutableList(31) { _: Int -> Day() }
+        val days = MutableList(31) { _: Int -> Room() to MutableList(31) { _: Int -> RoomDay.EmptyDay() }}
 
         SyncScroller().bindFirst(days_list_view.recyclerView)
             .bindSecond(plan.recyclerView)
@@ -104,6 +113,10 @@ class OverviewFragment : Fragment() {
             activity?.let {
                 viewModel.onFABClick(it)
             }
+        }
+
+        month_and_year.setOnClickListener {
+            datePickerDialog.show()
         }
 
         if (savedInstanceState == null) {

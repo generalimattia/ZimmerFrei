@@ -1,9 +1,6 @@
 package com.generals.zimmerfrei.overview.usecase
 
-import com.generals.zimmerfrei.model.Day
-import com.generals.zimmerfrei.model.DayWithReservations
-import com.generals.zimmerfrei.model.Reservation
-import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.*
 import com.generals.zimmerfrei.overview.service.calendar.CalendarService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.overview.service.room.RoomService
@@ -21,8 +18,6 @@ class OverviewUseCaseImpl @Inject constructor(
 ) : OverviewUseCase {
 
     override fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>> = calendarService.loadDays(date)
-
-    override fun loadMoreDays(): Observable<Pair<List<Day>, String>> = calendarService.loadMoreDays()
 
     override fun loadRooms(): Observable<List<Room>> = roomService.fetchRooms().toObservable()
 
@@ -59,4 +54,7 @@ class OverviewUseCaseImpl @Inject constructor(
                 }
 
         }.sorted()
+
+    override fun loadReservationsByRoom(startDate: LocalDate, endDate: LocalDate): Observable<Map<Room, List<RoomDay>>> =
+        reservationService.fetchReservationsFromDayToDayGroupedByRoom(startDate, endDate).toObservable()
 }

@@ -28,27 +28,13 @@ class CalendarServiceImpl @Inject constructor() : CalendarService {
         return buildDaysObservable(date)
     }
 
-    override fun loadMoreDays(): Observable<Pair<List<Day>, String>> {
-        val previousDate: LocalDate = LocalDate.of(
-            untilMonthAndYear.second,
-            untilMonthAndYear.first,
-            1
-        )
-
-        val newDate: LocalDate = previousDate.plusMonths(1)
-
-        untilMonthAndYear = newDate.monthValue to newDate.year
-
-        return buildDaysObservable(newDate)
-    }
-
     private fun buildDaysObservable(date: LocalDate): Observable<Pair<List<Day>, String>> =
         Observable.create { emitter: ObservableEmitter<Pair<List<Day>, String>> ->
 
             val month: Month = date.month
             val monthLength: Int = month.length(date.isLeapYear)
 
-            val days: List<Day> = (date.dayOfMonth..monthLength).toList()
+            val days: List<Day> = (1..monthLength).toList()
                 .map { index: Int ->
 
                     val accumulator: LocalDate = date.withDayOfMonth(index)

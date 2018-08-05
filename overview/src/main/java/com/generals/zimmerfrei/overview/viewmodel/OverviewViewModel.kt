@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel
 import com.generals.zimmerfrei.common.navigator.Navigator
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +22,6 @@ class OverviewViewModel @Inject constructor(
 
     private val _month = MutableLiveData<String>()
     private val _days = MutableLiveData<List<Day>>()
-    private val _moreDays = MutableLiveData<List<Day>>()
     private val _rooms: MutableLiveData<List<Room>> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
@@ -31,9 +31,6 @@ class OverviewViewModel @Inject constructor(
 
     val days: LiveData<List<Day>>
         get() = _days
-
-    val moreDays: LiveData<List<Day>>
-        get() = _moreDays
 
     val rooms: LiveData<List<Room>>
         get() = _rooms
@@ -49,9 +46,10 @@ class OverviewViewModel @Inject constructor(
                     }
                 })
 
+        val startDate = LocalDate.now()
         compositeDisposable.add(
             useCase.
-                loadDays(LocalDate.now())
+                loadDays(startDate)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -59,6 +57,17 @@ class OverviewViewModel @Inject constructor(
                     daysAndMonth?.let {
                         _days.value = it.first
                         _month.value = it.second
+                    }
+                }
+        )
+
+        compositeDisposable.add(
+            useCase.loadReservationsByRoom(startDate, startDate.withDayOfMonth(startDate.month.length(startDate.isLeapYear)))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { reservationsByRoom: Map<Room, List<RoomDay>>? ->
+                    reservationsByRoom?.let {
+
                     }
                 }
         )
@@ -72,29 +81,13 @@ class OverviewViewModel @Inject constructor(
         })*/
     }
 
-    fun loadMoreDays() {
-        compositeDisposable.add(
-            useCase.
-                loadMoreDays()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                        daysAndMonth: Pair<List<Day>, String>? ->
-                    daysAndMonth?.let {
-                        _moreDays.value = daysAndMonth.first
-                        _month.value = daysAndMonth.second
-                    }
-                }
-        )
-    }
-
     fun onFABClick(activity: Activity) {
         navigator.reservation()
             .start(activity)
     }
 
     override fun onCleared() {
-        compositeDisposable.clear()
+        compositeDisposable.dispose()
         super.onCleared()
     }
 }

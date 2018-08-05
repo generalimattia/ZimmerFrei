@@ -10,8 +10,6 @@ interface CalendarService {
 
     fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>>
 
-    fun loadMoreDays(): Observable<Pair<List<Day>, String>>
-
     fun loadCalendar(): Observable<Day>
 
 }

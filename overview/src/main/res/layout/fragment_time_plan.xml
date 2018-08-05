@@ -25,6 +25,7 @@
             android:id="@+id/month_and_year"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:textSize="26sp"
             app:layout_constraintBottom_toTopOf="@id/days_list_view"

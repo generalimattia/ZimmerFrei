@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.TimeAdapter
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
@@ -39,13 +40,9 @@ class TimePlan : FrameLayout {
         recyclerView = findViewById(R.id.recycler_view)
     }
 
-    fun bind(days: List<Day>, syncScroller: SyncScroller) {
+    fun bind(roomDays: List<Pair<Room, List<RoomDay>>>, syncScroller: SyncScroller) {
         syncScroller.bindSecond(recyclerView)
             .sync()
-        recyclerView.adapter = TimeAdapter(days)
-    }
-
-    fun moreDays(days: List<Day>) {
-        (recyclerView.adapter as TimeAdapter).moreDays(days)
+        recyclerView.adapter = TimeAdapter(roomDays)
     }
 }

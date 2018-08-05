@@ -166,6 +166,41 @@ class ReservationTest {
         }
     }
 
+    @Test
+    fun shouldFetchReservationsFromDateToDate() {
+        populateDatabase()
+
+        val first: Flowable<List<ReservationEntity>> =
+            reservationDAO.findReservationsFromDateToDate(
+                OffsetDateTime.of(2018, 7, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+                OffsetDateTime.of(2018, 7, 31, 0, 0, 0, 0, ZoneOffset.UTC)
+            )
+
+        first.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 3
+        }
+
+        val second: Flowable<List<ReservationEntity>> =
+            reservationDAO.findReservationsFromDateToDate(
+                OffsetDateTime.of(2018, 8, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+                OffsetDateTime.of(2018, 8, 31, 0, 0, 0, 0, ZoneOffset.UTC)
+            )
+
+        second.test().assertValue { entities: List<ReservationEntity> ->
+            entities.isEmpty()
+        }
+
+        val third: Flowable<List<ReservationEntity>> =
+            reservationDAO.findReservationsFromDateToDate(
+                OffsetDateTime.of(2018, 7, 10, 0, 0, 0, 0, ZoneOffset.UTC),
+                OffsetDateTime.of(2018, 7, 19, 0, 0, 0, 0, ZoneOffset.UTC)
+            )
+
+        third.test().assertValue { entities: List<ReservationEntity> ->
+            entities.size == 1
+        }
+    }
+
     private fun populateDatabase() {
         roomDAO.insert(
             listOf(

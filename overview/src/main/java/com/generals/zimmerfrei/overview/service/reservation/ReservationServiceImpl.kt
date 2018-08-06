@@ -66,14 +66,27 @@ class ReservationServiceImpl @Inject constructor(
                                     day
                                 )
                                 val roomDay: RoomDay = entry.value.firstOrNull {
-                                    val startDate = ChronoLocalDate.from(it.startDate)
-                                    val endDate = ChronoLocalDate.from(it.endDate)
+                                    val startDate: ChronoLocalDate = ChronoLocalDate.from(it.startDate)
+                                    val endDate: ChronoLocalDate = ChronoLocalDate.from(it.endDate)
                                     (currentDay.isAfter(startDate) && currentDay.isBefore(endDate)) || currentDay.isEqual(startDate) || currentDay.isEqual(endDate)
                                 }?.let {
-                                    RoomDay.BookedDay(
-                                        Day(date = OffsetDateTime.from(currentDay)),
-                                        Reservation(it)
-                                    )
+                                    val startDate = ChronoLocalDate.from(it.startDate)
+                                    val endDate = ChronoLocalDate.from(it.endDate)
+
+                                    when {
+                                        currentDay.isEqual(startDate) -> RoomDay.StartingReservationDay(
+                                            Day(date = OffsetDateTime.from(currentDay)),
+                                            Reservation(it)
+                                        )
+                                        currentDay.isEqual(endDate) -> RoomDay.EndingReservationDay(
+                                            Day(date = OffsetDateTime.from(currentDay)),
+                                            Reservation(it)
+                                        )
+                                        else -> RoomDay.BookedDay(
+                                            Day(date = OffsetDateTime.from(currentDay)),
+                                            Reservation(it)
+                                        )
+                                    }
                                 } ?: RoomDay.EmptyDay(Day(date = OffsetDateTime.from(currentDay)))
                                 roomDay
                             }

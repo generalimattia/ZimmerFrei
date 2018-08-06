@@ -55,7 +55,15 @@ sealed class RoomDay {
 
     data class EmptyDay(val day: Day = Day()) : RoomDay()
 
+    data class StartingReservationDay(
+        val day: Day = Day(), val reservation: Reservation = Reservation()
+    ) : RoomDay()
+
     data class BookedDay(
+        val day: Day = Day(), val reservation: Reservation = Reservation()
+    ) : RoomDay()
+
+    data class EndingReservationDay(
         val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 }

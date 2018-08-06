@@ -61,6 +61,11 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         viewModel.color.observe(this, Observer { color: String? ->
             color?.let {
                 color_view.setBackgroundColor(Color.parseColor(it))

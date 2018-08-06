@@ -153,12 +153,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_quad"
-        android:background="@drawable/background_shape"
+        android:stateListAnimator="@drawable/translation_z_animator"
         android:foreground="?attr/selectableItemBackground"
         android:padding="@dimen/material_double"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/room_input_layout">
+        app:layout_constraintTop_toBottomOf="@id/room_input_layout"
+        android:elevation="2dp"
+        android:background="@drawable/background_color_selectable">
 
         <View
             android:id="@+id/color_view"

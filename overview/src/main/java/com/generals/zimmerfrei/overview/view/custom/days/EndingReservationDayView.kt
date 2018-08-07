@@ -1,14 +1,13 @@
-package com.generals.zimmerfrei.overview.view.custom
+package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.TextView
-import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 
-class RoomDayView : FrameLayout {
+class EndingReservationDayView : FrameLayout {
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -25,6 +24,8 @@ class RoomDayView : FrameLayout {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        LayoutInflater.from(context).inflate(R.layout.widget_room_day, this, true)
+        LayoutInflater.from(context).inflate(R.layout.widget_ending_reservation_day, this, true)
     }
+
+    fun bind(roomDay: RoomDay.EndingReservationDay) {}
 }

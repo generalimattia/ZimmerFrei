@@ -8,5 +8,5 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/widget_room_day"
+    tools:listitem="@layout/widget_empty_day"
     />

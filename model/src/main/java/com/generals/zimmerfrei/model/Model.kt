@@ -59,7 +59,7 @@ sealed class RoomDay {
         val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 
-    data class BookedDay(
+    data class ReservedDay(
         val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 

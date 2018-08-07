@@ -82,7 +82,7 @@ class ReservationServiceImpl @Inject constructor(
                                             Day(date = OffsetDateTime.from(currentDay)),
                                             Reservation(it)
                                         )
-                                        else -> RoomDay.BookedDay(
+                                        else -> RoomDay.ReservedDay(
                                             Day(date = OffsetDateTime.from(currentDay)),
                                             Reservation(it)
                                         )

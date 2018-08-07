@@ -9,5 +9,5 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/widget_room_day"
+    tools:listitem="@layout/widget_empty_day"
     />

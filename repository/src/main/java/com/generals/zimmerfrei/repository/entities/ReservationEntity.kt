@@ -19,7 +19,10 @@ data class ReservationEntity(
     var children: Int = 0,
     var babies: Int = 0,
     var roomId: String = "",
-    var color: String = ""
+    var color: String = "",
+    var notes: String = "",
+    var email: String = "",
+    var mobile: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

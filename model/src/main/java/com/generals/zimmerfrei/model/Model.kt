@@ -13,11 +13,14 @@ data class Reservation(
     val name: String = "",
     val startDate: OffsetDateTime = OffsetDateTime.now(),
     val endDate: OffsetDateTime = OffsetDateTime.now(),
-    val adults: Int = 3,
-    val children: Int = 3,
-    val babies: Int = 3,
+    val adults: Int = 0,
+    val children: Int = 0,
+    val babies: Int = 0,
     val color: String = "#546e7a",
-    val room: Room = Room()
+    val room: Room = Room(),
+    val notes: String = "",
+    val mobile: String = "",
+    val email: String = ""
 ) {
 
     constructor(entity: ReservationEntity) : this(
@@ -31,6 +34,20 @@ data class Reservation(
         color = entity.color,
         room = Room(entity.roomId)
     )
+
+    fun toEntity() : ReservationEntity = ReservationEntity(
+        name = name,
+        startDate = startDate,
+        endDate = endDate,
+        adults = adults,
+        children = children,
+        babies = babies,
+        color = color,
+        roomId = room.name,
+        notes = notes,
+        email = email,
+        mobile = mobile
+    )
 }
 
 data class Room(
@@ -38,9 +55,10 @@ data class Room(
 ) {
 
     constructor(entity: RoomEntity) : this(
-
         name = entity.name
     )
+
+    fun toEntity(): RoomEntity = RoomEntity(name)
 }
 
 data class DayWithReservations(

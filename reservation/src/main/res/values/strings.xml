@@ -9,4 +9,7 @@
     <string name="end_date">Data Fine</string>
     <string name="submit">SALVA</string>
     <string name="change">Cambia</string>
+    <string name="email">E-mail</string>
+    <string name="mobile">Cellulare</string>
+    <string name="notes">Note</string>
 </resources>

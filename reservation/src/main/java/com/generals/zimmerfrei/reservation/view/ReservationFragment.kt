@@ -30,17 +30,43 @@ class ReservationFragment : Fragment() {
     private val currentDate: LocalDate = LocalDate.now()
 
     private val startDatePickerDialog: DatePickerDialog by lazy {
-        DatePickerDialog(context, { _: DatePicker, year: Int, month: Int, day: Int ->
-            viewModel.setStartDate(year, month, day)
-            start_date.setText("$day/$month/$year", TextView.BufferType.NORMAL)
-        }, currentDate.year, currentDate.month.value - 1, currentDate.dayOfMonth)
+        DatePickerDialog(
+            context,
+            { _: DatePicker, year: Int, month: Int, day: Int ->
+                viewModel.setStartDate(
+                    year,
+                    month,
+                    day
+                )
+                start_date.setText(
+                    "$day/$month/$year",
+                    TextView.BufferType.NORMAL
+                )
+            },
+            currentDate.year,
+            currentDate.month.value - 1,
+            currentDate.dayOfMonth
+        )
     }
 
     private val endDatePickerDialog: DatePickerDialog by lazy {
-        DatePickerDialog(context, { _: DatePicker, year: Int, month: Int, day: Int ->
-            viewModel.setEndDate(year, month, day)
-            end_date.setText("$day/$month/$year", TextView.BufferType.NORMAL)
-        }, currentDate.year, currentDate.month.value - 1, currentDate.dayOfMonth)
+        DatePickerDialog(
+            context,
+            { _: DatePicker, year: Int, month: Int, day: Int ->
+                viewModel.setEndDate(
+                    year,
+                    month,
+                    day
+                )
+                end_date.setText(
+                    "$day/$month/$year",
+                    TextView.BufferType.NORMAL
+                )
+            },
+            currentDate.year,
+            currentDate.month.value - 1,
+            currentDate.dayOfMonth
+        )
     }
 
     override fun onAttach(context: Context?) {
@@ -50,27 +76,39 @@ class ReservationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        viewModel = ViewModelProviders.of(
+            this,
+            viewModelFactory
+        )
             .get(ReservationViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_reservation, container, false)
+    ): View? = inflater.inflate(
+        R.layout.fragment_reservation,
+        container,
+        false
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(
+            view,
+            savedInstanceState
+        )
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
 
-        viewModel.color.observe(this, Observer { color: String? ->
-            color?.let {
-                color_view.setBackgroundColor(Color.parseColor(it))
-            }
-        })
+        viewModel.color.observe(
+            this,
+            Observer { color: String? ->
+                color?.let {
+                    color_view.setBackgroundColor(Color.parseColor(it))
+                }
+            })
 
         start_date.setOnClickListener {
             startDatePickerDialog.show()
@@ -85,7 +123,18 @@ class ReservationFragment : Fragment() {
         }
 
         submit.setOnClickListener {
-            viewModel.submit()
+            viewModel.submit(
+                name = name.text.toString(),
+                startDate = start_date.text.toString(),
+                endDate = end_date.text.toString(),
+                adults = adult_count.text.toString(),
+                children = children_count.text.toString(),
+                babies = children_count.text.toString(),
+                notes = notes.text.toString(),
+                email = email.text.toString(),
+                mobile = mobile.text.toString(),
+                room = room.text.toString()
+            )
         }
 
         if (savedInstanceState == null) {

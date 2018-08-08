@@ -3,9 +3,20 @@ package com.generals.zimmerfrei.reservation.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.generals.zimmerfrei.model.Reservation
+import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-class ReservationViewModel @Inject constructor() : ViewModel() {
+class ReservationViewModel @Inject constructor(
+    private val useCase: ReservationUseCase
+) : ViewModel() {
+
+    companion object {
+        private const val DATE_FORMAT = "dd/MM/yyyy"
+    }
 
     private val _color: MutableLiveData<String> = MutableLiveData()
 
@@ -44,6 +55,58 @@ class ReservationViewModel @Inject constructor() : ViewModel() {
 
     fun setEndDate(year: Int, month: Int, day: Int) {}
 
-    fun submit() {}
+    fun submit(
+        name: String,
+        startDate: String,
+        endDate: String,
+        adults: String,
+        children: String,
+        babies: String,
+        room: String,
+        notes: String,
+        mobile: String,
+        email: String
+    ) {
+
+        val adultsNumber: Int = try {
+            adults.toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }
+
+        val childrenNumber: Int = try {
+            children.toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }
+
+        val babiesNumber: Int = try {
+            babies.toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }
+
+        useCase.save(
+            Reservation(
+                name = name,
+                startDate = OffsetDateTime.parse(
+                    startDate,
+                    DateTimeFormatter.ofPattern(DATE_FORMAT)
+                ),
+                endDate = OffsetDateTime.parse(
+                    endDate,
+                    DateTimeFormatter.ofPattern(DATE_FORMAT)
+                ),
+                adults = adultsNumber,
+                children = childrenNumber,
+                babies = babiesNumber,
+                color = _color.value ?: availableColors.first(),
+                room = Room(room),
+                notes = notes,
+                mobile = mobile,
+                email = email
+            )
+        )
+    }
 
 }

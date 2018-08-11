@@ -21,9 +21,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="@android:color/white"/>
 
+        <ImageView
+            android:id="@+id/previous_month"
+            android:layout_width="@dimen/material_sixth"
+            android:layout_height="@dimen/material_sixth"
+            android:background="@drawable/background_color_selectable"
+            android:elevation="2dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:stateListAnimator="@drawable/translation_z_animator"
+            app:layout_constraintBottom_toTopOf="@id/days_list_view"
+            app:layout_constraintEnd_toStartOf="@id/month_and_year"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
         <TextView
             android:id="@+id/month_and_year"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
@@ -33,6 +48,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             tools:text="Agosto 2018"/>
+
+        <ImageView
+            android:id="@+id/next_month"
+            android:layout_width="@dimen/material_sixth"
+            android:layout_height="@dimen/material_sixth"
+            android:background="@drawable/background_color_selectable"
+            android:elevation="2dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:stateListAnimator="@drawable/translation_z_animator"
+            app:layout_constraintBottom_toTopOf="@id/days_list_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toEndOf="@id/month_and_year"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
         <com.generals.zimmerfrei.overview.view.custom.DaysListView
             android:id="@+id/days_list_view"

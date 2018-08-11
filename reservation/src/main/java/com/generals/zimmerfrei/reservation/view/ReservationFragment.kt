@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
@@ -111,6 +112,12 @@ class ReservationFragment : Fragment() {
             savedInstanceState
         )
 
+        toolbar.inflateMenu(R.menu.menu_reservation)
+        toolbar.menu.findItem(R.id.save)
+            .setOnMenuItemClickListener { _: MenuItem? ->
+                submit()
+                true
+            }
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
@@ -136,23 +143,27 @@ class ReservationFragment : Fragment() {
         }
 
         submit.setOnClickListener {
-            viewModel.submit(
-                name = name.text.toString(),
-                startDate = start_date.text.toString(),
-                endDate = end_date.text.toString(),
-                adults = adult_count.text.toString(),
-                children = children_count.text.toString(),
-                babies = children_count.text.toString(),
-                notes = notes.text.toString(),
-                email = email.text.toString(),
-                mobile = mobile.text.toString(),
-                room = room.text.toString()
-            )
+            submit()
         }
 
         if (savedInstanceState == null) {
             viewModel.start()
         }
+    }
+
+    private fun submit() {
+        viewModel.submit(
+            name = name.text.toString(),
+            startDate = start_date.text.toString(),
+            endDate = end_date.text.toString(),
+            adults = adult_count.text.toString(),
+            children = children_count.text.toString(),
+            babies = children_count.text.toString(),
+            notes = notes.text.toString(),
+            email = email.text.toString(),
+            mobile = mobile.text.toString(),
+            room = room.text.toString()
+        )
     }
 
     companion object {

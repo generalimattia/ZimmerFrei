@@ -12,4 +12,5 @@
     <string name="email">E-mail</string>
     <string name="mobile">Cellulare</string>
     <string name="notes">Note</string>
+    <string name="save">SAVE</string>
 </resources>

@@ -15,6 +15,8 @@ import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDate
 
 import javax.inject.Inject
+import kotlin.properties.Delegates
+import kotlin.reflect.KProperty
 
 class OverviewViewModel @Inject constructor(
     private val useCase: OverviewUseCase, private val navigator: Navigator
@@ -23,6 +25,14 @@ class OverviewViewModel @Inject constructor(
     private val _month = MutableLiveData<String>()
     private val _days = MutableLiveData<List<Day>>()
     private val _rooms: MutableLiveData<List<Room>> = MutableLiveData()
+    private val _selectedDate: MutableLiveData<LocalDate> = MutableLiveData()
+
+    private var date: LocalDate by Delegates.observable(LocalDate.now()) { _: KProperty<*>, _: LocalDate?, newValue: LocalDate? ->
+        newValue?.let {
+            _selectedDate.value = it
+            processNewDate(it)
+        }
+    }
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -35,50 +45,64 @@ class OverviewViewModel @Inject constructor(
     val rooms: LiveData<List<Room>>
         get() = _rooms
 
+    val selectedDate: LiveData<LocalDate>
+        get() = _selectedDate
+
     fun start() {
-        compositeDisposable.add(
-            useCase.loadRooms()
-                .subscribeOn(Schedulers.computation()).observeOn(
-                    AndroidSchedulers.mainThread()
-                ).subscribe { internalRooms: List<Room>? ->
-                    internalRooms?.let {
-                        _rooms.value = it
-                    }
-                })
+        _selectedDate.value = date
 
-        val startDate = LocalDate.now()
-        compositeDisposable.add(
-            useCase.
-                loadDays(startDate)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    daysAndMonth: Pair<List<Day>, String>? ->
-                    daysAndMonth?.let {
-                        _days.value = it.first
-                        _month.value = it.second
-                    }
-                }
-        )
+        loadRooms()
 
-        compositeDisposable.add(
-            useCase.loadReservationsByRoom(startDate, startDate.withDayOfMonth(startDate.month.length(startDate.isLeapYear)))
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { reservationsByRoom: Map<Room, List<RoomDay>>? ->
-                    reservationsByRoom?.let {
+        processNewDate(date)
+    }
 
-                    }
-                }
-        )
-
-        /*compositeDisposable.add(useCase.loadCalendar().subscribeOn(Schedulers.computation()).observeOn(
+    private fun loadRooms() {
+        compositeDisposable.add(useCase.loadRooms().subscribeOn(Schedulers.computation()).observeOn(
             AndroidSchedulers.mainThread()
-        ).subscribe { day: DayWithReservations? ->
-            day?.let {
-                _days.value = it
+        ).subscribe { internalRooms: List<Room>? ->
+            internalRooms?.let {
+                _rooms.value = it
             }
-        })*/
+        })
+    }
+
+    fun onPreviousMonthClick() {
+        date = date.minusMonths(1)
+    }
+
+    fun onNextMonthClick() {
+        date = date.plusMonths(1)
+    }
+
+    fun onNewDate(month: Int, year: Int) {
+        date = date.withMonth(month + 1)
+            .withYear(year)
+    }
+
+    private fun processNewDate(newDate: LocalDate) {
+        loadCalendar(newDate)
+
+        loadReservations(newDate)
+    }
+
+    private fun loadReservations(currentDate: LocalDate) {
+        compositeDisposable.add(useCase.loadReservationsByRoom(
+            currentDate,
+            currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
+        ).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { reservationsByRoom: Map<Room, List<RoomDay>>? ->
+            reservationsByRoom?.let {
+
+            }
+        })
+    }
+
+    private fun loadCalendar(currentDate: LocalDate) {
+        compositeDisposable.add(useCase.loadDays(currentDate).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { daysAndMonth: Pair<List<Day>, String>? ->
+            daysAndMonth?.let {
+                _days.value = it.first
+                _month.value = it.second
+            }
+        })
     }
 
     fun onFABClick(activity: Activity) {

@@ -29,18 +29,7 @@ class OverviewFragment : Fragment() {
 
     private lateinit var viewModel: OverviewViewModel
 
-    private val currentDate: LocalDate = LocalDate.now()
-
-    private val datePickerDialog: DatePickerDialog by lazy {
-        DatePickerDialog(
-            context,
-            { _: DatePicker, year: Int, month: Int, day: Int ->
-            },
-            currentDate.year,
-            currentDate.month.value - 1,
-            currentDate.dayOfMonth
-        )
-    }
+    private var datePickerDialog: DatePickerDialog? = null
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -66,13 +55,31 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        /*calendar.bind(mutableListOf())
-
-        viewModel.days.observe(this, Observer { day: DayWithReservations? ->
-            day?.let {
-                calendar.update(it.day)
-            }
-        })*/
+        viewModel.selectedDate.observe(this,
+                                       Observer { date: LocalDate? ->
+                                           date?.let {
+                                               val localPicker: DatePickerDialog =
+                                                   datePickerDialog.takeIf { it != null }
+                                                           ?: DatePickerDialog(
+                                                               context,
+                                                               { _: DatePicker, year: Int, month: Int, day: Int ->
+                                                                   viewModel.onNewDate(
+                                                                       month,
+                                                                       year
+                                                                   )
+                                                               },
+                                                               it.year,
+                                                               it.monthValue - 1,
+                                                               it.dayOfMonth
+                                                           )
+                                               localPicker.datePicker.updateDate(
+                                                   it.year,
+                                                   it.monthValue - 1,
+                                                   it.dayOfMonth
+                                               )
+                                               datePickerDialog = localPicker
+                                           }
+                                       })
 
         viewModel.rooms.observe(this,
                                 Observer { rooms: List<Room>? ->
@@ -96,7 +103,8 @@ class OverviewFragment : Fragment() {
                                     }
                                 })
 
-        val days = MutableList(31) { _: Int -> Room() to MutableList(31) { _: Int -> RoomDay.EmptyDay() }}
+        val days =
+            MutableList(31) { _: Int -> Room() to MutableList(31) { _: Int -> RoomDay.EmptyDay() } }
 
         SyncScroller().bindFirst(days_list_view.recyclerView)
             .bindSecond(plan.recyclerView)
@@ -116,7 +124,15 @@ class OverviewFragment : Fragment() {
         }
 
         month_and_year.setOnClickListener {
-            datePickerDialog.show()
+            datePickerDialog?.show()
+        }
+
+        previous_month.setOnClickListener {
+            viewModel.onPreviousMonthClick()
+        }
+
+        next_month.setOnClickListener {
+            viewModel.onNextMonthClick()
         }
 
         if (savedInstanceState == null) {

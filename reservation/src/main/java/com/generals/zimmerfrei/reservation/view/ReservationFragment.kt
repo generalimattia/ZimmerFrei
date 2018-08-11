@@ -35,7 +35,7 @@ class ReservationFragment : Fragment() {
             { _: DatePicker, year: Int, month: Int, day: Int ->
                 viewModel.setStartDate(
                     year,
-                    month,
+                    month + 1,
                     day
                 )
                 start_date.setText(
@@ -64,7 +64,7 @@ class ReservationFragment : Fragment() {
             { _: DatePicker, year: Int, month: Int, day: Int ->
                 viewModel.setEndDate(
                     year,
-                    month,
+                    month + 1,
                     day
                 )
                 end_date.setText(

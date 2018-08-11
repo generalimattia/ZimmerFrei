@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.generals.zimmerfrei">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".ZimmerFreiApplication"
         android:allowBackup="true"
@@ -17,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="16df767f65e1d71ddf9f821e1183b13e287e0454"
+            />
 
         <activity android:name=".reservation.view.ReservationActivity">
         </activity>

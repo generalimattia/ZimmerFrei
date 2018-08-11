@@ -17,7 +17,7 @@ import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_reservation.*
-import org.threeten.bp.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 class ReservationFragment : Fragment() {
@@ -27,9 +27,8 @@ class ReservationFragment : Fragment() {
 
     private lateinit var viewModel: ReservationViewModel
 
-    private val currentDate: LocalDate = LocalDate.now()
-
     private val startDatePickerDialog: DatePickerDialog by lazy {
+        val calendar: Calendar = Calendar.getInstance()
         DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
@@ -39,18 +38,27 @@ class ReservationFragment : Fragment() {
                     day
                 )
                 start_date.setText(
-                    "$day/$month/$year",
+                    DATE_FORMAT.format(
+                        day.toString(),
+                        (month + 1).toString(),
+                        year.toString()
+                    ),
                     TextView.BufferType.NORMAL
                 )
             },
-            currentDate.year,
-            currentDate.month.value - 1,
-            currentDate.dayOfMonth
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
 
     private val endDatePickerDialog: DatePickerDialog by lazy {
-        DatePickerDialog(
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.add(
+            Calendar.DAY_OF_MONTH,
+            1
+        )
+        val picker = DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
                 viewModel.setEndDate(
@@ -59,14 +67,20 @@ class ReservationFragment : Fragment() {
                     day
                 )
                 end_date.setText(
-                    "$day/$month/$year",
+                    DATE_FORMAT.format(
+                        day.toString(),
+                        (month + 1).toString(),
+                        year.toString()
+                    ),
                     TextView.BufferType.NORMAL
                 )
             },
-            currentDate.year,
-            currentDate.month.value - 1,
-            currentDate.dayOfMonth
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR)
         )
+        picker.datePicker.minDate = calendar.timeInMillis
+        picker
     }
 
     override fun onAttach(context: Context?) {
@@ -102,13 +116,12 @@ class ReservationFragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        viewModel.color.observe(
-            this,
-            Observer { color: String? ->
-                color?.let {
-                    color_view.setBackgroundColor(Color.parseColor(it))
-                }
-            })
+        viewModel.color.observe(this,
+                                Observer { color: String? ->
+                                    color?.let {
+                                        color_view.setBackgroundColor(Color.parseColor(it))
+                                    }
+                                })
 
         start_date.setOnClickListener {
             startDatePickerDialog.show()
@@ -144,6 +157,8 @@ class ReservationFragment : Fragment() {
 
     companion object {
         fun newInstance() = ReservationFragment()
+
+        private const val DATE_FORMAT = "%s/%s/%s"
     }
 
 }

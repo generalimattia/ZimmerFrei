@@ -6,6 +6,8 @@ import com.generals.zimmerfrei.overview.inject.OverviewBuilder
 import com.generals.zimmerfrei.overview.inject.OverviewModule
 import com.generals.zimmerfrei.reservation.inject.ReservationBuilder
 import com.generals.zimmerfrei.reservation.inject.ReservationModule
+import com.generals.zimmerfrei.room.inject.RoomBuilder
+import com.generals.zimmerfrei.room.inject.RoomModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -18,10 +20,13 @@ import javax.inject.Singleton
         ApplicationModule::class,
         ViewModelBuilder::class,
         DatabaseModule::class,
+        ServiceModule::class,
         OverviewModule::class,
         OverviewBuilder::class,
         ReservationModule::class,
-        ReservationBuilder::class
+        ReservationBuilder::class,
+        RoomModule::class,
+        RoomBuilder::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<ZimmerFreiApplication> {

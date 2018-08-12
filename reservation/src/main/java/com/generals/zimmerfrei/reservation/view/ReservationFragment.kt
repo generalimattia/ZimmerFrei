@@ -33,11 +33,7 @@ class ReservationFragment : Fragment() {
         DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
-                viewModel.setStartDate(
-                    year,
-                    month + 1,
-                    day
-                )
+
                 start_date.setText(
                     DATE_FORMAT.format(
                         day.toString(),
@@ -62,11 +58,7 @@ class ReservationFragment : Fragment() {
         val picker = DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
-                viewModel.setEndDate(
-                    year,
-                    month + 1,
-                    day
-                )
+
                 end_date.setText(
                     DATE_FORMAT.format(
                         day.toString(),
@@ -112,16 +104,7 @@ class ReservationFragment : Fragment() {
             savedInstanceState
         )
 
-        toolbar.inflateMenu(R.menu.menu_reservation)
-        toolbar.menu.findItem(R.id.save)
-            .setOnMenuItemClickListener { _: MenuItem? ->
-                submit()
-                true
-            }
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
+        setUpToolbar()
 
         viewModel.color.observe(this,
                                 Observer { color: String? ->
@@ -148,6 +131,19 @@ class ReservationFragment : Fragment() {
 
         if (savedInstanceState == null) {
             viewModel.start()
+        }
+    }
+
+    private fun setUpToolbar() {
+        toolbar.inflateMenu(R.menu.menu_save)
+        toolbar.menu.findItem(R.id.save)
+            .setOnMenuItemClickListener { _: MenuItem? ->
+                submit()
+                true
+            }
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
     }
 

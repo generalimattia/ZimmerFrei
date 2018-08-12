@@ -12,10 +12,10 @@ import dagger.android.ContributesAndroidInjector
 abstract class ReservationModule {
 
     @ContributesAndroidInjector
-    abstract fun contributeOverviewActivityInjector(): ReservationActivity
+    abstract fun contributeReservationActivityInjector(): ReservationActivity
 
     @ContributesAndroidInjector
-    abstract fun contributeOverviewFragmentInjector(): ReservationFragment
+    abstract fun contributeReservationFragmentInjector(): ReservationFragment
 
     @Binds
     abstract fun bindReservationUseCase(useCase: ReservationUseCaseImpl): ReservationUseCase

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="persons_count">N° Persone</string>
+    <string name="handicap">Supporto Disabili</string>
+    <string name="balcony">Con Balcone</string>
+    <string name="double_bed">Matrimoniale</string>
+    <string name="single_bed">Singola</string>
+</resources>

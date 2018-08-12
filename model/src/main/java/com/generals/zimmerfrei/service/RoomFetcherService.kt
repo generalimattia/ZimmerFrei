@@ -1,9 +1,9 @@
-package com.generals.zimmerfrei.overview.service.room
+package com.generals.zimmerfrei.service
 
 import com.generals.zimmerfrei.model.Room
 import io.reactivex.Flowable
 
-interface RoomService {
+interface RoomFetcherService {
 
     fun fetchRooms(): Flowable<List<Room>>
 }

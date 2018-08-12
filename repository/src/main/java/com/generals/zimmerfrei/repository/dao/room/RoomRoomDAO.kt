@@ -10,6 +10,9 @@ import io.reactivex.Flowable
 interface RoomRoomDAO {
 
     @Insert
+    fun insert(room: RoomEntity)
+
+    @Insert
     fun insert(rooms: List<RoomEntity>)
 
     @Query("SELECT * FROM rooms")

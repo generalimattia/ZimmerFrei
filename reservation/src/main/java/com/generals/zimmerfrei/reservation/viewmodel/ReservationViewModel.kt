@@ -51,10 +51,6 @@ class ReservationViewModel @Inject constructor(
         generateNewColor()
     }
 
-    fun setStartDate(year: Int, month: Int, day: Int) {}
-
-    fun setEndDate(year: Int, month: Int, day: Int) {}
-
     fun submit(
         name: String,
         startDate: String,

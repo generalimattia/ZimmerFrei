@@ -30,6 +30,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':overview')
     implementation project(path: ':reservation')
+    implementation project(path: ':room')
     implementation project(path: ':model')
     implementation project(path: ':common')
     implementation project(path: ':repository')

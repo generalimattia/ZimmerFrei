@@ -5,6 +5,8 @@ import io.reactivex.Flowable
 
 interface RoomDAO {
 
+    fun insert(room: RoomEntity)
+
     fun insert(rooms: List<RoomEntity>)
 
     fun getAllRooms(): Flowable<List<RoomEntity>>

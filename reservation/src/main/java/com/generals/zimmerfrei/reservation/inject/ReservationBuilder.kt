@@ -13,5 +13,5 @@ abstract class ReservationBuilder {
     @Binds
     @IntoMap
     @ViewModelKey(ReservationViewModel::class)
-    abstract fun bindOverviewViewModel(viewModel: ReservationViewModel): ViewModel
+    abstract fun bindReservationViewModel(viewModel: ReservationViewModel): ViewModel
 }

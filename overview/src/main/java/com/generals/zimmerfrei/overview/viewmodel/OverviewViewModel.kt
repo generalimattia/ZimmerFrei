@@ -4,6 +4,8 @@ import android.app.Activity
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.support.annotation.IdRes
+import android.support.v7.app.AppCompatActivity
 import com.generals.zimmerfrei.common.navigator.Navigator
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
@@ -105,9 +107,18 @@ class OverviewViewModel @Inject constructor(
         })
     }
 
+    fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
+        navigator.room()
+            .startNewFragment(
+                activity = activity,
+                containerViewId = containerViewId,
+                addToBackStack = true
+            )
+    }
+
     fun onFABClick(activity: Activity) {
         navigator.reservation()
-            .start(activity)
+            .startNewActivity(activity)
     }
 
     override fun onCleared() {

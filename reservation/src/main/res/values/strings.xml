@@ -4,10 +4,8 @@
     <string name="adult_count">N° Adulti</string>
     <string name="children_count">N° Bambini</string>
     <string name="babies_count">N° Neonati</string>
-    <string name="room">Camera</string>
     <string name="start_date">Data Inizio</string>
     <string name="end_date">Data Fine</string>
-    <string name="submit">SALVA</string>
     <string name="change">Cambia</string>
     <string name="email">E-mail</string>
     <string name="mobile">Cellulare</string>

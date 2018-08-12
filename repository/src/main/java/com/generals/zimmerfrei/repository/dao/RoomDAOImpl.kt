@@ -9,9 +9,9 @@ class RoomDAOImpl @Inject constructor(
     private val dao: RoomRoomDAO
 ) : RoomDAO {
 
-    override fun insert(rooms: List<RoomEntity>) {
-        dao.insert(rooms)
-    }
+    override fun insert(room: RoomEntity) = dao.insert(room)
+
+    override fun insert(rooms: List<RoomEntity>) = dao.insert(rooms)
 
     override fun getAllRooms(): Flowable<List<RoomEntity>> = dao.getAllRooms()
 }

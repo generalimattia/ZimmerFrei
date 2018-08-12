@@ -7,7 +7,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
@@ -54,6 +56,8 @@ class OverviewFragment : Fragment() {
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        setUpToolbar()
 
         viewModel.selectedDate.observe(this,
                                        Observer { date: LocalDate? ->
@@ -140,6 +144,19 @@ class OverviewFragment : Fragment() {
         }
     }
 
+    private fun setUpToolbar() {
+        toolbar.inflateMenu(R.menu.menu_overview)
+        toolbar.menu.findItem(R.id.rooms)
+            .setOnMenuItemClickListener { _: MenuItem? ->
+                activity?.let {
+                    viewModel.onRoomsMenuItemClick(
+                        it as AppCompatActivity,
+                        R.id.fragment_container
+                    )
+                }
+                true
+            }
+    }
 
     companion object {
         fun newInstance() = OverviewFragment()

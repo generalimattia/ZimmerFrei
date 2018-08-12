@@ -3,7 +3,7 @@ package com.generals.zimmerfrei.overview.usecase
 import com.generals.zimmerfrei.model.*
 import com.generals.zimmerfrei.overview.service.calendar.CalendarService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
-import com.generals.zimmerfrei.overview.service.room.RoomService
+import com.generals.zimmerfrei.service.RoomFetcherService
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
@@ -14,10 +14,11 @@ import javax.inject.Inject
 class OverviewUseCaseImpl @Inject constructor(
     private val calendarService: CalendarService,
     private val reservationService: ReservationService,
-    private val roomService: RoomService
+    private val roomService: RoomFetcherService
 ) : OverviewUseCase {
 
-    override fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>> = calendarService.loadDays(date)
+    override fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>> =
+        calendarService.loadDays(date)
 
     override fun loadRooms(): Observable<List<Room>> = roomService.fetchRooms().toObservable()
 
@@ -40,7 +41,10 @@ class OverviewUseCaseImpl @Inject constructor(
 
                                 reservations?.let {
                                     emitter.onNext(
-                                        DayWithReservations(day, it)
+                                        DayWithReservations(
+                                            day,
+                                            it
+                                        )
                                     )
                                 }
 
@@ -55,6 +59,12 @@ class OverviewUseCaseImpl @Inject constructor(
 
         }.sorted()
 
-    override fun loadReservationsByRoom(startDate: LocalDate, endDate: LocalDate): Observable<Map<Room, List<RoomDay>>> =
-        reservationService.fetchReservationsFromDayToDayGroupedByRoom(startDate, endDate).toObservable()
+    override fun loadReservationsByRoom(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): Observable<Map<Room, List<RoomDay>>> =
+        reservationService.fetchReservationsFromDayToDayGroupedByRoom(
+            startDate,
+            endDate
+        ).toObservable()
 }

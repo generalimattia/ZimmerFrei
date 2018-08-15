@@ -89,7 +89,7 @@ class OverviewFragment : Fragment() {
                                 Observer { rooms: List<Room>? ->
                                     rooms?.let {
                                         //rooms_list_view.bind(it)
-                                        rooms_list_view.bind(List(30) { index: Int -> Room(index.toString()) })
+                                        rooms_list_view.bind(List(30) { index: Int -> Room(id = index.toLong(), name = index.toString()) })
                                     }
                                 })
 

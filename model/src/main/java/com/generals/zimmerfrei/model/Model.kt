@@ -1,5 +1,7 @@
 package com.generals.zimmerfrei.model
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import com.generals.zimmerfrei.repository.entities.RoomEntity
 import org.threeten.bp.OffsetDateTime
@@ -21,21 +23,23 @@ data class Reservation(
     val notes: String = "",
     val mobile: String = "",
     val email: String = ""
-) {
+) : Parcelable {
 
-    constructor(entity: ReservationEntity) : this(
-        id = entity.id,
-        name = entity.name,
-        startDate = entity.startDate,
-        endDate = entity.endDate,
-        adults = entity.adults,
-        children = entity.children,
-        babies = entity.babies,
-        color = entity.color,
-        room = Room(entity.roomId)
+    constructor(
+        reservation: ReservationEntity, room: RoomEntity
+    ) : this(
+        id = reservation.id,
+        name = reservation.name,
+        startDate = reservation.startDate,
+        endDate = reservation.endDate,
+        adults = reservation.adults,
+        children = reservation.children,
+        babies = reservation.babies,
+        color = reservation.color,
+        room = Room(room)
     )
 
-    fun toEntity() : ReservationEntity = ReservationEntity(
+    fun toEntity(): ReservationEntity = ReservationEntity(
         name = name,
         startDate = startDate,
         endDate = endDate,
@@ -43,22 +47,114 @@ data class Reservation(
         children = children,
         babies = babies,
         color = color,
-        roomId = room.name,
+        roomId = room.id,
         notes = notes,
         email = email,
         mobile = mobile
     )
+
+    constructor(source: Parcel) : this(
+        source.readLong(),
+        source.readString(),
+        source.readSerializable() as OffsetDateTime,
+        source.readSerializable() as OffsetDateTime,
+        source.readInt(),
+        source.readInt(),
+        source.readInt(),
+        source.readString(),
+        source.readParcelable<Room>(Room::class.java.classLoader),
+        source.readString(),
+        source.readString(),
+        source.readString()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeLong(id)
+        writeString(name)
+        writeSerializable(startDate)
+        writeSerializable(endDate)
+        writeInt(adults)
+        writeInt(children)
+        writeInt(babies)
+        writeString(color)
+        writeParcelable(
+            room,
+            0
+        )
+        writeString(notes)
+        writeString(mobile)
+        writeString(email)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<Reservation> = object : Parcelable.Creator<Reservation> {
+            override fun createFromParcel(source: Parcel): Reservation = Reservation(source)
+            override fun newArray(size: Int): Array<Reservation?> = arrayOfNulls(size)
+        }
+    }
 }
 
 data class Room(
-    val name: String = ""
-) {
+    val id: Long = 0L,
+    val name: String = "",
+    val personsCount: Int = 0,
+    val isDouble: Boolean = false,
+    val isSingle: Boolean = false,
+    val isHandicap: Boolean = false,
+    val hasBalcony: Boolean = false
+) : Parcelable {
 
     constructor(entity: RoomEntity) : this(
-        name = entity.name
+        id = entity.id,
+        name = entity.name,
+        isDouble = entity.isDouble,
+        isSingle = entity.isSingle,
+        isHandicap = entity.isHandicap,
+        hasBalcony = entity.hasBalcony
     )
 
-    fun toEntity(): RoomEntity = RoomEntity(name)
+    fun toEntity(): RoomEntity = RoomEntity(
+        id,
+        name,
+        personsCount,
+        isDouble,
+        isSingle,
+        isHandicap,
+        hasBalcony
+    )
+
+    constructor(source: Parcel) : this(
+        source.readLong(),
+        source.readString(),
+        source.readInt(),
+        1 == source.readInt(),
+        1 == source.readInt(),
+        1 == source.readInt(),
+        1 == source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeLong(id)
+        writeString(name)
+        writeInt(personsCount)
+        writeInt((if (isDouble) 1 else 0))
+        writeInt((if (isSingle) 1 else 0))
+        writeInt((if (isHandicap) 1 else 0))
+        writeInt((if (hasBalcony) 1 else 0))
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<Room> = object : Parcelable.Creator<Room> {
+            override fun createFromParcel(source: Parcel): Room = Room(source)
+            override fun newArray(size: Int): Array<Room?> = arrayOfNulls(size)
+        }
+    }
 }
 
 data class DayWithReservations(

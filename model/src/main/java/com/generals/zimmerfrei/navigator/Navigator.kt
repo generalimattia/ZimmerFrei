@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.common.navigator
+package com.generals.zimmerfrei.navigator
 
 import android.app.Activity
 import android.content.Intent
@@ -6,12 +6,13 @@ import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import com.generals.zimmerfrei.model.Room
 
 interface Navigator {
 
     fun reservation(): NavigationRequest.ActivityRequest
 
-    fun room(): NavigationRequest.FragmentRequest
+    fun room(room: Room?): NavigationRequest.FragmentRequest
 }
 
 sealed class NavigationRequest {

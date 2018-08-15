@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.room.detail.view
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 import com.generals.zimmerfrei.room.detail.viewmodel.RoomDetailViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -38,16 +41,39 @@ class RoomDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.fragment_room_detail,
-            container,
-            false
-        )
-    }
+    ): View? = inflater.inflate(
+        R.layout.fragment_room_detail,
+        container,
+        false
+    )
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpToolbar()
+
+        viewModel.room.observe(this,
+                               Observer { room: Room? ->
+                                   room?.let {
+                                       name.setText(
+                                           room.name,
+                                           TextView.BufferType.EDITABLE
+                                       )
+                                       persons.setText(
+                                           room.personsCount,
+                                           TextView.BufferType.EDITABLE
+                                       )
+                                       double_bed.isChecked = room.isDouble
+                                       single_bed.isChecked = room.isSingle
+                                       handicap.isChecked = room.isHandicap
+                                       balcony.isChecked = room.hasBalcony
+                                   }
+                               })
+
+        if (savedInstanceState == null) {
+            val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
+
+            viewModel.start(room)
+        }
     }
 
     private fun setUpToolbar() {
@@ -63,11 +89,21 @@ class RoomDetailFragment : Fragment() {
         }
     }
 
-    private fun submit() {}
+    private fun submit() {
+        viewModel.start(null)
+    }
 
     companion object {
-        fun newInstance(): RoomDetailFragment =
-            RoomDetailFragment()
+        private const val ROOM_BUNDLE_KEY = "RoomDetailFragment.ROOM_BUNDLE_KEY"
+
+        fun newInstance(room: Room?): RoomDetailFragment = RoomDetailFragment().apply {
+            arguments = Bundle(1).apply {
+                putParcelable(
+                    ROOM_BUNDLE_KEY,
+                    room
+                )
+            }
+        }
     }
 
 }

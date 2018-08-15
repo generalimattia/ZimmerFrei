@@ -9,5 +9,7 @@ interface RoomDAO {
 
     fun insert(rooms: List<RoomEntity>)
 
+    fun findById(id: Long): Flowable<RoomEntity>
+
     fun getAllRooms(): Flowable<List<RoomEntity>>
 }

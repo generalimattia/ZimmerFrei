@@ -12,8 +12,4 @@ interface OverviewUseCase {
     fun loadRooms(): Observable<List<Room>>
 
     fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>>
-
-    fun loadCalendar(): Observable<DayWithReservations>
-
-    fun loadReservationsByRoom(startDate: LocalDate, endDate: LocalDate): Observable<Map<Room, List<RoomDay>>>
 }

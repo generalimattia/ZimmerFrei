@@ -15,6 +15,9 @@ interface RoomRoomDAO {
     @Insert
     fun insert(rooms: List<RoomEntity>)
 
+    @Query("SELECT * FROM rooms WHERE id = :id")
+    fun findById(id: Long): Flowable<RoomEntity>
+
     @Query("SELECT * FROM rooms")
     fun getAllRooms(): Flowable<List<RoomEntity>>
 }

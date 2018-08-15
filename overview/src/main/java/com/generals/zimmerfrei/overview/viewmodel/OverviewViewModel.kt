@@ -6,10 +6,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
-import com.generals.zimmerfrei.common.navigator.Navigator
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.model.RoomDay
+import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -88,14 +87,14 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadReservations(currentDate: LocalDate) {
-        compositeDisposable.add(useCase.loadReservationsByRoom(
+        /*compositeDisposable.add(useCase.loadReservationsByRoom(
             currentDate,
             currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
         ).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { reservationsByRoom: Map<Room, List<RoomDay>>? ->
             reservationsByRoom?.let {
 
             }
-        })
+        })*/
     }
 
     private fun loadCalendar(currentDate: LocalDate) {
@@ -108,7 +107,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
-        navigator.room()
+        navigator.room(null)
             .startNewFragment(
                 activity = activity,
                 containerViewId = containerViewId,

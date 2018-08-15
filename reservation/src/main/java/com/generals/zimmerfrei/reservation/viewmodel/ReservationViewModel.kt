@@ -3,11 +3,7 @@ package com.generals.zimmerfrei.reservation.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.generals.zimmerfrei.model.Reservation
-import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class ReservationViewModel @Inject constructor(
@@ -82,7 +78,7 @@ class ReservationViewModel @Inject constructor(
             0
         }
 
-        useCase.save(
+        /*useCase.save(
             Reservation(
                 name = name,
                 startDate = OffsetDateTime.parse(
@@ -102,7 +98,7 @@ class ReservationViewModel @Inject constructor(
                 mobile = mobile,
                 email = email
             )
-        )
+        )*/
     }
 
 }

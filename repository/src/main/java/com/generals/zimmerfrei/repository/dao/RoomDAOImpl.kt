@@ -13,5 +13,7 @@ class RoomDAOImpl @Inject constructor(
 
     override fun insert(rooms: List<RoomEntity>) = dao.insert(rooms)
 
+    override fun findById(id: Long): Flowable<RoomEntity> = dao.findById(id)
+
     override fun getAllRooms(): Flowable<List<RoomEntity>> = dao.getAllRooms()
 }

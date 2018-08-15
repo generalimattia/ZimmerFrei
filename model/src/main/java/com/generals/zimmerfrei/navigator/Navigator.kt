@@ -12,7 +12,9 @@ interface Navigator {
 
     fun reservation(): NavigationRequest.ActivityRequest
 
-    fun room(room: Room?): NavigationRequest.FragmentRequest
+    fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest
+
+    fun roomDetail(room: Room? = null): NavigationRequest.FragmentRequest
 }
 
 sealed class NavigationRequest {

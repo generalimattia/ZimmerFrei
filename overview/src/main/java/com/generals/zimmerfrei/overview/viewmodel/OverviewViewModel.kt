@@ -107,7 +107,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
-        navigator.room(null)
+        navigator.roomList(containerViewId)
             .startNewFragment(
                 activity = activity,
                 containerViewId = containerViewId,

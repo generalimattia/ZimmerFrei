@@ -93,7 +93,7 @@ class ReservationViewModel @Inject constructor(
                 children = childrenNumber,
                 babies = babiesNumber,
                 color = _color.value ?: availableColors.first(),
-                room = Room(room),
+                roomDetail = Room(roomDetail),
                 notes = notes,
                 mobile = mobile,
                 email = email

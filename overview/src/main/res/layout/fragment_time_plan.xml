@@ -26,11 +26,9 @@
             android:layout_width="@dimen/material_sixth"
             android:layout_height="@dimen/material_sixth"
             android:layout_marginStart="@dimen/material_double"
-            android:background="@drawable/background_color_selectable"
             android:elevation="2dp"
-            android:foreground="?attr/selectableItemBackground"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-            android:stateListAnimator="@drawable/translation_z_animator"
             app:layout_constraintBottom_toTopOf="@id/days_list_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"/>
@@ -53,11 +51,9 @@
             android:layout_width="@dimen/material_sixth"
             android:layout_height="@dimen/material_sixth"
             android:layout_marginEnd="@dimen/material_double"
-            android:background="@drawable/background_color_selectable"
             android:elevation="2dp"
-            android:foreground="?attr/selectableItemBackground"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-            android:stateListAnimator="@drawable/translation_z_animator"
             app:layout_constraintBottom_toTopOf="@id/days_list_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"/>
@@ -91,20 +87,19 @@
             app:layout_constraintStart_toEndOf="@id/rooms_list_view"
             app:layout_constraintTop_toBottomOf="@id/days_list_view"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/material_double"
-            android:layout_marginEnd="@dimen/material_double"
-            android:backgroundTint="@color/colorAccent"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_add_white_24dp"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/material_double"
+        android:layout_marginEnd="@dimen/material_double"
+        android:backgroundTint="@color/colorAccent"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_add_white_24dp"
+        app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

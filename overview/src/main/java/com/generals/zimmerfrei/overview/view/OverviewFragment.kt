@@ -87,9 +87,23 @@ class OverviewFragment : Fragment() {
 
         viewModel.rooms.observe(this,
                                 Observer { rooms: List<Room>? ->
-                                    rooms?.let {
-                                        //rooms_list_view.bind(it)
-                                        rooms_list_view.bind(List(30) { index: Int -> Room(id = index.toLong(), name = index.toString()) })
+                                    rooms?.let { roomList: List<Room> ->
+                                        rooms_list_view.bind(roomList)
+
+                                        val roomDays =
+                                            MutableList(roomList.size) { index: Int -> roomList[index] to MutableList(31) { _: Int -> RoomDay.EmptyDay() } }
+
+                                        SyncScroller().bindFirst(days_list_view.recyclerView)
+                                            .bindSecond(plan.recyclerView)
+                                            .sync()
+
+                                        val syncScroller =
+                                            SyncScroller().bindFirst(rooms_list_view.recyclerView)
+
+                                        plan.bind(
+                                            roomDays,
+                                            syncScroller
+                                        )
                                     }
                                 })
 
@@ -106,20 +120,6 @@ class OverviewFragment : Fragment() {
                                         month_and_year.text = it.capitalize()
                                     }
                                 })
-
-        val days =
-            MutableList(31) { _: Int -> Room() to MutableList(31) { _: Int -> RoomDay.EmptyDay() } }
-
-        SyncScroller().bindFirst(days_list_view.recyclerView)
-            .bindSecond(plan.recyclerView)
-            .sync()
-
-        val syncScroller = SyncScroller().bindFirst(rooms_list_view.recyclerView)
-
-        plan.bind(
-            days,
-            syncScroller
-        )
 
         add_fab.setOnClickListener {
             activity?.let {

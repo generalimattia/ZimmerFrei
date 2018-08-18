@@ -122,6 +122,5 @@ class OverviewViewModel @Inject constructor(
 
     override fun onCleared() {
         compositeDisposable.dispose()
-        super.onCleared()
     }
 }

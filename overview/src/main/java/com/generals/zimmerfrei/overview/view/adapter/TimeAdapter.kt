@@ -7,8 +7,10 @@ import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.SingleRoomPlan
 
 class TimeAdapter(
-    private val roomDays: List<Pair<Room, List<RoomDay>>>
+    roomDays: List<Pair<Room, List<RoomDay>>>
 ) : RecyclerView.Adapter<TimeAdapter.SingleRoomViewHolder>() {
+
+    private val _roomDays: MutableList<Pair<Room, List<RoomDay>>> = roomDays.toMutableList()
 
     init {
         setHasStableIds(true)
@@ -19,12 +21,18 @@ class TimeAdapter(
     ): SingleRoomViewHolder = SingleRoomViewHolder(SingleRoomPlan(parent.context))
 
     override fun onBindViewHolder(holder: SingleRoomViewHolder, position: Int) {
-        holder.bind(roomDays[position].second)
+        holder.bind(_roomDays[position].second)
     }
 
-    override fun getItemCount(): Int = roomDays.size
+    override fun getItemCount(): Int = _roomDays.size
 
-    override fun getItemId(position: Int): Long = roomDays[position].first.hashCode().toLong()
+    override fun getItemId(position: Int): Long = _roomDays[position].first.hashCode().toLong()
+
+    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
+        _roomDays.clear()
+        _roomDays.addAll(newRoomDays)
+        notifyDataSetChanged()
+    }
 
     class SingleRoomViewHolder(
         private val view: SingleRoomPlan

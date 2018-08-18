@@ -93,21 +93,21 @@ class ReservationServiceImpl @Inject constructor(
 
                                                             when {
                                                                 currentDay.isEqual(startDate) -> RoomDay.StartingReservationDay(
-                                                                    Day(date = OffsetDateTime.from(currentDay)),
+                                                                    Day(date = offsetDateTimeFromLocalDate(currentDay)),
                                                                     Reservation(
                                                                         it,
                                                                         roomEntity
                                                                     )
                                                                 )
                                                                 currentDay.isEqual(endDate) -> RoomDay.EndingReservationDay(
-                                                                    Day(date = OffsetDateTime.from(currentDay)),
+                                                                    Day(date = offsetDateTimeFromLocalDate(currentDay)),
                                                                     Reservation(
                                                                         it,
                                                                         roomEntity
                                                                     )
                                                                 )
                                                                 else -> RoomDay.ReservedDay(
-                                                                    Day(date = OffsetDateTime.from(currentDay)),
+                                                                    Day(date = offsetDateTimeFromLocalDate(currentDay)),
                                                                     Reservation(
                                                                         it,
                                                                         roomEntity
@@ -115,7 +115,7 @@ class ReservationServiceImpl @Inject constructor(
                                                                 )
                                                             }
                                                         }
-                                                                ?: RoomDay.EmptyDay(Day(date = OffsetDateTime.from(currentDay)))
+                                                                ?: RoomDay.EmptyDay(Day(date = offsetDateTimeFromLocalDate(currentDay)))
                                                     roomDay
                                                 }
                                         emitter.onNext(Room(roomEntity) to roomDays)

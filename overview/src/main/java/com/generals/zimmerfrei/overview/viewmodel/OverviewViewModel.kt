@@ -8,6 +8,7 @@ import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,6 +28,8 @@ class OverviewViewModel @Inject constructor(
     private val _days = MutableLiveData<List<Day>>()
     private val _rooms: MutableLiveData<List<Room>> = MutableLiveData()
     private val _selectedDate: MutableLiveData<LocalDate> = MutableLiveData()
+    private val _reservations: MutableLiveData<MutableList<Pair<Room, List<RoomDay>>>> =
+        MutableLiveData()
 
     private var date: LocalDate by Delegates.observable(LocalDate.now()) { _: KProperty<*>, _: LocalDate?, newValue: LocalDate? ->
         newValue?.let {
@@ -49,8 +52,12 @@ class OverviewViewModel @Inject constructor(
     val selectedDate: LiveData<LocalDate>
         get() = _selectedDate
 
+    val reservations: LiveData<MutableList<Pair<Room, List<RoomDay>>>>
+        get() = _reservations
+
     fun start() {
         _selectedDate.value = date
+        _reservations.value = mutableListOf()
 
         loadRooms()
 
@@ -87,14 +94,18 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadReservations(currentDate: LocalDate) {
-        /*compositeDisposable.add(useCase.loadReservationsByRoom(
-            currentDate,
-            currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
-        ).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { reservationsByRoom: Map<Room, List<RoomDay>>? ->
-            reservationsByRoom?.let {
 
+        useCase.loadReservations(
+            currentDate.withDayOfMonth(1),
+            currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
+        )
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
+                roomDay?.let {
+                    _reservations.value?.add(it)
+                }
             }
-        })*/
     }
 
     private fun loadCalendar(currentDate: LocalDate) {

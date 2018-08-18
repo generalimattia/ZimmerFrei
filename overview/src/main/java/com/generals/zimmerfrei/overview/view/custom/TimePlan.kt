@@ -18,24 +18,45 @@ class TimePlan : FrameLayout {
     private lateinit var recyclerView: RecyclerView
 
     constructor(context: Context) : super(context) {
-        init(null, 0)
+        init(
+            null,
+            0
+        )
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
+    constructor(context: Context, attrs: AttributeSet) : super(
+        context,
+        attrs
+    ) {
+        init(
+            attrs,
+            0
+        )
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context, attrs, defStyle
+        context,
+        attrs,
+        defStyle
     ) {
-        init(attrs, defStyle)
+        init(
+            attrs,
+            defStyle
+        )
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(R.layout.widget_time_plan, this, true)
+            .inflate(
+                R.layout.widget_time_plan,
+                this,
+                true
+            )
 
-        layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+        layoutParams = FrameLayout.LayoutParams(
+            WRAP_CONTENT,
+            MATCH_PARENT
+        )
 
         recyclerView = findViewById(R.id.recycler_view)
     }
@@ -44,5 +65,9 @@ class TimePlan : FrameLayout {
         syncScroller.bindSecond(recyclerView)
             .sync()
         recyclerView.adapter = TimeAdapter(roomDays)
+    }
+
+    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
+        (recyclerView.adapter as TimeAdapter).update(newRoomDays)
     }
 }

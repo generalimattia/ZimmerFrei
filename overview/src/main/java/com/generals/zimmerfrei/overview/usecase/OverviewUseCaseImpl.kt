@@ -1,14 +1,13 @@
 package com.generals.zimmerfrei.overview.usecase
 
-import com.generals.zimmerfrei.model.*
+import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.service.calendar.CalendarService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.service.RoomFetcherService
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDate
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 class OverviewUseCaseImpl @Inject constructor(
@@ -21,4 +20,12 @@ class OverviewUseCaseImpl @Inject constructor(
         calendarService.loadDays(date)
 
     override fun loadRooms(): Observable<List<Room>> = roomService.fetchRooms().toObservable()
+
+    override fun loadReservations(
+        startPeriod: LocalDate, endPeriod: LocalDate
+    ): Observable<Pair<Room, List<RoomDay>>> =
+        reservationService.fetchReservationsFromDayToDayGroupedByRoom(
+            startPeriod,
+            endPeriod
+        )
 }

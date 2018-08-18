@@ -59,6 +59,20 @@ class OverviewFragment : Fragment() {
 
         setUpToolbar()
 
+        /*val roomDays: List<Pair<Room, List<RoomDay>>> = emptyList()
+
+        SyncScroller().bindFirst(days_list_view.recyclerView)
+            .bindSecond(plan.recyclerView)
+            .sync()
+
+        val syncScroller =
+            SyncScroller().bindFirst(rooms_list_view.recyclerView)
+
+        plan.bind(
+            roomDays,
+            syncScroller
+        )*/
+
         viewModel.selectedDate.observe(this,
                                        Observer { date: LocalDate? ->
                                            date?.let {
@@ -113,6 +127,12 @@ class OverviewFragment : Fragment() {
                                        days_list_view.bind(it)
                                    }
                                })
+
+        /*viewModel.reservations.observe(this, Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
+            roomDays?.let {
+                plan.update(it)
+            }
+        })*/
 
         viewModel.month.observe(this,
                                 Observer { month: String? ->

@@ -61,4 +61,8 @@ class AllRoomsPlan : FrameLayout {
             syncScroller
         )
     }
+
+    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
+        (recyclerView.adapter as AllRoomsAdapter).update(newRoomDays)
+    }
 }

@@ -26,6 +26,10 @@ class RoomListViewModel @Inject constructor(
 
     fun start() {
 
+        fetchRooms()
+    }
+
+    private fun fetchRooms() {
         compositeDisposable.add(useCase.getAllRooms().subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { rooms: List<Room>? ->
             rooms?.let {
                 _allRooms.value = it
@@ -40,6 +44,24 @@ class RoomListViewModel @Inject constructor(
                 containerViewId,
                 true
             )
+    }
+
+    fun onRoomClick(activity: AppCompatActivity, @IdRes containerViewId: Int, room: Room) {
+        navigator.roomDetail(room)
+            .startNewFragment(
+                activity,
+                containerViewId,
+                true
+            )
+    }
+
+    fun onDeleteRoomClick(room: Room) {
+        useCase.delete(room)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+
+        fetchRooms()
     }
 
     override fun onCleared() {

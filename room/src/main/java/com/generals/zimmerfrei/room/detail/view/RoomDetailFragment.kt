@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -54,12 +55,16 @@ class RoomDetailFragment : Fragment() {
         viewModel.room.observe(this,
                                Observer { room: Room? ->
                                    room?.let {
+
+                                       toolbar.title =
+                                               "${resources.getString(R.string.room)} ${room.name}"
+
                                        name.setText(
                                            room.name,
                                            TextView.BufferType.EDITABLE
                                        )
                                        persons.setText(
-                                           room.personsCount,
+                                           room.personsCount.toString(),
                                            TextView.BufferType.EDITABLE
                                        )
                                        double_bed.isChecked = room.isDouble
@@ -69,9 +74,13 @@ class RoomDetailFragment : Fragment() {
                                    }
                                })
 
-        if (savedInstanceState == null) {
-            val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
+        val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
 
+        submit.setOnClickListener {
+            submit()
+        }
+
+        if (savedInstanceState == null) {
             viewModel.start(room)
         }
     }
@@ -90,7 +99,18 @@ class RoomDetailFragment : Fragment() {
     }
 
     private fun submit() {
-        viewModel.start(null)
+        activity?.let {
+
+            viewModel.submit(
+                it as AppCompatActivity,
+                name.text.toString(),
+                persons.text.toString(),
+                double_bed.isChecked,
+                single_bed.isChecked,
+                handicap.isChecked,
+                balcony.isChecked
+            )
+        }
     }
 
     companion object {

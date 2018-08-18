@@ -45,22 +45,34 @@ class RoomListFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.fragment_room_list,
-            container,
-            false
-        )
-    }
+    ): View? = inflater.inflate(
+        R.layout.fragment_room_list,
+        container,
+        false
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         containerViewId = arguments?.getInt(CONTAINER_VIEW_BUNDLE_KEY) ?: 0
 
+        setUpToolbar()
+
         viewModel.allRooms.observe(this,
                                    Observer { rooms: List<Room>? ->
                                        rooms?.let {
-                                           recycler_view.adapter = RoomsAdapter(it)
+                                           recycler_view.adapter = RoomsAdapter(
+                                               rooms = it,
+                                               onClickListener = { room: Room ->
+                                                   activity?.let {
+                                                       viewModel.onRoomClick(
+                                                           it as AppCompatActivity,
+                                                           containerViewId,
+                                                           room
+                                                       )
+                                                   }
+                                               },
+                                               onDeleteClickListener = viewModel::onDeleteRoomClick
+                                           )
                                        }
                                    })
 
@@ -75,6 +87,13 @@ class RoomListFragment : Fragment() {
 
         if (savedInstanceState == null) {
             viewModel.start()
+        }
+    }
+
+    private fun setUpToolbar() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
     }
 

@@ -2,6 +2,7 @@ package com.generals.zimmerfrei.repository.dao
 
 import com.generals.zimmerfrei.repository.entities.ReservationEntity
 import io.reactivex.Flowable
+import io.reactivex.Single
 import org.threeten.bp.OffsetDateTime
 
 interface ReservationDAO {

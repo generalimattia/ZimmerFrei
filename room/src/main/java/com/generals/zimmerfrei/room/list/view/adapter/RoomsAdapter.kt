@@ -10,7 +10,9 @@ import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 
 class RoomsAdapter(
-    private val rooms: List<Room>
+    private val rooms: List<Room>,
+    private val onClickListener: (Room) -> Unit,
+    private val onDeleteClickListener: (Room) -> Unit
 ) : RecyclerView.Adapter<RoomsAdapter.RoomViewHolder>() {
 
     init {
@@ -30,7 +32,11 @@ class RoomsAdapter(
     override fun getItemCount(): Int = rooms.size
 
     override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
-        holder.bind(rooms[position])
+        holder.bind(
+            rooms[position],
+            onClickListener,
+            onDeleteClickListener
+        )
     }
 
     override fun getItemId(position: Int): Long = rooms[position].hashCode().toLong()
@@ -43,6 +49,22 @@ class RoomsAdapter(
         private val delete: ImageView = view.findViewById(R.id.delete)
         private val edit: ImageView = view.findViewById(R.id.edit)
 
-        fun bind(room: Room) {}
+        fun bind(
+            room: Room, onClickListener: (Room) -> Unit, onDeleteClickListener: (Room) -> Unit
+        ) {
+            roomName.text = room.name
+
+            itemView.setOnClickListener {
+                onClickListener(room)
+            }
+
+            delete.setOnClickListener {
+                onDeleteClickListener(room)
+            }
+
+            edit.setOnClickListener {
+                onClickListener(room)
+            }
+        }
     }
 }

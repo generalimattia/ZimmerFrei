@@ -10,9 +10,7 @@ class ReservationDAOImpl @Inject constructor(
     private val dao: RoomReservationDAO
 ) : ReservationDAO {
 
-    override fun insert(reservation: ReservationEntity) {
-        dao.insert(reservation)
-    }
+    override fun insert(reservation: ReservationEntity) = dao.insert(reservation)
 
     override fun getAllReservations(): Flowable<List<ReservationEntity>> = dao.getAllReservations()
 
@@ -25,15 +23,25 @@ class ReservationDAOImpl @Inject constructor(
     override fun findReservationsByRoomAndDateBetweenStartDateAndEndDate(
         roomId: String, date: OffsetDateTime
     ): Flowable<List<ReservationEntity>> =
-        dao.findReservationsByRoomAndDateBetweenStartDateAndEndDate(roomId, date)
+        dao.findReservationsByRoomAndDateBetweenStartDateAndEndDate(
+            roomId,
+            date
+        )
 
     override fun findReservationsByRoomAndFromDateToDate(
         roomId: Long, startDate: OffsetDateTime, endDate: OffsetDateTime
-    ): Flowable<List<ReservationEntity>> =
-        dao.findReservationsByRoomAndFromDateToDate(roomId, startDate, endDate)
+    ): Flowable<List<ReservationEntity>> = dao.findReservationsByRoomAndFromDateToDate(
+        roomId,
+        startDate,
+        endDate
+    )
 
-    override fun findReservationsFromDateToDate(startDate: OffsetDateTime, endDate: OffsetDateTime): Flowable<List<ReservationEntity>> =
-        dao.findReservationsFromDateToDate(startDate, endDate)
+    override fun findReservationsFromDateToDate(
+        startDate: OffsetDateTime, endDate: OffsetDateTime
+    ): Flowable<List<ReservationEntity>> = dao.findReservationsFromDateToDate(
+        startDate,
+        endDate
+    )
 
     override fun deleteAll() {
         dao.deleteAll()

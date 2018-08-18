@@ -36,7 +36,10 @@ data class Reservation(
         children = reservation.children,
         babies = reservation.babies,
         color = reservation.color,
-        room = Room(room)
+        room = Room(room),
+        notes = reservation.notes,
+        mobile = reservation.mobile,
+        email = reservation.email
     )
 
     fun toEntity(): ReservationEntity = ReservationEntity(
@@ -110,6 +113,7 @@ data class Room(
     constructor(entity: RoomEntity) : this(
         id = entity.id,
         name = entity.name,
+        personsCount = entity.personsCount,
         isDouble = entity.isDouble,
         isSingle = entity.isSingle,
         isHandicap = entity.isHandicap,

@@ -30,7 +30,7 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun fetchRooms() {
-        compositeDisposable.add(useCase.getAllRooms().subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { rooms: List<Room>? ->
+        compositeDisposable.add(useCase.getAllRooms().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { rooms: List<Room>? ->
             rooms?.let {
                 _allRooms.value = it
             }
@@ -57,7 +57,7 @@ class RoomListViewModel @Inject constructor(
 
     fun onDeleteRoomClick(room: Room) {
         useCase.delete(room)
-            .subscribeOn(Schedulers.computation())
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
 

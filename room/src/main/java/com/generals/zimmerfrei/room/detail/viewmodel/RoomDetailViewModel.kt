@@ -55,7 +55,7 @@ class RoomDetailViewModel @Inject constructor(
                         isHandicap = isHandicap,
                         hasBalcony = hasBalcony
                     )
-                ).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+                ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe()
             )
         } ?: let {
             compositeDisposable.add(
@@ -68,7 +68,7 @@ class RoomDetailViewModel @Inject constructor(
                         isHandicap = isHandicap,
                         hasBalcony = hasBalcony
                     )
-                ).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe()
+                ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe()
             )
         }
 

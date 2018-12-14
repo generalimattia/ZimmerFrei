@@ -65,7 +65,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadRooms() {
-        compositeDisposable.add(useCase.loadRooms().subscribeOn(Schedulers.computation()).observeOn(
+        compositeDisposable.add(useCase.loadRooms().subscribeOn(Schedulers.newThread()).observeOn(
             AndroidSchedulers.mainThread()
         ).subscribe { internalRooms: List<Room>? ->
             internalRooms?.let {
@@ -99,7 +99,7 @@ class OverviewViewModel @Inject constructor(
             currentDate.withDayOfMonth(1),
             currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
         )
-            .subscribeOn(Schedulers.computation())
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
                 roomDay?.let {
@@ -109,7 +109,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadCalendar(currentDate: LocalDate) {
-        compositeDisposable.add(useCase.loadDays(currentDate).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe { daysAndMonth: Pair<List<Day>, String>? ->
+        compositeDisposable.add(useCase.loadDays(currentDate).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { daysAndMonth: Pair<List<Day>, String>? ->
             daysAndMonth?.let {
                 _days.value = it.first
                 _month.value = it.second

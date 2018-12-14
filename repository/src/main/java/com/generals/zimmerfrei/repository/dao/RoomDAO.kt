@@ -15,5 +15,7 @@ interface RoomDAO {
 
     fun findById(id: Long): Flowable<RoomEntity>
 
+    fun findByName(name: String): Flowable<RoomEntity>
+
     fun getAllRooms(): Flowable<List<RoomEntity>>
 }

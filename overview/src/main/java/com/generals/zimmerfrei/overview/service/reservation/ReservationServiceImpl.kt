@@ -47,8 +47,7 @@ class ReservationServiceImpl @Inject constructor(
         Observable.create<Pair<Room, List<RoomDay>>> { emitter: ObservableEmitter<Pair<Room, List<RoomDay>>> ->
 
             roomDAO.getAllRooms()
-                .observeOn(Schedulers.computation())
-                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.newThread())
                 .subscribe { roomEntities: List<RoomEntity> ->
 
                     val countDownLatch = CountDownLatch(roomEntities.size)
@@ -64,9 +63,7 @@ class ReservationServiceImpl @Inject constructor(
                                     offsetDateTimeFromLocalDate(endPeriod)
                                 )
 
-                            allReservations.subscribeOn(Schedulers.computation())
-                                .observeOn(Schedulers.computation())
-                                .subscribe { nullableReservationEntities: List<ReservationEntity>? ->
+                            allReservations.subscribe { nullableReservationEntities: List<ReservationEntity>? ->
 
                                     nullableReservationEntities?.let { reservationEntities: List<ReservationEntity> ->
 

@@ -22,6 +22,9 @@ interface RoomRoomDAO {
     @Query("SELECT * FROM rooms WHERE id = :id")
     fun findById(id: Long): Flowable<RoomEntity>
 
+    @Query("SELECT * FROM rooms WHERE name = :name")
+    fun findByName(name: String): Flowable<RoomEntity>
+
     @Query("SELECT * FROM rooms")
     fun getAllRooms(): Flowable<List<RoomEntity>>
 }

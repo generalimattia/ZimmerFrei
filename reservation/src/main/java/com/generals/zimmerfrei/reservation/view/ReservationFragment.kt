@@ -28,11 +28,23 @@ class ReservationFragment : Fragment() {
 
     private lateinit var viewModel: ReservationViewModel
 
+    private var startDay: Int = 0
+    private var startMonth: Int = 0
+    private var startYear: Int = 0
+
+    private var endDay: Int = 0
+    private var endMonth: Int = 0
+    private var endYear: Int = 0
+
     private val startDatePickerDialog: DatePickerDialog by lazy {
         val calendar: Calendar = Calendar.getInstance()
         DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
+
+                startDay = day
+                startMonth = month
+                startYear = year
 
                 start_date.setText(
                     DATE_FORMAT.format(
@@ -58,6 +70,10 @@ class ReservationFragment : Fragment() {
         val picker = DatePickerDialog(
             context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
+
+                endDay = day
+                endMonth = month
+                endYear = year
 
                 end_date.setText(
                     DATE_FORMAT.format(
@@ -129,6 +145,16 @@ class ReservationFragment : Fragment() {
             submit()
         }
 
+        viewModel.pressBack.observe(
+            this,
+            Observer { shouldPressBack: Boolean? ->
+                shouldPressBack?.let {
+                    if (it) {
+                        activity?.onBackPressed()
+                    }
+                }
+            })
+
         if (savedInstanceState == null) {
             viewModel.start()
         }
@@ -150,15 +176,19 @@ class ReservationFragment : Fragment() {
     private fun submit() {
         viewModel.submit(
             name = name.text.toString(),
-            startDate = start_date.text.toString(),
-            endDate = end_date.text.toString(),
+            startDay = startDay,
+            startMonth = startMonth,
+            startYear = startYear,
+            endDay = endDay,
+            endMonth = endMonth,
+            endYear = endYear,
             adults = adult_count.text.toString(),
             children = children_count.text.toString(),
             babies = children_count.text.toString(),
             notes = notes.text.toString(),
             email = email.text.toString(),
             mobile = mobile.text.toString(),
-            room = room.text.toString()
+            roomName = room.text.toString()
         )
     }
 

@@ -32,6 +32,7 @@ class OverviewViewModel @Inject constructor(
 
     private var date: LocalDate by Delegates.observable(LocalDate.now()) { _: KProperty<*>, _: LocalDate?, newValue: LocalDate? ->
         newValue?.let {
+            _reservations.value = mutableListOf()
             _selectedDate.value = it
             processNewDate(it)
         }

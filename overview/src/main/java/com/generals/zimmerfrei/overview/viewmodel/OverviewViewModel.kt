@@ -26,10 +26,9 @@ class OverviewViewModel @Inject constructor(
 
     private val _month = MutableLiveData<String>()
     private val _days = MutableLiveData<List<Day>>()
-    private val _rooms: MutableLiveData<List<Room>> = MutableLiveData()
-    private val _selectedDate: MutableLiveData<LocalDate> = MutableLiveData()
-    private val _reservations: MutableLiveData<MutableList<Pair<Room, List<RoomDay>>>> =
-        MutableLiveData()
+    private val _rooms = MutableLiveData<List<Room>>()
+    private val _selectedDate = MutableLiveData<LocalDate>()
+    private val _reservations = MutableLiveData<MutableList<Pair<Room, List<RoomDay>>>>()
 
     private var date: LocalDate by Delegates.observable(LocalDate.now()) { _: KProperty<*>, _: LocalDate?, newValue: LocalDate? ->
         newValue?.let {
@@ -95,17 +94,17 @@ class OverviewViewModel @Inject constructor(
 
     private fun loadReservations(currentDate: LocalDate) {
 
-        useCase.loadReservations(
+        compositeDisposable.add(useCase.loadReservations(
             currentDate.withDayOfMonth(1),
             currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
-        )
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
-                roomDay?.let {
-                    _reservations.value?.add(it)
-                }
+        ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
+            roomDay?.let { notNullableRoomDay: Pair<Room, List<RoomDay>> ->
+                val newList: MutableList<Pair<Room, List<RoomDay>>> = _reservations.value?.let {
+                    (it + notNullableRoomDay).toMutableList()
+                } ?: mutableListOf()
+                _reservations.value = newList
             }
+        })
     }
 
     private fun loadCalendar(currentDate: LocalDate) {

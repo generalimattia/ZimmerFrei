@@ -1,8 +1,8 @@
 package com.generals.zimmerfrei.reservation.view
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import com.generals.zimmerfrei.reservation.R
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -20,11 +20,14 @@ class ReservationActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
 
-        supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.fragment_container, ReservationFragment.newInstance()
-            )
-            .commitAllowingStateLoss()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(
+                    R.id.fragment_container,
+                    ReservationFragment.newInstance()
+                )
+                .commitAllowingStateLoss()
+        }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector

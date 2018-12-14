@@ -21,11 +21,14 @@ class OverviewActivity : AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_overview)
 
 
-        supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.fragment_container, OverviewFragment.newInstance()
-            )
-            .commitAllowingStateLoss()
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(
+                    R.id.fragment_container,
+                    OverviewFragment.newInstance()
+                )
+                .commitAllowingStateLoss()
+        }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector

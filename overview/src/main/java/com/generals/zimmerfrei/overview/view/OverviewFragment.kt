@@ -59,20 +59,6 @@ class OverviewFragment : Fragment() {
 
         setUpToolbar()
 
-        /*val roomDays: List<Pair<Room, List<RoomDay>>> = emptyList()
-
-        SyncScroller().bindFirst(days_list_view.recyclerView)
-            .bindSecond(plan.recyclerView)
-            .sync()
-
-        val syncScroller =
-            SyncScroller().bindFirst(rooms_list_view.recyclerView)
-
-        plan.bind(
-            roomDays,
-            syncScroller
-        )*/
-
         viewModel.selectedDate.observe(this,
                                        Observer { date: LocalDate? ->
                                            date?.let {
@@ -99,28 +85,6 @@ class OverviewFragment : Fragment() {
                                            }
                                        })
 
-        viewModel.rooms.observe(this,
-                                Observer { rooms: List<Room>? ->
-                                    rooms?.let { roomList: List<Room> ->
-                                        rooms_list_view.bind(roomList)
-
-                                        val roomDays =
-                                            MutableList(roomList.size) { index: Int -> roomList[index] to MutableList(31) { _: Int -> RoomDay.EmptyDay() } }
-
-                                        SyncScroller().bindFirst(days_list_view.recyclerView)
-                                            .bindSecond(plan.recyclerView)
-                                            .sync()
-
-                                        val syncScroller =
-                                            SyncScroller().bindFirst(rooms_list_view.recyclerView)
-
-                                        plan.bind(
-                                            roomDays,
-                                            syncScroller
-                                        )
-                                    }
-                                })
-
         viewModel.days.observe(this,
                                Observer { days: List<Day>? ->
                                    days?.let {
@@ -128,11 +92,22 @@ class OverviewFragment : Fragment() {
                                    }
                                })
 
-        /*viewModel.reservations.observe(this, Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
+        viewModel.reservations.observe(this, Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
             roomDays?.let {
-                plan.update(it)
+
+                SyncScroller().bindFirst(days_list_view.recyclerView)
+                    .bindSecond(plan.recyclerView)
+                    .sync()
+
+                val syncScroller =
+                    SyncScroller().bindFirst(rooms_list_view.recyclerView)
+
+                plan.bind(
+                    it,
+                    syncScroller
+                )
             }
-        })*/
+        })
 
         viewModel.month.observe(this,
                                 Observer { month: String? ->

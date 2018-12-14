@@ -19,11 +19,6 @@ class ReservationViewModel @Inject constructor(
     private val useCase: ReservationUseCase
 ) : ViewModel() {
 
-    companion object {
-        private const val DATE_FORMAT = "dd/MM/yyyy"
-        private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT).withZone(ZoneId.of("Europe/Rome"))
-    }
-
     private val _color: MutableLiveData<String> = MutableLiveData()
 
     private val _pressBack: MutableLiveData<Boolean> = MutableLiveData()
@@ -104,8 +99,8 @@ class ReservationViewModel @Inject constructor(
                     useCase.save(
                         Reservation(
                             name = name,
-                            startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
-                            endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
+                            startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth+1, startDay)),
+                            endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth+1, endDay)),
                             adults = adultsNumber,
                             children = childrenNumber,
                             babies = babiesNumber,

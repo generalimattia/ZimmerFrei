@@ -19,8 +19,13 @@ class RoomDetailViewModel @Inject constructor(
 
     private val _room: MutableLiveData<Room> = MutableLiveData()
 
+    private val _pressBack: MutableLiveData<Boolean> = MutableLiveData()
+
     val room: LiveData<Room>
         get() = _room
+
+    val pressBack: LiveData<Boolean>
+        get() = _pressBack
 
 
     fun start(room: Room? = null) {
@@ -30,7 +35,6 @@ class RoomDetailViewModel @Inject constructor(
     }
 
     fun submit(
-        activity: AppCompatActivity,
         name: String,
         personCount: String,
         isDouble: Boolean,
@@ -72,7 +76,7 @@ class RoomDetailViewModel @Inject constructor(
             )
         }
 
-        activity.onBackPressed()
+        _pressBack.value = true
     }
 
     override fun onCleared() {

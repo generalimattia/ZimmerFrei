@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -51,6 +50,15 @@ class RoomDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpToolbar()
+
+        viewModel.pressBack.observe(this,
+                                    Observer { shouldPressBack: Boolean? ->
+                                        shouldPressBack?.let {
+                                            if (it) {
+                                                activity?.onBackPressed()
+                                            }
+                                        }
+                                    })
 
         viewModel.room.observe(this,
                                Observer { room: Room? ->
@@ -102,7 +110,6 @@ class RoomDetailFragment : Fragment() {
         activity?.let {
 
             viewModel.submit(
-                it as AppCompatActivity,
                 name.text.toString(),
                 persons.text.toString(),
                 double_bed.isChecked,

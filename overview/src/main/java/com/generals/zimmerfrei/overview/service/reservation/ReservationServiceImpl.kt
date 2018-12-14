@@ -46,8 +46,11 @@ class ReservationServiceImpl @Inject constructor(
     ): Observable<Pair<Room, List<RoomDay>>> =
         Observable.create<Pair<Room, List<RoomDay>>> { emitter: ObservableEmitter<Pair<Room, List<RoomDay>>> ->
 
+            reservationDao.getAllReservations().subscribe { reservations: List<ReservationEntity> ->
+                reservations.size
+            }
+
             roomDAO.getAllRooms()
-                .observeOn(Schedulers.newThread())
                 .subscribe { roomEntities: List<RoomEntity> ->
 
                     val countDownLatch = CountDownLatch(roomEntities.size)

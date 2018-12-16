@@ -6,4 +6,5 @@
     <string name="balcony">Con Balcone</string>
     <string name="double_bed">Matrimoniale</string>
     <string name="single_bed">Singola</string>
+    <string name="error_on_room_name" translatable="false">Nome della camera obbligatorio</string>
 </resources>

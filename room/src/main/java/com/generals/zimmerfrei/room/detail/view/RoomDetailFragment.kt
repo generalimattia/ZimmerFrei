@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.generals.zimmerfrei.common.extension.hideKeyboard
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 import com.generals.zimmerfrei.room.detail.viewmodel.RoomDetailViewModel
@@ -33,18 +34,18 @@ class RoomDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(
-            this,
-            viewModelFactory
+                this,
+                viewModelFactory
         )
-            .get(RoomDetailViewModel::class.java)
+                .get(RoomDetailViewModel::class.java)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(
-        R.layout.fragment_room_detail,
-        container,
-        false
+            R.layout.fragment_room_detail,
+            container,
+            false
     )
 
 
@@ -52,54 +53,81 @@ class RoomDetailFragment : Fragment() {
         setUpToolbar()
 
         viewModel.pressBack.observe(this,
-                                    Observer { shouldPressBack: Boolean? ->
-                                        shouldPressBack?.let {
-                                            if (it) {
-                                                activity?.onBackPressed()
-                                            }
-                                        }
-                                    })
+                Observer { shouldPressBack: Boolean? ->
+                    shouldPressBack?.let {
+                        if (it) {
+                            activity?.onBackPressed()
+                        }
+                    }
+                })
 
         viewModel.room.observe(this,
-                               Observer { room: Room? ->
-                                   room?.let {
+                Observer { room: Room? ->
+                    room?.let {
 
-                                       toolbar.title =
-                                               "${resources.getString(R.string.room)} ${room.name}"
+                        toolbar.title =
+                                "${resources.getString(R.string.room)} ${room.name}"
 
-                                       name.setText(
-                                           room.name,
-                                           TextView.BufferType.EDITABLE
-                                       )
-                                       persons.setText(
-                                           room.personsCount.toString(),
-                                           TextView.BufferType.EDITABLE
-                                       )
-                                       double_bed.isChecked = room.isDouble
-                                       single_bed.isChecked = room.isSingle
-                                       handicap.isChecked = room.isHandicap
-                                       balcony.isChecked = room.hasBalcony
-                                   }
-                               })
+                        name.setText(
+                                room.name,
+                                TextView.BufferType.EDITABLE
+                        )
+                        persons.setText(
+                                room.personsCount.toString(),
+                                TextView.BufferType.EDITABLE
+                        )
+                        double_bed.isChecked = room.isDouble
+                        single_bed.isChecked = room.isSingle
+                        handicap.isChecked = room.isHandicap
+                        balcony.isChecked = room.hasBalcony
+                    }
+                })
+
+        viewModel.errorOnName.observe(this,
+                Observer { error: String? ->
+                    error?.let {
+                        room_input_layout.error = it
+                    }
+                })
 
         val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
 
-        submit.setOnClickListener {
-            submit()
-        }
+        setUpListeners()
 
         if (savedInstanceState == null) {
             viewModel.start(room)
         }
     }
 
+    private fun setUpListeners() {
+        double_bed.setOnClickListener {
+            it.hideKeyboard()
+        }
+
+        single_bed.setOnClickListener {
+            it.hideKeyboard()
+        }
+
+        handicap.setOnClickListener {
+            it.hideKeyboard()
+        }
+
+        balcony.setOnClickListener {
+            it.hideKeyboard()
+        }
+
+        submit.setOnClickListener {
+            submit()
+        }
+    }
+
     private fun setUpToolbar() {
         toolbar.inflateMenu(R.menu.menu_save)
         toolbar.menu.findItem(R.id.save)
-            .setOnMenuItemClickListener { _: MenuItem? ->
-                submit()
-                true
-            }
+                .setOnMenuItemClickListener { _: MenuItem? ->
+                    submit()
+                    true
+                }
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
@@ -107,17 +135,14 @@ class RoomDetailFragment : Fragment() {
     }
 
     private fun submit() {
-        activity?.let {
-
-            viewModel.submit(
+        viewModel.submit(
                 name.text.toString(),
                 persons.text.toString(),
                 double_bed.isChecked,
                 single_bed.isChecked,
                 handicap.isChecked,
                 balcony.isChecked
-            )
-        }
+        )
     }
 
     companion object {
@@ -126,8 +151,8 @@ class RoomDetailFragment : Fragment() {
         fun newInstance(room: Room?): RoomDetailFragment = RoomDetailFragment().apply {
             arguments = Bundle(1).apply {
                 putParcelable(
-                    ROOM_BUNDLE_KEY,
-                    room
+                        ROOM_BUNDLE_KEY,
+                        room
                 )
             }
         }

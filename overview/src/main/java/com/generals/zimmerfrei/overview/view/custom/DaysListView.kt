@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.common.custom.EndlessRecyclerViewScrollListener
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter

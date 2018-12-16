@@ -21,7 +21,7 @@ interface ReservationDAO {
 
     fun findReservationsByRoomAndFromDateToDate(
         roomId: Long, startDate: OffsetDateTime, endDate: OffsetDateTime
-    ): Flowable<List<ReservationEntity>>
+    ): Flowable<List<ReservationEntity>>?
 
     fun findReservationsFromDateToDate(
         startDate: OffsetDateTime, endDate: OffsetDateTime

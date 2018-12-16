@@ -62,7 +62,9 @@ dependencies {
     implementation "android.arch.lifecycle:livedata:$lifecycle_version"
     implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+
     testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
     kapt "android.arch.lifecycle:compiler:$lifecycle_version"
 
 }

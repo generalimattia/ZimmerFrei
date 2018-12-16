@@ -99,7 +99,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add_white_24dp"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/accent"
         app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

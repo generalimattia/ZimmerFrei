@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/material_double"
             android:layout_marginEnd="@dimen/material_double"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/accent"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_add_white_24dp"

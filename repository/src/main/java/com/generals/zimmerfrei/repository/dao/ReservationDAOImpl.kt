@@ -30,7 +30,7 @@ class ReservationDAOImpl @Inject constructor(
 
     override fun findReservationsByRoomAndFromDateToDate(
         roomId: Long, startDate: OffsetDateTime, endDate: OffsetDateTime
-    ): Flowable<List<ReservationEntity>> = dao.findReservationsByRoomAndFromDateToDate(
+    ): Flowable<List<ReservationEntity>>? = dao.findReservationsByRoomAndFromDateToDate(
         roomId,
         startDate,
         endDate

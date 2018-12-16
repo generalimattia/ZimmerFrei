@@ -90,10 +90,16 @@ class RoomDetailFragment : Fragment() {
                     }
                 })
 
-        val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
+        viewModel.toolbarTitle.observe(this,
+                Observer { title: String? ->
+                    title?.let {
+                        toolbar.title = it
+                    }
+                })
 
         setUpListeners()
 
+        val room: Room? = arguments?.getParcelable(ROOM_BUNDLE_KEY)
         if (savedInstanceState == null) {
             viewModel.start(room)
         }

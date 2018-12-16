@@ -20,7 +20,7 @@ import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_time_plan.*
+import kotlinx.android.synthetic.main.fragment_overview.*
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -50,7 +50,7 @@ class OverviewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(
-        R.layout.fragment_time_plan,
+        R.layout.fragment_overview,
         container,
         false
     )

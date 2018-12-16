@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="new_room">Nuova Camera</string>
     <string name="rooms">Camere</string>
     <string name="persons_count">N° Persone</string>
     <string name="handicap">Supporto Disabili</string>

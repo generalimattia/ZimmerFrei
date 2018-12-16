@@ -39,57 +39,51 @@ class ReservationFragment : Fragment() {
     private val startDatePickerDialog: DatePickerDialog by lazy {
         val calendar: Calendar = Calendar.getInstance()
         DatePickerDialog(
-            context,
-            { _: DatePicker, year: Int, month: Int, day: Int ->
+                context,
+                { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                startDay = day
-                startMonth = month
-                startYear = year
+                    startDay = day
+                    startMonth = month
+                    startYear = year
 
-                start_date.setText(
-                    DATE_FORMAT.format(
-                        day.toString(),
-                        (month + 1).toString(),
-                        year.toString()
-                    ),
-                    TextView.BufferType.NORMAL
-                )
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+                    start_date.setText(
+                            DATE_FORMAT.format(
+                                    day.toString(),
+                                    (month + 1).toString(),
+                                    year.toString()
+                            ),
+                            TextView.BufferType.NORMAL
+                    )
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
 
     private val endDatePickerDialog: DatePickerDialog by lazy {
         val calendar: Calendar = Calendar.getInstance()
-        calendar.add(
-            Calendar.DAY_OF_MONTH,
-            1
-        )
-        val picker = DatePickerDialog(
-            context,
-            { _: DatePicker, year: Int, month: Int, day: Int ->
+        DatePickerDialog(
+                context,
+                { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                endDay = day
-                endMonth = month
-                endYear = year
+                    endDay = day
+                    endMonth = month
+                    endYear = year
 
-                end_date.setText(
-                    DATE_FORMAT.format(
-                        day.toString(),
-                        (month + 1).toString(),
-                        year.toString()
-                    ),
-                    TextView.BufferType.NORMAL
-                )
-            },
-            calendar.get(Calendar.DAY_OF_MONTH),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.YEAR)
+                    end_date.setText(
+                            DATE_FORMAT.format(
+                                    day.toString(),
+                                    (month + 1).toString(),
+                                    year.toString()
+                            ),
+                            TextView.BufferType.NORMAL
+                    )
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
         )
-        picker.datePicker.minDate = calendar.timeInMillis
-        picker
     }
 
     override fun onAttach(context: Context?) {
@@ -100,35 +94,53 @@ class ReservationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(
-            this,
-            viewModelFactory
+                this,
+                viewModelFactory
         )
-            .get(ReservationViewModel::class.java)
+                .get(ReservationViewModel::class.java)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(
-        R.layout.fragment_reservation,
-        container,
-        false
+            R.layout.fragment_reservation,
+            container,
+            false
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(
-            view,
-            savedInstanceState
+                view,
+                savedInstanceState
         )
 
         setUpToolbar()
 
         viewModel.color.observe(this,
-                                Observer { color: String? ->
-                                    color?.let {
-                                        color_view.setBackgroundColor(Color.parseColor(it))
-                                    }
-                                })
+                Observer { color: String? ->
+                    color?.let {
+                        color_view.setBackgroundColor(Color.parseColor(it))
+                    }
+                })
 
+        viewModel.pressBack.observe(
+                this,
+                Observer { shouldPressBack: Boolean? ->
+                    shouldPressBack?.let {
+                        if (it) {
+                            activity?.onBackPressed()
+                        }
+                    }
+                })
+
+        setupListeners()
+
+        if (savedInstanceState == null) {
+            viewModel.start()
+        }
+    }
+
+    private fun setupListeners() {
         start_date.setOnClickListener {
             startDatePickerDialog.show()
         }
@@ -144,29 +156,15 @@ class ReservationFragment : Fragment() {
         submit.setOnClickListener {
             submit()
         }
-
-        viewModel.pressBack.observe(
-            this,
-            Observer { shouldPressBack: Boolean? ->
-                shouldPressBack?.let {
-                    if (it) {
-                        activity?.onBackPressed()
-                    }
-                }
-            })
-
-        if (savedInstanceState == null) {
-            viewModel.start()
-        }
     }
 
     private fun setUpToolbar() {
         toolbar.inflateMenu(R.menu.menu_save)
         toolbar.menu.findItem(R.id.save)
-            .setOnMenuItemClickListener { _: MenuItem? ->
-                submit()
-                true
-            }
+                .setOnMenuItemClickListener { _: MenuItem? ->
+                    submit()
+                    true
+                }
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
@@ -175,20 +173,20 @@ class ReservationFragment : Fragment() {
 
     private fun submit() {
         viewModel.submit(
-            name = name.text.toString(),
-            startDay = startDay,
-            startMonth = startMonth,
-            startYear = startYear,
-            endDay = endDay,
-            endMonth = endMonth,
-            endYear = endYear,
-            adults = adult_count.text.toString(),
-            children = children_count.text.toString(),
-            babies = children_count.text.toString(),
-            notes = notes.text.toString(),
-            email = email.text.toString(),
-            mobile = mobile.text.toString(),
-            roomName = room.text.toString()
+                name = name.text.toString(),
+                startDay = startDay,
+                startMonth = startMonth,
+                startYear = startYear,
+                endDay = endDay,
+                endMonth = endMonth,
+                endYear = endYear,
+                adults = adult_count.text.toString(),
+                children = children_count.text.toString(),
+                babies = children_count.text.toString(),
+                notes = notes.text.toString(),
+                email = email.text.toString(),
+                mobile = mobile.text.toString(),
+                roomName = room.text.toString()
         )
     }
 

@@ -7,44 +7,99 @@
                                                  tools:context=".overview.view.OverviewFragment">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="@dimen/elevation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="@dimen/elevation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:titleTextColor="@android:color/white"
+                app:title="@string/reservations"/>
 
-        <com.generals.zimmerfrei.overview.view.custom.Calendar
-            android:id="@+id/calendar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:paddingEnd="@dimen/material_double"
-            android:paddingStart="@dimen/material_double"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+        <ImageView
+                android:id="@+id/previous_month"
+                android:layout_width="@dimen/material_sixth"
+                android:layout_height="@dimen/material_sixth"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+                app:layout_constraintBottom_toTopOf="@id/days_list_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <TextView
+                android:id="@+id/month_and_year"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/material_eight"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:textSize="26sp"
+                android:textColor="@color/primary_text"
+                app:layout_constraintBottom_toTopOf="@id/days_list_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                tools:text="Agosto 2018"/>
+
+        <ImageView
+                android:id="@+id/next_month"
+                android:layout_width="@dimen/material_sixth"
+                android:layout_height="@dimen/material_sixth"
+                android:elevation="2dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                app:layout_constraintBottom_toTopOf="@id/days_list_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+        <com.generals.zimmerfrei.overview.view.custom.DaysListView
+                android:id="@+id/days_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/plan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/month_and_year"/>
+
+        <com.generals.zimmerfrei.overview.view.custom.RoomsListView
+                android:id="@+id/rooms_list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/plan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/days_list_view"/>
+
+        <com.generals.zimmerfrei.overview.view.custom.AllRoomsPlan
+                android:id="@+id/plan"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rooms_list_view"
+                app:layout_constraintTop_toBottomOf="@id/days_list_view"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             android:layout_marginBottom="@dimen/material_double"
             android:layout_marginEnd="@dimen/material_double"
-            android:backgroundTint="@color/accent"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_add_white_24dp"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    </android.support.constraint.ConstraintLayout>
+            app:backgroundTint="@color/accent"
+            app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

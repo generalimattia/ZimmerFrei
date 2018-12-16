@@ -22,6 +22,7 @@ class RoomDetailViewModel @Inject constructor(
     private val _room: MutableLiveData<Room> = MutableLiveData()
     private val _pressBack: MutableLiveData<Boolean> = MutableLiveData()
     private val _errorOnName: MutableLiveData<String> = MutableLiveData()
+    private val _toolbarTitle: MutableLiveData<String> = MutableLiveData()
 
     val room: LiveData<Room>
         get() = _room
@@ -32,10 +33,16 @@ class RoomDetailViewModel @Inject constructor(
     val errorOnName: LiveData<String>
         get() = _errorOnName
 
+    val toolbarTitle: LiveData<String>
+        get() = _toolbarTitle
+
 
     fun start(room: Room? = null) {
         room?.let {
             _room.value = it
+            _toolbarTitle.value = "${stringProvider.provide(R.string.room)} ${it.name}"
+        } ?: let {
+            _toolbarTitle.value = stringProvider.provide(R.string.new_room)
         }
     }
 

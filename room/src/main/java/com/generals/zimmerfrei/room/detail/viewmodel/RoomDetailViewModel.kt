@@ -56,7 +56,7 @@ class RoomDetailViewModel @Inject constructor(
     ) {
 
         if (name.isBlank()) {
-            _errorOnName.value = stringProvider.provide(R.string.error_on_room_name)
+            _errorOnName.value = stringProvider.provide(R.string.mandatory_field)
         } else {
 
             val persons: Int = try {

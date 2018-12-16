@@ -133,6 +133,34 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
+        viewModel.roomError.observe(this,
+                Observer { error: String? ->
+                    error?.let {
+                        room_input_layout.error = it
+                    }
+                })
+
+        viewModel.startDateError.observe(this,
+                Observer { error: String? ->
+                    error?.let {
+                        start_date_input_layout.error = it
+                    }
+                })
+
+        viewModel.endDateError.observe(this,
+                Observer { error: String? ->
+                    error?.let {
+                        end_date_input_layout.error = it
+                    }
+                })
+
+        viewModel.nameError.observe(this,
+                Observer { error: String? ->
+                    error?.let {
+                        name_input_layout.error = it
+                    }
+                })
+
         setupListeners()
 
         if (savedInstanceState == null) {

@@ -2,4 +2,5 @@
 <resources>
     <string name="room">Camera</string>
     <string name="submit">SALVA</string>
+    <string name="mandatory_field">Campo obbligatorio</string>
 </resources>

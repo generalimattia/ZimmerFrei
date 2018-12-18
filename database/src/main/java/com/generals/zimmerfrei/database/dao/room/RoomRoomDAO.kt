@@ -22,9 +22,6 @@ interface RoomRoomDAO {
     @Query("SELECT * FROM rooms WHERE id = :id")
     fun findById(id: Long): Maybe<RoomEntity>
 
-    @Query("SELECT * FROM rooms WHERE name = :name")
-    fun findByName(name: String): Maybe<RoomEntity>
-
     @Query("SELECT * FROM rooms")
     fun getAllRooms(): Maybe<List<RoomEntity>>
 }

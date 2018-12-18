@@ -1,18 +1,18 @@
 package com.generals.zimmerfrei.reservation.usecase
 
+import com.generals.roomrepository.RoomRepository
+import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.database.dao.ReservationDAO
-import com.generals.zimmerfrei.database.dao.RoomDAO
-import com.generals.zimmerfrei.database.entities.RoomEntity
-import io.reactivex.Observable
+import io.reactivex.Maybe
+import io.reactivex.MaybeEmitter
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import javax.inject.Inject
 
 class ReservationUseCaseImpl @Inject constructor(
         private val reservationDao: ReservationDAO,
-        private val roomDao: RoomDAO
+        private val roomRepository: RoomRepository
 ) : ReservationUseCase {
 
     override fun save(reservation: Reservation): Single<Unit> =
@@ -25,13 +25,18 @@ class ReservationUseCaseImpl @Inject constructor(
                 }
             }
 
-    override fun getRoomByName(name: String): Observable<Room> =
-            roomDao.findByName(name).map { entity: RoomEntity ->
-                Room(entity)
-            }.toObservable()
+    override fun getAllRooms(): Maybe<List<Room>> = roomRepository.getAllRooms()
 
-    override fun getAllRooms(): Observable<List<Room>> =
-            roomDao.getAllRooms().map { entities: List<RoomEntity> ->
-                entities.map { Room(it) }
-            }.toObservable()
+    override fun getRoomByListPosition(position: Int): Maybe<Room> =
+            Maybe.create { emitter: MaybeEmitter<Room> ->
+                roomRepository.getAllRooms()
+                        .subscribe { rooms: List<Room> ->
+                            if (rooms.isEmpty() || rooms.size <= position) {
+                                emitter.onError(Throwable("No room available"))
+                            } else {
+                                emitter.onSuccess(rooms[position])
+                            }
+                            emitter.onComplete()
+                        }
+            }
 }

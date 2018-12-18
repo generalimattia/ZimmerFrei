@@ -15,7 +15,5 @@ interface RoomDAO {
 
     fun findById(id: Long): Maybe<RoomEntity>
 
-    fun findByName(name: String): Maybe<RoomEntity>
-
     fun getAllRooms(): Maybe<List<RoomEntity>>
 }

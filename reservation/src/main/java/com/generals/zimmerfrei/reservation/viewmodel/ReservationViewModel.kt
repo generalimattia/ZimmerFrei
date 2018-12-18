@@ -20,6 +20,8 @@ class ReservationViewModel @Inject constructor(
         private val stringProvider: StringResourcesProvider
 ) : ViewModel() {
 
+    private var roomPosition = 0
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val _color = MutableLiveData<String>()
@@ -88,6 +90,7 @@ class ReservationViewModel @Inject constructor(
     fun onRoomSelected(position: Int) {
         val selectedRoom: String? = _rooms.value?.get(position)
         _selectedRoom.value = selectedRoom
+        roomPosition = position
     }
 
     fun submit(
@@ -129,7 +132,7 @@ class ReservationViewModel @Inject constructor(
                 0
             }
 
-            compositeDisposable.add(useCase.getRoomByName(roomName)
+            compositeDisposable.add(useCase.getRoomByListPosition(roomPosition)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe { room: Room? ->
                         room?.let {

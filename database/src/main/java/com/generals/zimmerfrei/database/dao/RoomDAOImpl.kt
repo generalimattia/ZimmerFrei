@@ -19,7 +19,5 @@ class RoomDAOImpl @Inject constructor(
 
     override fun findById(id: Long): Maybe<RoomEntity> = dao.findById(id)
 
-    override fun findByName(name: String): Maybe<RoomEntity> = dao.findByName(name)
-
     override fun getAllRooms(): Maybe<List<RoomEntity>> = dao.getAllRooms()
 }

@@ -30,6 +30,7 @@ dependencies {
     implementation project(path: ':database')
     implementation project(path: ':common')
     implementation project(path: ':model')
+    implementation project(path: ':roomrepository')
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'

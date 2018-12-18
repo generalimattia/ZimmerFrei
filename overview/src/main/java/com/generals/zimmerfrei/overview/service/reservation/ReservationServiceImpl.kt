@@ -5,10 +5,10 @@ import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.repository.dao.ReservationDAO
-import com.generals.zimmerfrei.repository.dao.RoomDAO
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.dao.ReservationDAO
+import com.generals.zimmerfrei.database.dao.RoomDAO
+import com.generals.zimmerfrei.database.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter

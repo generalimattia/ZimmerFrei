@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.repository.entities
+package com.generals.zimmerfrei.database.entities
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

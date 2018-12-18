@@ -1,9 +1,9 @@
-package com.generals.zimmerfrei.repository.dao.room
+package com.generals.zimmerfrei.database.dao.room
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.ReservationEntity
 import io.reactivex.Flowable
 import org.threeten.bp.OffsetDateTime
 

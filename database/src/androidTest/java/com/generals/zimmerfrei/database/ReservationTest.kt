@@ -1,14 +1,14 @@
-package com.generals.zimmerfrei.repository
+package com.generals.zimmerfrei.database
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
-import com.generals.zimmerfrei.repository.dao.room.RoomRoomDAO
-import com.generals.zimmerfrei.repository.database.ReservationDatabase
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.dao.room.RoomReservationDAO
+import com.generals.zimmerfrei.database.dao.room.RoomRoomDAO
+import com.generals.zimmerfrei.database.database.ReservationDatabase
+import com.generals.zimmerfrei.database.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 import org.junit.After
 import org.junit.Before

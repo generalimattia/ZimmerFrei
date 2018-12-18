@@ -1,7 +1,7 @@
-package com.generals.zimmerfrei.repository.dao.room
+package com.generals.zimmerfrei.database.dao.room
 
 import android.arch.persistence.room.*
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 
 @Dao

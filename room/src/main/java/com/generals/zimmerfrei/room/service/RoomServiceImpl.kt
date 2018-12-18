@@ -1,7 +1,7 @@
 package com.generals.zimmerfrei.room.service
 
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.repository.dao.RoomDAO
+import com.generals.zimmerfrei.database.dao.RoomDAO
 import com.generals.zimmerfrei.service.RoomFetcherService
 import io.reactivex.Single
 import io.reactivex.SingleEmitter

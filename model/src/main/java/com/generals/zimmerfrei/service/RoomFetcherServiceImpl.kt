@@ -1,8 +1,8 @@
 package com.generals.zimmerfrei.service
 
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.repository.dao.RoomDAO
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.dao.RoomDAO
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 import javax.inject.Inject
 

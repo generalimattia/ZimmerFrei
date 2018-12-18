@@ -1,6 +1,6 @@
-package com.generals.zimmerfrei.repository.dao
+package com.generals.zimmerfrei.database.dao
 
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 
 interface RoomDAO {

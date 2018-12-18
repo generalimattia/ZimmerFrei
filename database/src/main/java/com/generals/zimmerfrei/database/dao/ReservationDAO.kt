@@ -1,8 +1,7 @@
-package com.generals.zimmerfrei.repository.dao
+package com.generals.zimmerfrei.database.dao
 
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.ReservationEntity
 import io.reactivex.Flowable
-import io.reactivex.Single
 import org.threeten.bp.OffsetDateTime
 
 interface ReservationDAO {

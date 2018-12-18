@@ -4,10 +4,10 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.repository.dao.ReservationDAO
-import com.generals.zimmerfrei.repository.dao.RoomDAO
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.dao.ReservationDAO
+import com.generals.zimmerfrei.database.dao.RoomDAO
+import com.generals.zimmerfrei.database.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock

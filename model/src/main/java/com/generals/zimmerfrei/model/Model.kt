@@ -2,8 +2,8 @@ package com.generals.zimmerfrei.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.generals.zimmerfrei.repository.entities.ReservationEntity
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.entities.ReservationEntity
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import org.threeten.bp.OffsetDateTime
 
 data class Day(

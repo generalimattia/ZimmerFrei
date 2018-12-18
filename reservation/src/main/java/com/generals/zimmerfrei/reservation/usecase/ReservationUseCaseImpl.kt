@@ -2,9 +2,9 @@ package com.generals.zimmerfrei.reservation.usecase
 
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.repository.dao.ReservationDAO
-import com.generals.zimmerfrei.repository.dao.RoomDAO
-import com.generals.zimmerfrei.repository.entities.RoomEntity
+import com.generals.zimmerfrei.database.dao.ReservationDAO
+import com.generals.zimmerfrei.database.dao.RoomDAO
+import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter

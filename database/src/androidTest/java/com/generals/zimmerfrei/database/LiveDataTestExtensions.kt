@@ -1,4 +1,4 @@
-package com.generals.zimmerfrei.repository
+package com.generals.zimmerfrei.database
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer

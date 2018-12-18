@@ -2,13 +2,13 @@ package com.generals.zimmerfrei.inject
 
 import android.arch.persistence.room.Room
 import android.content.Context
-import com.generals.zimmerfrei.repository.dao.ReservationDAO
-import com.generals.zimmerfrei.repository.dao.ReservationDAOImpl
-import com.generals.zimmerfrei.repository.dao.RoomDAO
-import com.generals.zimmerfrei.repository.dao.RoomDAOImpl
-import com.generals.zimmerfrei.repository.dao.room.RoomReservationDAO
-import com.generals.zimmerfrei.repository.dao.room.RoomRoomDAO
-import com.generals.zimmerfrei.repository.database.ReservationDatabase
+import com.generals.zimmerfrei.database.dao.ReservationDAO
+import com.generals.zimmerfrei.database.dao.ReservationDAOImpl
+import com.generals.zimmerfrei.database.dao.RoomDAO
+import com.generals.zimmerfrei.database.dao.RoomDAOImpl
+import com.generals.zimmerfrei.database.dao.room.RoomReservationDAO
+import com.generals.zimmerfrei.database.dao.room.RoomRoomDAO
+import com.generals.zimmerfrei.database.database.ReservationDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

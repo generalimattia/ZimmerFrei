@@ -1,7 +1,7 @@
 package com.generals.zimmerfrei.database.dao
 
 import com.generals.zimmerfrei.database.entities.RoomEntity
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 interface RoomDAO {
 
@@ -13,9 +13,9 @@ interface RoomDAO {
 
     fun delete(room: RoomEntity)
 
-    fun findById(id: Long): Flowable<RoomEntity>
+    fun findById(id: Long): Maybe<RoomEntity>
 
-    fun findByName(name: String): Flowable<RoomEntity>
+    fun findByName(name: String): Maybe<RoomEntity>
 
-    fun getAllRooms(): Flowable<List<RoomEntity>>
+    fun getAllRooms(): Maybe<List<RoomEntity>>
 }

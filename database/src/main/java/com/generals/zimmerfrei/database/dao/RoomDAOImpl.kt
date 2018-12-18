@@ -2,11 +2,11 @@ package com.generals.zimmerfrei.database.dao
 
 import com.generals.zimmerfrei.database.dao.room.RoomRoomDAO
 import com.generals.zimmerfrei.database.entities.RoomEntity
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 import javax.inject.Inject
 
 class RoomDAOImpl @Inject constructor(
-    private val dao: RoomRoomDAO
+        private val dao: RoomRoomDAO
 ) : RoomDAO {
 
     override fun insert(room: RoomEntity) = dao.insert(room)
@@ -17,9 +17,9 @@ class RoomDAOImpl @Inject constructor(
 
     override fun delete(room: RoomEntity) = dao.delete(room)
 
-    override fun findById(id: Long): Flowable<RoomEntity> = dao.findById(id)
+    override fun findById(id: Long): Maybe<RoomEntity> = dao.findById(id)
 
-    override fun findByName(name: String): Flowable<RoomEntity> = dao.findByName(name)
+    override fun findByName(name: String): Maybe<RoomEntity> = dao.findByName(name)
 
-    override fun getAllRooms(): Flowable<List<RoomEntity>> = dao.getAllRooms()
+    override fun getAllRooms(): Maybe<List<RoomEntity>> = dao.getAllRooms()
 }

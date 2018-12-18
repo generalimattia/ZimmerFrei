@@ -2,7 +2,7 @@ package com.generals.zimmerfrei.database.dao.room
 
 import android.arch.persistence.room.*
 import com.generals.zimmerfrei.database.entities.RoomEntity
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 @Dao
 interface RoomRoomDAO {
@@ -20,11 +20,11 @@ interface RoomRoomDAO {
     fun delete(room: RoomEntity)
 
     @Query("SELECT * FROM rooms WHERE id = :id")
-    fun findById(id: Long): Flowable<RoomEntity>
+    fun findById(id: Long): Maybe<RoomEntity>
 
     @Query("SELECT * FROM rooms WHERE name = :name")
-    fun findByName(name: String): Flowable<RoomEntity>
+    fun findByName(name: String): Maybe<RoomEntity>
 
     @Query("SELECT * FROM rooms")
-    fun getAllRooms(): Flowable<List<RoomEntity>>
+    fun getAllRooms(): Maybe<List<RoomEntity>>
 }

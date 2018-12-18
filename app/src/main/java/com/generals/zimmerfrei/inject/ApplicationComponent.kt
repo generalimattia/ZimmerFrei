@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.inject
 
+import com.generals.roomrepository.inject.RoomRepositoryModule
 import com.generals.zimmerfrei.ZimmerFreiApplication
 import com.generals.zimmerfrei.common.inject.ViewModelBuilder
 import com.generals.zimmerfrei.overview.inject.OverviewBuilder
@@ -15,19 +16,19 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [
-        AndroidSupportInjectionModule::class,
-        ApplicationModule::class,
-        ViewModelBuilder::class,
-        DatabaseModule::class,
-        ServiceModule::class,
-        OverviewModule::class,
-        OverviewBuilder::class,
-        ReservationModule::class,
-        ReservationBuilder::class,
-        RoomModule::class,
-        RoomBuilder::class
-    ]
+        modules = [
+            AndroidSupportInjectionModule::class,
+            ApplicationModule::class,
+            ViewModelBuilder::class,
+            DatabaseModule::class,
+            OverviewModule::class,
+            OverviewBuilder::class,
+            ReservationModule::class,
+            ReservationBuilder::class,
+            RoomModule::class,
+            RoomBuilder::class,
+            RoomRepositoryModule::class
+        ]
 )
 interface ApplicationComponent : AndroidInjector<ZimmerFreiApplication> {
     @Component.Builder

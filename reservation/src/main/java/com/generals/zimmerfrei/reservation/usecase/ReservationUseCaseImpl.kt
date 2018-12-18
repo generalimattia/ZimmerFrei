@@ -11,21 +11,27 @@ import io.reactivex.SingleEmitter
 import javax.inject.Inject
 
 class ReservationUseCaseImpl @Inject constructor(
-    private val reservationDao: ReservationDAO, private val roomDao: RoomDAO
+        private val reservationDao: ReservationDAO,
+        private val roomDao: RoomDAO
 ) : ReservationUseCase {
 
     override fun save(reservation: Reservation): Single<Unit> =
-        Single.create<Unit> { emitter: SingleEmitter<Unit> ->
-            try {
-                reservationDao.insert(reservation.toEntity())
-                emitter.onSuccess(Unit)
-            } catch (e: Exception) {
-                emitter.onError(e)
+            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
+                try {
+                    reservationDao.insert(reservation.toEntity())
+                    emitter.onSuccess(Unit)
+                } catch (e: Exception) {
+                    emitter.onError(e)
+                }
             }
-        }
 
     override fun getRoomByName(name: String): Observable<Room> =
-        roomDao.findByName(name).map { entity: RoomEntity ->
-            Room(entity)
-        }.toObservable()
+            roomDao.findByName(name).map { entity: RoomEntity ->
+                Room(entity)
+            }.toObservable()
+
+    override fun getAllRooms(): Observable<List<Room>> =
+            roomDao.getAllRooms().map { entities: List<RoomEntity> ->
+                entities.map { Room(it) }
+            }.toObservable()
 }

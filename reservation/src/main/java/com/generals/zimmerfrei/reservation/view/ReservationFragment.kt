@@ -12,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TextView
 import com.generals.zimmerfrei.reservation.R
@@ -161,6 +163,33 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
+        viewModel.rooms.observe(this,
+                Observer { rooms: List<String>? ->
+                    rooms?.let {
+                        room_spinner.adapter = ArrayAdapter(context,
+                                android.R.layout.simple_spinner_item,
+                                it).apply {
+                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        }
+
+                        room_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                viewModel.onRoomSelected(position)
+                            }
+                        }
+                    }
+                })
+
+        viewModel.selectedRoom.observe(this,
+                Observer { nullableRoom: String? ->
+                    nullableRoom?.let {
+                        room.setText(it, TextView.BufferType.EDITABLE)
+                    }
+                }
+        )
+
         setupListeners()
 
         if (savedInstanceState == null) {
@@ -169,6 +198,10 @@ class ReservationFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        room.setOnClickListener {
+            room_spinner.performClick()
+        }
+
         start_date.setOnClickListener {
             startDatePickerDialog.show()
         }

@@ -23,11 +23,13 @@ class ReservationViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val _color = MutableLiveData<String>()
-    private val _pressBack= MutableLiveData<Boolean>()
+    private val _pressBack = MutableLiveData<Boolean>()
     private val _roomError = MutableLiveData<String>()
     private val _nameError = MutableLiveData<String>()
     private val _startDateError = MutableLiveData<String>()
     private val _endDateError = MutableLiveData<String>()
+    private val _rooms = MutableLiveData<List<String>>()
+    private val _selectedRoom = MutableLiveData<String>()
 
     private val availableColors: List<String> = listOf(
             "#d50000",
@@ -66,13 +68,26 @@ class ReservationViewModel @Inject constructor(
     val endDateError: LiveData<String>
         get() = _endDateError
 
+    val rooms: LiveData<List<String>>
+        get() = _rooms
+
+    val selectedRoom: LiveData<String>
+        get() = _selectedRoom
+
+    fun start() {
+        generateNewColor()
+
+        fetchRooms()
+    }
+
     fun generateNewColor() {
         val colorsCount = availableColors.size
         _color.value = availableColors[(0 until colorsCount).shuffled().first()]
     }
 
-    fun start() {
-        generateNewColor()
+    fun onRoomSelected(position: Int) {
+        val selectedRoom: String? = _rooms.value?.get(position)
+        _selectedRoom.value = selectedRoom
     }
 
     fun submit(
@@ -92,9 +107,9 @@ class ReservationViewModel @Inject constructor(
             email: String
     ) {
 
-        var isValid = validate(roomName, name, startDay, endDay)
+        val isValid = validate(roomName, name, startDay, endDay)
 
-        if(isValid) {
+        if (isValid) {
 
             val adultsNumber: Int = try {
                 adults.toInt()
@@ -168,6 +183,18 @@ class ReservationViewModel @Inject constructor(
             isValid = false
         }
         return isValid
+    }
+
+    private fun fetchRooms() {
+        compositeDisposable.addAll(
+                useCase.getAllRooms()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { entities: List<Room>? ->
+                            entities?.let {
+                                _rooms.value = it.map { entity: Room -> entity.name }
+                            }
+                        })
     }
 
     override fun onCleared() {

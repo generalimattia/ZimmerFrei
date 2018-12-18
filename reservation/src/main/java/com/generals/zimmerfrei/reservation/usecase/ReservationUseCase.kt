@@ -10,4 +10,6 @@ interface ReservationUseCase {
     fun save(reservation: Reservation): Single<Unit>
 
     fun getRoomByName(name: String): Observable<Room>
+
+    fun getAllRooms(): Observable<List<Room>>
 }

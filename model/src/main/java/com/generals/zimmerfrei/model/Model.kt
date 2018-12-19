@@ -7,68 +7,105 @@ import com.generals.zimmerfrei.database.entities.RoomEntity
 import org.threeten.bp.OffsetDateTime
 
 data class Day(
-    val title: String = "", val date: OffsetDateTime = OffsetDateTime.now(), val monthDays: Int = 0
+        val title: String = "",
+        val date: OffsetDateTime = OffsetDateTime.now(),
+        val monthDays: Int = 0
 )
 
-data class Reservation(
-    val id: Long = 0,
-    val name: String = "",
-    val startDate: OffsetDateTime = OffsetDateTime.now(),
-    val endDate: OffsetDateTime = OffsetDateTime.now(),
-    val adults: Int = 0,
-    val children: Int = 0,
-    val babies: Int = 0,
-    val color: String = "#546e7a",
-    val room: Room = Room(),
-    val notes: String = "",
-    val mobile: String = "",
-    val email: String = ""
+data class ParcelableDay(
+        val dayOfMonth: Int,
+        val month: Int,
+        val year: Int
 ) : Parcelable {
 
-    constructor(
-        reservation: ReservationEntity, room: RoomEntity
-    ) : this(
-        id = reservation.id,
-        name = reservation.name,
-        startDate = reservation.startDate,
-        endDate = reservation.endDate,
-        adults = reservation.adults,
-        children = reservation.children,
-        babies = reservation.babies,
-        color = reservation.color,
-        room = Room(room),
-        notes = reservation.notes,
-        mobile = reservation.mobile,
-        email = reservation.email
-    )
-
-    fun toEntity(): ReservationEntity = ReservationEntity(
-        name = name,
-        startDate = startDate,
-        endDate = endDate,
-        adults = adults,
-        children = children,
-        babies = babies,
-        color = color,
-        roomId = room.id,
-        notes = notes,
-        email = email,
-        mobile = mobile
+    constructor(input: Day) : this(
+            dayOfMonth = input.date.dayOfMonth,
+            month = input.date.month.value,
+            year = input.date.year
     )
 
     constructor(source: Parcel) : this(
-        source.readLong(),
-        source.readString(),
-        source.readSerializable() as OffsetDateTime,
-        source.readSerializable() as OffsetDateTime,
-        source.readInt(),
-        source.readInt(),
-        source.readInt(),
-        source.readString(),
-        source.readParcelable<Room>(Room::class.java.classLoader),
-        source.readString(),
-        source.readString(),
-        source.readString()
+            source.readInt(),
+            source.readInt(),
+            source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(dayOfMonth)
+        writeInt(month)
+        writeInt(year)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<ParcelableDay> = object : Parcelable.Creator<ParcelableDay> {
+            override fun createFromParcel(source: Parcel): ParcelableDay = ParcelableDay(source)
+            override fun newArray(size: Int): Array<ParcelableDay?> = arrayOfNulls(size)
+        }
+    }
+}
+
+data class Reservation(
+        val id: Long = 0,
+        val name: String = "",
+        val startDate: OffsetDateTime = OffsetDateTime.now(),
+        val endDate: OffsetDateTime = OffsetDateTime.now(),
+        val adults: Int = 0,
+        val children: Int = 0,
+        val babies: Int = 0,
+        val color: String = "#546e7a",
+        val room: Room = Room(),
+        val notes: String = "",
+        val mobile: String = "",
+        val email: String = ""
+) : Parcelable {
+
+    constructor(
+            reservation: ReservationEntity, room: RoomEntity
+    ) : this(
+            id = reservation.id,
+            name = reservation.name,
+            startDate = reservation.startDate,
+            endDate = reservation.endDate,
+            adults = reservation.adults,
+            children = reservation.children,
+            babies = reservation.babies,
+            color = reservation.color,
+            room = Room(room),
+            notes = reservation.notes,
+            mobile = reservation.mobile,
+            email = reservation.email
+    )
+
+    fun toEntity(): ReservationEntity = ReservationEntity(
+            name = name,
+            startDate = startDate,
+            endDate = endDate,
+            adults = adults,
+            children = children,
+            babies = babies,
+            color = color,
+            roomId = room.id,
+            notes = notes,
+            email = email,
+            mobile = mobile
+    )
+
+    constructor(source: Parcel) : this(
+            source.readLong(),
+            source.readString(),
+            source.readSerializable() as OffsetDateTime,
+            source.readSerializable() as OffsetDateTime,
+            source.readInt(),
+            source.readInt(),
+            source.readInt(),
+            source.readString(),
+            source.readParcelable<Room>(Room::class.java.classLoader),
+            source.readString(),
+            source.readString(),
+            source.readString()
     )
 
     override fun describeContents() = 0
@@ -83,8 +120,8 @@ data class Reservation(
         writeInt(babies)
         writeString(color)
         writeParcelable(
-            room,
-            0
+                room,
+                0
         )
         writeString(notes)
         writeString(mobile)
@@ -101,43 +138,43 @@ data class Reservation(
 }
 
 data class Room(
-    val id: Long = 0L,
-    val name: String = "",
-    val personsCount: Int = 0,
-    val isDouble: Boolean = false,
-    val isSingle: Boolean = false,
-    val isHandicap: Boolean = false,
-    val hasBalcony: Boolean = false
+        val id: Long = 0L,
+        val name: String = "",
+        val personsCount: Int = 0,
+        val isDouble: Boolean = false,
+        val isSingle: Boolean = false,
+        val isHandicap: Boolean = false,
+        val hasBalcony: Boolean = false
 ) : Parcelable {
 
     constructor(entity: RoomEntity) : this(
-        id = entity.id,
-        name = entity.name,
-        personsCount = entity.personsCount,
-        isDouble = entity.isDouble,
-        isSingle = entity.isSingle,
-        isHandicap = entity.isHandicap,
-        hasBalcony = entity.hasBalcony
+            id = entity.id,
+            name = entity.name,
+            personsCount = entity.personsCount,
+            isDouble = entity.isDouble,
+            isSingle = entity.isSingle,
+            isHandicap = entity.isHandicap,
+            hasBalcony = entity.hasBalcony
     )
 
     fun toEntity(): RoomEntity = RoomEntity(
-        id,
-        name,
-        personsCount,
-        isDouble,
-        isSingle,
-        isHandicap,
-        hasBalcony
+            id,
+            name,
+            personsCount,
+            isDouble,
+            isSingle,
+            isHandicap,
+            hasBalcony
     )
 
     constructor(source: Parcel) : this(
-        source.readLong(),
-        source.readString(),
-        source.readInt(),
-        1 == source.readInt(),
-        1 == source.readInt(),
-        1 == source.readInt(),
-        1 == source.readInt()
+            source.readLong(),
+            source.readString(),
+            source.readInt(),
+            1 == source.readInt(),
+            1 == source.readInt(),
+            1 == source.readInt(),
+            1 == source.readInt()
     )
 
     override fun describeContents() = 0
@@ -162,11 +199,11 @@ data class Room(
 }
 
 data class DayWithReservations(
-    val day: Day = Day(), val reservations: List<Reservation> = emptyList()
+        val day: Day = Day(), val reservations: List<Reservation> = emptyList()
 ) : Comparable<DayWithReservations> {
 
     override fun compareTo(other: DayWithReservations): Int =
-        this.day.date.compareTo(other.day.date)
+            this.day.date.compareTo(other.day.date)
 }
 
 sealed class RoomDay {
@@ -174,14 +211,14 @@ sealed class RoomDay {
     data class EmptyDay(val day: Day = Day()) : RoomDay()
 
     data class StartingReservationDay(
-        val day: Day = Day(), val reservation: Reservation = Reservation()
+            val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 
     data class ReservedDay(
-        val day: Day = Day(), val reservation: Reservation = Reservation()
+            val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 
     data class EndingReservationDay(
-        val day: Day = Day(), val reservation: Reservation = Reservation()
+            val day: Day = Day(), val reservation: Reservation = Reservation()
     ) : RoomDay()
 }

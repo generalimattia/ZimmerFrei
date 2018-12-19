@@ -16,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TextView
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -38,30 +39,7 @@ class ReservationFragment : Fragment() {
     private var endMonth: Int = 0
     private var endYear: Int = 0
 
-    private val startDatePickerDialog: DatePickerDialog by lazy {
-        val calendar: Calendar = Calendar.getInstance()
-        DatePickerDialog(
-                context,
-                { _: DatePicker, year: Int, month: Int, day: Int ->
-
-                    startDay = day
-                    startMonth = month
-                    startYear = year
-
-                    start_date.setText(
-                            DATE_FORMAT.format(
-                                    day.toString(),
-                                    (month + 1).toString(),
-                                    year.toString()
-                            ),
-                            TextView.BufferType.NORMAL
-                    )
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        )
-    }
+    private lateinit var startDatePickerDialog: DatePickerDialog
 
     private val endDatePickerDialog: DatePickerDialog by lazy {
         val calendar: Calendar = Calendar.getInstance()
@@ -117,6 +95,21 @@ class ReservationFragment : Fragment() {
         )
 
         setUpToolbar()
+
+        viewModel.startDay.observe(this,
+                Observer { nullableStartDate: ParcelableDay? ->
+                    startDatePickerDialog = buildStartDatePickerDialog(nullableStartDate)
+                    nullableStartDate?.let {
+                        start_date.setText(
+                                DATE_FORMAT.format(
+                                        it.dayOfMonth.toString(),
+                                        it.month.toString(),
+                                        it.year.toString()
+                                ),
+                                TextView.BufferType.NORMAL
+                        )
+                    }
+                })
 
         viewModel.color.observe(this,
                 Observer { color: String? ->
@@ -193,8 +186,46 @@ class ReservationFragment : Fragment() {
         setupListeners()
 
         if (savedInstanceState == null) {
-            viewModel.start()
+            viewModel.start(arguments?.getParcelable(RESERVATION_START_DATE))
         }
+    }
+
+    private fun setUpToolbar() {
+        toolbar.inflateMenu(R.menu.menu_save)
+        toolbar.menu.findItem(R.id.save)
+                .setOnMenuItemClickListener { _: MenuItem? ->
+                    submit()
+                    true
+                }
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+    }
+
+    private fun buildStartDatePickerDialog(startDate: ParcelableDay?): DatePickerDialog {
+        val calendar: Calendar = Calendar.getInstance()
+        return DatePickerDialog(
+                context,
+                { _: DatePicker, year: Int, month: Int, day: Int ->
+
+                    startDay = day
+                    startMonth = month
+                    startYear = year
+
+                    start_date.setText(
+                            DATE_FORMAT.format(
+                                    day.toString(),
+                                    (month + 1).toString(),
+                                    year.toString()
+                            ),
+                            TextView.BufferType.NORMAL
+                    )
+                },
+                startDate?.year ?: calendar.get(Calendar.YEAR),
+                startDate?.month ?: calendar.get(Calendar.MONTH),
+                startDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
+        )
     }
 
     private fun setupListeners() {
@@ -219,19 +250,6 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    private fun setUpToolbar() {
-        toolbar.inflateMenu(R.menu.menu_save)
-        toolbar.menu.findItem(R.id.save)
-                .setOnMenuItemClickListener { _: MenuItem? ->
-                    submit()
-                    true
-                }
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
-    }
-
     private fun submit() {
         viewModel.submit(
                 name = name.text.toString(),
@@ -252,7 +270,12 @@ class ReservationFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = ReservationFragment()
+        fun newInstance(startDate: ParcelableDay?) = ReservationFragment().apply {
+            val arguments = Bundle().apply {
+                startDate?.let { putParcelable(RESERVATION_START_DATE, startDate) }
+            }
+            setArguments(arguments)
+        }
 
         private const val DATE_FORMAT = "%s/%s/%s"
     }

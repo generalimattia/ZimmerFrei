@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
@@ -17,48 +18,51 @@ class AllRoomsPlan : FrameLayout {
 
     constructor(context: Context) : super(context) {
         init(
-            null,
-            0
+                null,
+                0
         )
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(
-        context,
-        attrs
+            context,
+            attrs
     ) {
         init(
-            attrs,
-            0
+                attrs,
+                0
         )
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-        init(
+            context,
             attrs,
             defStyle
+    ) {
+        init(
+                attrs,
+                defStyle
         )
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(
-                R.layout.widget_all_rooms_plan,
-                this,
-                true
-            )
+                .inflate(
+                        R.layout.widget_all_rooms_plan,
+                        this,
+                        true
+                )
 
         recyclerView = findViewById(R.id.recycler_view)
 
     }
 
-    fun bind(roomDays: List<Pair<Room, List<RoomDay>>>, syncScroller: SyncScroller) {
+    fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
+             syncScroller: SyncScroller,
+             onEmptyDayClick: (day: Day) -> Unit) {
         recyclerView.adapter = AllRoomsAdapter(
-            roomDays,
-            syncScroller
+                roomDays,
+                syncScroller,
+                onEmptyDayClick
         )
     }
 

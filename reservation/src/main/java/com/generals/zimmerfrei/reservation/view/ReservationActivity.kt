@@ -3,6 +3,7 @@ package com.generals.zimmerfrei.reservation.view
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.reservation.R
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -21,10 +22,13 @@ class ReservationActivity : AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_reservation)
 
         if (savedInstanceState == null) {
+
+            val startDate: ParcelableDay? = intent.getParcelableExtra(RESERVATION_START_DATE)
+
             supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.fragment_container,
-                    ReservationFragment.newInstance()
+                    ReservationFragment.newInstance(startDate)
                 )
                 .commitAllowingStateLoss()
         }

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.RoomsDaysAdapter
@@ -17,50 +18,51 @@ class SingleRoomPlan : FrameLayout {
 
     constructor(context: Context) : super(context) {
         init(
-            null,
-            0
+                null,
+                0
         )
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(
-        context,
-        attrs
+            context,
+            attrs
     ) {
         init(
-            attrs,
-            0
+                attrs,
+                0
         )
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-        init(
+            context,
             attrs,
             defStyle
+    ) {
+        init(
+                attrs,
+                defStyle
         )
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         LayoutInflater.from(context)
-            .inflate(
-                R.layout.widget_single_room_plan,
-                this,
-                true
-            )
+                .inflate(
+                        R.layout.widget_single_room_plan,
+                        this,
+                        true
+                )
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = NotScrollableLayoutManager(
-            context,
-            LinearLayoutManager.HORIZONTAL,
-            false
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
         )
 
     }
 
-    fun bind(days: List<RoomDay>) {
-        recyclerView.adapter = RoomsDaysAdapter(days)
+    fun bind(days: List<RoomDay>,
+             onEmptyDayClick: (day: Day) -> Unit) {
+        recyclerView.adapter = RoomsDaysAdapter(days, onEmptyDayClick)
     }
 }

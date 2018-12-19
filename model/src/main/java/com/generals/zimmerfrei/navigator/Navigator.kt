@@ -6,11 +6,14 @@ import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 
 interface Navigator {
 
-    fun reservation(): NavigationRequest.ActivityRequest
+    fun reservation(
+            startDate: Day? = null
+    ): NavigationRequest.ActivityRequest
 
     fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest
 

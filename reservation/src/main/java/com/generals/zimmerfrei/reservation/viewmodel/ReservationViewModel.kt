@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.reservation.R
@@ -32,6 +33,7 @@ class ReservationViewModel @Inject constructor(
     private val _endDateError = MutableLiveData<String>()
     private val _rooms = MutableLiveData<List<String>>()
     private val _selectedRoom = MutableLiveData<String>()
+    private val _startDate = MutableLiveData<ParcelableDay>()
 
     private val availableColors: List<String> = listOf(
             "#d50000",
@@ -76,7 +78,14 @@ class ReservationViewModel @Inject constructor(
     val selectedRoom: LiveData<String>
         get() = _selectedRoom
 
-    fun start() {
+    val startDay: LiveData<ParcelableDay>
+        get() = _startDate
+
+    fun start(
+            startDay: ParcelableDay?
+    ) {
+        _startDate.value = startDay
+
         generateNewColor()
 
         fetchRooms()

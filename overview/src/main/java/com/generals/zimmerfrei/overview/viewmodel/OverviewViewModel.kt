@@ -21,7 +21,8 @@ import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
 class OverviewViewModel @Inject constructor(
-    private val useCase: OverviewUseCase, private val navigator: Navigator
+        private val useCase: OverviewUseCase,
+        private val navigator: Navigator
 ) : ViewModel() {
 
     private val _month = MutableLiveData<String>()
@@ -66,7 +67,7 @@ class OverviewViewModel @Inject constructor(
 
     private fun loadRooms() {
         compositeDisposable.add(useCase.loadRooms().subscribeOn(Schedulers.newThread()).observeOn(
-            AndroidSchedulers.mainThread()
+                AndroidSchedulers.mainThread()
         ).subscribe { internalRooms: List<Room>? ->
             internalRooms?.let {
                 _rooms.value = it
@@ -84,7 +85,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onNewDate(month: Int, year: Int) {
         date = date.withMonth(month + 1)
-            .withYear(year)
+                .withYear(year)
     }
 
     private fun processNewDate(newDate: LocalDate) {
@@ -96,8 +97,8 @@ class OverviewViewModel @Inject constructor(
     private fun loadReservations(currentDate: LocalDate) {
 
         compositeDisposable.add(useCase.loadReservations(
-            currentDate.withDayOfMonth(1),
-            currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
+                currentDate.withDayOfMonth(1),
+                currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
         ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
             roomDay?.let { notNullableRoomDay: Pair<Room, List<RoomDay>> ->
                 val newList: MutableList<Pair<Room, List<RoomDay>>> = _reservations.value?.let {
@@ -119,16 +120,21 @@ class OverviewViewModel @Inject constructor(
 
     fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
         navigator.roomList(containerViewId)
-            .startNewFragment(
-                activity = activity,
-                containerViewId = containerViewId,
-                addToBackStack = true
-            )
+                .startNewFragment(
+                        activity = activity,
+                        containerViewId = containerViewId,
+                        addToBackStack = true
+                )
     }
 
     fun onFABClick(activity: Activity) {
         navigator.reservation()
-            .startNewActivity(activity)
+                .startNewActivity(activity)
+    }
+
+    fun onEmptyDayClick(day: Day, activity: Activity) {
+        navigator.reservation(day)
+                .startNewActivity(activity)
     }
 
     override fun onCleared() {

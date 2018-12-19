@@ -3,6 +3,7 @@ package com.generals.zimmerfrei.overview.view.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.days.EmptyDayView
 import com.generals.zimmerfrei.overview.view.custom.days.EndingReservationDayView
@@ -10,7 +11,8 @@ import com.generals.zimmerfrei.overview.view.custom.days.ReservedDayView
 import com.generals.zimmerfrei.overview.view.custom.days.StartingReservationDayView
 
 class RoomsDaysAdapter(
-    roomDays: List<RoomDay>
+        roomDays: List<RoomDay>,
+        private val onEmptyDayClick: (day: Day) -> Unit
 ) : RecyclerView.Adapter<RoomsDaysAdapter.RoomDayViewHolder>() {
 
     private val _roomDays: MutableList<RoomDay> = roomDays.toMutableList()
@@ -27,7 +29,7 @@ class RoomsDaysAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
+            parent: ViewGroup, viewType: Int
     ): RoomDayViewHolder = when (viewType) {
         EMPTY_DAY -> RoomDayViewHolder.EmptyDayViewHolder(EmptyDayView(parent.context))
         RESERVED -> RoomDayViewHolder.ReservedDayViewHolder(ReservedDayView(parent.context))
@@ -37,8 +39,8 @@ class RoomsDaysAdapter(
 
 
     override fun onBindViewHolder(holder: RoomDayViewHolder, position: Int) {
-        when(holder) {
-            is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(_roomDays[position] as RoomDay.EmptyDay)
+        when (holder) {
+            is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(_roomDays[position] as RoomDay.EmptyDay, onEmptyDayClick)
             is RoomDayViewHolder.ReservedDayViewHolder -> holder.bind(_roomDays[position] as RoomDay.ReservedDay)
             is RoomDayViewHolder.StartingReservationViewHolder -> holder.bind(_roomDays[position] as RoomDay.StartingReservationDay)
             is RoomDayViewHolder.EndingReservationViewHolder -> holder.bind(_roomDays[position] as RoomDay.EndingReservationDay)
@@ -56,19 +58,20 @@ class RoomsDaysAdapter(
         is RoomDay.ReservedDay -> RESERVED
     }
 
-    sealed class RoomDayViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    sealed class RoomDayViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         class EmptyDayViewHolder(
-            private val view: EmptyDayView
+                private val view: EmptyDayView
         ) : RoomDayViewHolder(view) {
 
-            fun bind(roomDay: RoomDay.EmptyDay) {
-                view.bind(roomDay)
+            fun bind(roomDay: RoomDay.EmptyDay,
+                     onEmptyDayClick: (day: Day) -> Unit) {
+                view.bind(roomDay, onEmptyDayClick)
             }
         }
 
         class StartingReservationViewHolder(
-            private val view: StartingReservationDayView
+                private val view: StartingReservationDayView
         ) : RoomDayViewHolder(view) {
 
             fun bind(roomDay: RoomDay.StartingReservationDay) {
@@ -77,7 +80,7 @@ class RoomsDaysAdapter(
         }
 
         class EndingReservationViewHolder(
-            private val view: EndingReservationDayView
+                private val view: EndingReservationDayView
         ) : RoomDayViewHolder(view) {
 
             fun bind(roomDay: RoomDay.EndingReservationDay) {
@@ -86,7 +89,7 @@ class RoomsDaysAdapter(
         }
 
         class ReservedDayViewHolder(
-            private val view: ReservedDayView
+                private val view: ReservedDayView
         ) : RoomDayViewHolder(view) {
 
             fun bind(roomDay: RoomDay.ReservedDay) {

@@ -1,18 +1,18 @@
 package com.generals.zimmerfrei.overview.service.reservation
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.generals.roomrepository.RoomRepository
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.database.dao.ReservationDAO
-import com.generals.zimmerfrei.database.dao.RoomDAO
 import com.generals.zimmerfrei.database.entities.ReservationEntity
-import com.generals.zimmerfrei.database.entities.RoomEntity
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import org.junit.Rule
 import org.junit.Test
@@ -21,8 +21,8 @@ import org.threeten.bp.LocalDate
 class ReservationServiceImplTest {
 
     private val reservationDao: ReservationDAO = mock()
-    private val roomDAO: RoomDAO = mock()
-    private val sut: ReservationService = ReservationServiceImpl(reservationDao, roomDAO)
+    private val roomRepository: RoomRepository = mock()
+    private val sut: ReservationService = ReservationServiceImpl(reservationDao, roomRepository)
 
     @get:Rule
     val executor = InstantTaskExecutorRule()
@@ -30,10 +30,10 @@ class ReservationServiceImplTest {
     @Test
     fun shouldFetchReservationsByRoom() {
 
-        whenever(roomDAO.getAllRooms()).thenReturn(
-                Flowable.just(
+        whenever(roomRepository.getAllRooms()).thenReturn(
+                Maybe.just(
                         listOf(
-                                RoomEntity(
+                                Room(
                                         id = 0,
                                         name = "A",
                                         personsCount = 4,
@@ -41,7 +41,7 @@ class ReservationServiceImplTest {
                                         isSingle = false,
                                         isHandicap = false,
                                         hasBalcony = true
-                                ), RoomEntity(
+                                ), Room(
                                 id = 1,
                                 name = "B",
                                 personsCount = 4,
@@ -49,7 +49,7 @@ class ReservationServiceImplTest {
                                 isSingle = false,
                                 isHandicap = false,
                                 hasBalcony = true
-                        ), RoomEntity(
+                        ), Room(
                                 id = 2,
                                 name = "C",
                                 personsCount = 4,
@@ -112,9 +112,9 @@ class ReservationServiceImplTest {
 
                     result.first.id == 0L &&
                             result.second.isNotEmpty() &&
-                            result.second[0] is RoomDay.EmptyDay &&
-                            result.second[startReservation - 1] is RoomDay.StartingReservationDay &&
-                            result.second[endReservation - 1] is RoomDay.EndingReservationDay
+                            result.second[0] is RoomDay.Empty &&
+                            result.second[startReservation - 1] is RoomDay.StartingReservation &&
+                            result.second[endReservation - 1] is RoomDay.EndingReservation
                 }.assertValueAt(1) { result: Pair<Room, List<RoomDay>> ->
                     var startReservation = now.dayOfMonth - 7
                     startReservation = Math.max(1, startReservation)
@@ -124,9 +124,9 @@ class ReservationServiceImplTest {
 
                     result.first.id == 1L &&
                             result.second.isNotEmpty() &&
-                            result.second[0] is RoomDay.EmptyDay &&
-                            result.second[startReservation - 1] is RoomDay.StartingReservationDay &&
-                            result.second[endReservation - 1] is RoomDay.EndingReservationDay
+                            result.second[0] is RoomDay.Empty &&
+                            result.second[startReservation - 1] is RoomDay.StartingReservation &&
+                            result.second[endReservation - 1] is RoomDay.EndingReservation
                 }
 
                 .assertValueAt(2) { result: Pair<Room, List<RoomDay>> ->

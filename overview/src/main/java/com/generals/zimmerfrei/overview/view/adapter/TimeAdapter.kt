@@ -9,7 +9,7 @@ import com.generals.zimmerfrei.overview.view.custom.SingleRoomPlan
 
 class TimeAdapter(
         roomDays: List<Pair<Room, List<RoomDay>>>,
-        private val onEmptyDayClick: (day: Day) -> Unit
+        private val onEmptyDayClick: (day: RoomDay) -> Unit
 ) : RecyclerView.Adapter<TimeAdapter.SingleRoomViewHolder>() {
 
     private val _roomDays: MutableList<Pair<Room, List<RoomDay>>> = roomDays.toMutableList()
@@ -41,7 +41,7 @@ class TimeAdapter(
     ) : RecyclerView.ViewHolder(view) {
 
         fun bind(days: List<RoomDay>,
-                 onEmptyDayClick: (day: Day) -> Unit) {
+                 onEmptyDayClick: (day: RoomDay) -> Unit) {
             view.bind(days, onEmptyDayClick)
         }
     }

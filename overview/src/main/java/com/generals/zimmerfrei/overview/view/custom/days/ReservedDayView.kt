@@ -27,5 +27,5 @@ class ReservedDayView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_reserved_day, this, true)
     }
 
-    fun bind(roomDay: RoomDay.ReservedDay) {}
+    fun bind(roomDay: RoomDay.Reserved) {}
 }

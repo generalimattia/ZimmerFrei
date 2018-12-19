@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 
@@ -28,8 +27,8 @@ class EmptyDayView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_empty_day, this, true)
     }
 
-    fun bind(roomDay: RoomDay.EmptyDay,
-             onClick: (day: Day) -> Unit) {
-        setOnClickListener { onClick(roomDay.day) }
+    fun bind(roomDay: RoomDay.Empty,
+             onClick: (day: RoomDay) -> Unit) {
+        setOnClickListener { onClick(roomDay) }
     }
 }

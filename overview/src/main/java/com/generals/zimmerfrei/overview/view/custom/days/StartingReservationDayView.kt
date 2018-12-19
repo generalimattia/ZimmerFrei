@@ -27,5 +27,5 @@ class StartingReservationDayView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_starting_reservation_day, this, true)
     }
 
-    fun bind(roomDay: RoomDay.StartingReservationDay) {}
+    fun bind(roomDay: RoomDay.StartingReservation) {}
 }

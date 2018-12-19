@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TextView
 import com.generals.zimmerfrei.model.ParcelableDay
+import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -96,7 +97,7 @@ class ReservationFragment : Fragment() {
 
         setUpToolbar()
 
-        viewModel.startDay.observe(this,
+        viewModel.startDate.observe(this,
                 Observer { nullableStartDate: ParcelableDay? ->
                     startDatePickerDialog = buildStartDatePickerDialog(nullableStartDate)
                     nullableStartDate?.let {
@@ -182,6 +183,13 @@ class ReservationFragment : Fragment() {
                     }
                 }
         )
+
+        viewModel.preselectedRoom.observe(this,
+                Observer { selection: Int? ->
+                    selection?.let {
+                        room_spinner.setSelection(it)
+                    }
+                })
 
         setupListeners()
 
@@ -270,9 +278,9 @@ class ReservationFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(startDate: ParcelableDay?) = ReservationFragment().apply {
+        fun newInstance(reservation: ParcelableRoomDay?) = ReservationFragment().apply {
             val arguments = Bundle().apply {
-                startDate?.let { putParcelable(RESERVATION_START_DATE, startDate) }
+                reservation?.let { putParcelable(RESERVATION_START_DATE, reservation) }
             }
             setArguments(arguments)
         }

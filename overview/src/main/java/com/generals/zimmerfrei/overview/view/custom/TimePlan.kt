@@ -64,7 +64,7 @@ class TimePlan : FrameLayout {
 
     fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
              syncScroller: SyncScroller,
-             onEmptyDayClick: (day: Day) -> Unit) {
+             onEmptyDayClick: (day: RoomDay) -> Unit) {
         syncScroller.bindSecond(recyclerView)
             .sync()
         recyclerView.adapter = TimeAdapter(roomDays, onEmptyDayClick)

@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.ParcelableDay
+import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.reservation.R
@@ -34,6 +35,7 @@ class ReservationViewModel @Inject constructor(
     private val _rooms = MutableLiveData<List<String>>()
     private val _selectedRoom = MutableLiveData<String>()
     private val _startDate = MutableLiveData<ParcelableDay>()
+    private val _preselectedRoom = MutableLiveData<Int>()
 
     private val availableColors: List<String> = listOf(
             "#d50000",
@@ -78,17 +80,27 @@ class ReservationViewModel @Inject constructor(
     val selectedRoom: LiveData<String>
         get() = _selectedRoom
 
-    val startDay: LiveData<ParcelableDay>
+    val startDate: LiveData<ParcelableDay>
         get() = _startDate
 
+    val preselectedRoom: LiveData<Int>
+        get() = _preselectedRoom
+
     fun start(
-            startDay: ParcelableDay?
+            reservation: ParcelableRoomDay?
     ) {
-        _startDate.value = startDay
+        reservation?.let {
+            when (it) {
+                is ParcelableRoomDay.Empty -> {
+                    _startDate.value = it.day
+                    fetchRooms(it.room)
+                }
+            }
+        }
 
         generateNewColor()
 
-        fetchRooms()
+        //fetchRooms()
     }
 
     fun generateNewColor() {
@@ -197,14 +209,19 @@ class ReservationViewModel @Inject constructor(
         return isValid
     }
 
-    private fun fetchRooms() {
+    private fun fetchRooms(preselected: Room? = null) {
         compositeDisposable.addAll(
                 useCase.getAllRooms()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { entities: List<Room>? ->
-                            entities?.let {
-                                _rooms.value = it.map { entity: Room -> entity.name }
+                            entities?.let { rooms: List<Room> ->
+                                _rooms.value = rooms.map { entity: Room -> entity.name }
+                                preselected?.let {
+                                    if (rooms.contains(it)) {
+                                        _preselectedRoom.value = rooms.indexOf(it)
+                                    }
+                                }
                             }
                         })
     }

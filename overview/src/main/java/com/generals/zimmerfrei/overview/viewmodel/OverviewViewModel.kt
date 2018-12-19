@@ -132,7 +132,7 @@ class OverviewViewModel @Inject constructor(
                 .startNewActivity(activity)
     }
 
-    fun onEmptyDayClick(day: Day, activity: Activity) {
+    fun onEmptyDayClick(day: RoomDay, activity: Activity) {
         navigator.reservation(day)
                 .startNewActivity(activity)
     }

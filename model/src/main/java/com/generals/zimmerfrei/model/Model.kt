@@ -79,6 +79,23 @@ data class Reservation(
             email = reservation.email
     )
 
+    constructor(
+            reservation: ReservationEntity, room: Room
+    ) : this(
+            id = reservation.id,
+            name = reservation.name,
+            startDate = reservation.startDate,
+            endDate = reservation.endDate,
+            adults = reservation.adults,
+            children = reservation.children,
+            babies = reservation.babies,
+            color = reservation.color,
+            room = room,
+            notes = reservation.notes,
+            mobile = reservation.mobile,
+            email = reservation.email
+    )
+
     fun toEntity(): ReservationEntity = ReservationEntity(
             name = name,
             startDate = startDate,
@@ -198,27 +215,87 @@ data class Room(
     }
 }
 
-data class DayWithReservations(
-        val day: Day = Day(), val reservations: List<Reservation> = emptyList()
-) : Comparable<DayWithReservations> {
-
-    override fun compareTo(other: DayWithReservations): Int =
-            this.day.date.compareTo(other.day.date)
-}
-
 sealed class RoomDay {
 
-    data class EmptyDay(val day: Day = Day()) : RoomDay()
-
-    data class StartingReservationDay(
-            val day: Day = Day(), val reservation: Reservation = Reservation()
+    data class Empty(
+            val day: Day = Day(),
+            val room: Room
     ) : RoomDay()
 
-    data class ReservedDay(
-            val day: Day = Day(), val reservation: Reservation = Reservation()
+    data class StartingReservation(
+            val day: Day = Day(),
+            val reservation: Reservation = Reservation()
     ) : RoomDay()
 
-    data class EndingReservationDay(
-            val day: Day = Day(), val reservation: Reservation = Reservation()
+    data class Reserved(
+            val day: Day = Day(),
+            val reservation: Reservation = Reservation()
     ) : RoomDay()
+
+    data class EndingReservation(
+            val day: Day = Day(),
+            val reservation: Reservation = Reservation()
+    ) : RoomDay()
+}
+
+sealed class ParcelableRoomDay: Parcelable {
+
+    abstract val day: ParcelableDay
+
+    data class Empty(
+            override val day: ParcelableDay,
+            val room: Room
+    ) : ParcelableRoomDay(), Parcelable {
+
+        constructor(input: RoomDay.Empty) : this(
+                ParcelableDay(input.day),
+                input.room
+        )
+
+        constructor(source: Parcel) : this(
+                source.readParcelable<ParcelableDay>(ParcelableDay::class.java.classLoader),
+                source.readParcelable<Room>(Room::class.java.classLoader)
+        )
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeParcelable(day, 0)
+            writeParcelable(room, 0)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<Empty> = object : Parcelable.Creator<Empty> {
+                override fun createFromParcel(source: Parcel): Empty = Empty(source)
+                override fun newArray(size: Int): Array<Empty?> = arrayOfNulls(size)
+            }
+        }
+    }
+
+    data class Reserved(
+            override val day: ParcelableDay,
+            val reservation: Reservation
+    ) : ParcelableRoomDay(), Parcelable {
+
+        constructor(source: Parcel) : this(
+                source.readParcelable<ParcelableDay>(ParcelableDay::class.java.classLoader),
+                source.readParcelable<Reservation>(Reservation::class.java.classLoader)
+        )
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeParcelable(day, 0)
+            writeParcelable(reservation, 0)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<Reserved> = object : Parcelable.Creator<Reserved> {
+                override fun createFromParcel(source: Parcel): Reserved = Reserved(source)
+                override fun newArray(size: Int): Array<Reserved?> = arrayOfNulls(size)
+            }
+        }
+    }
 }

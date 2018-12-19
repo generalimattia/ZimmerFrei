@@ -3,9 +3,9 @@ package com.generals.zimmerfrei.navigator
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.IdRes
-import com.generals.zimmerfrei.model.Day
-import com.generals.zimmerfrei.model.ParcelableDay
+import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.reservation.view.RESERVATION_START_DATE
 import com.generals.zimmerfrei.reservation.view.ReservationActivity
 import com.generals.zimmerfrei.room.detail.view.RoomDetailFragment
@@ -17,14 +17,19 @@ data class NavigatorImpl @Inject constructor(
 ) : Navigator {
 
     override fun reservation(
-            startDate: Day?
+            reservation: RoomDay?
     ): NavigationRequest.ActivityRequest =
             NavigationRequest.ActivityRequest(
                     Intent(
                             context,
                             ReservationActivity::class.java
                     ).apply {
-                        startDate?.let { putExtra(RESERVATION_START_DATE, ParcelableDay(it)) }
+                        reservation?.let {
+                            when (it) {
+                                is RoomDay.Empty -> putExtra(RESERVATION_START_DATE, ParcelableRoomDay.Empty(it))
+                                else -> {}
+                            }
+                        }
                     }
             )
 

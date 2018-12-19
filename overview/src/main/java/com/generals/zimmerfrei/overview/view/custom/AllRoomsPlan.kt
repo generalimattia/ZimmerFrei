@@ -58,7 +58,7 @@ class AllRoomsPlan : FrameLayout {
 
     fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
              syncScroller: SyncScroller,
-             onEmptyDayClick: (day: Day) -> Unit) {
+             onEmptyDayClick: (day: RoomDay) -> Unit) {
         recyclerView.adapter = AllRoomsAdapter(
                 roomDays,
                 syncScroller,

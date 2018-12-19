@@ -1,14 +1,13 @@
 package com.generals.zimmerfrei.overview.service.reservation
 
+import com.generals.roomrepository.RoomRepository
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
+import com.generals.zimmerfrei.database.dao.ReservationDAO
+import com.generals.zimmerfrei.database.entities.ReservationEntity
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.database.dao.ReservationDAO
-import com.generals.zimmerfrei.database.dao.RoomDAO
-import com.generals.zimmerfrei.database.entities.ReservationEntity
-import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -17,7 +16,8 @@ import org.threeten.bp.chrono.ChronoLocalDate
 import javax.inject.Inject
 
 class ReservationServiceImpl @Inject constructor(
-        private val reservationDao: ReservationDAO, private val roomDAO: RoomDAO
+        private val reservationDao: ReservationDAO,
+        private val roomRepository: RoomRepository
 ) : ReservationService {
 
     override fun fetchReservationsByRoomAndDay(room: Room, day: Day): Flowable<List<Reservation>> {
@@ -41,11 +41,11 @@ class ReservationServiceImpl @Inject constructor(
     ): Observable<Pair<Room, List<RoomDay>>> =
             Observable.create<Pair<Room, List<RoomDay>>> { externalEmitter: ObservableEmitter<Pair<Room, List<RoomDay>>> ->
 
-                roomDAO.getAllRooms().subscribe({ roomEntities: List<RoomEntity> ->
+                roomRepository.getAllRooms().subscribe({ rooms: List<Room> ->
 
                     val observables: List<Observable<Pair<Room, List<RoomDay>>>> =
                             buildObservablesToFetchReservationsByRoom(
-                                    roomEntities, startPeriod, endPeriod
+                                    rooms, startPeriod, endPeriod
                             )
 
                     Observable.merge(observables)
@@ -81,16 +81,16 @@ class ReservationServiceImpl @Inject constructor(
             }
 
     private fun buildObservablesToFetchReservationsByRoom(
-            roomEntities: List<RoomEntity>,
+            rooms: List<Room>,
             startPeriod: LocalDate, endPeriod: LocalDate
     ): List<Observable<Pair<Room, List<RoomDay>>>> {
-        return roomEntities.map { roomEntity: RoomEntity ->
+        return rooms.map { room: Room ->
 
             Observable.create<Pair<Room, List<RoomDay>>> { emitter: ObservableEmitter<Pair<Room, List<RoomDay>>> ->
 
                 val allReservations: Flowable<List<ReservationEntity>>? =
                         reservationDao.findReservationsByRoomAndFromDateToDate(
-                                roomEntity.id,
+                                room.id,
                                 offsetDateTimeFromLocalDate(startPeriod),
                                 offsetDateTimeFromLocalDate(endPeriod)
                         )
@@ -109,11 +109,11 @@ class ReservationServiceImpl @Inject constructor(
                                                 buildRoomDayForDay(
                                                         reservationEntities,
                                                         currentDay,
-                                                        roomEntity
+                                                        room
                                                 )
                                         roomDay
                                     }
-                    emitter.onNext(Room(roomEntity) to roomDays)
+                    emitter.onNext(room to roomDays)
                     emitter.onComplete()
                 }, { t: Throwable? ->
                     t?.let {
@@ -121,9 +121,12 @@ class ReservationServiceImpl @Inject constructor(
                         emitter.onComplete()
                     }
                 }) ?: let {
-                    emitter.onNext(Room(roomEntity) to MutableList(
-                            endPeriod.dayOfMonth
-                    ) { _: Int -> RoomDay.EmptyDay() })
+                    emitter.onNext(room to MutableList(endPeriod.dayOfMonth) { day: Int ->
+                        RoomDay.Empty(
+                               Day(date = offsetDateTimeFromLocalDate(LocalDate.of(endPeriod.year, endPeriod.month, day+1))),
+                               room
+                        )
+                    })
                     emitter.onComplete()
                 }
             }
@@ -131,35 +134,33 @@ class ReservationServiceImpl @Inject constructor(
     }
 
     private fun buildRoomDayForDay(
-            reservationEntities: List<ReservationEntity>, currentDay: LocalDate, roomEntity: RoomEntity
+            reservationEntities: List<ReservationEntity>, currentDay: LocalDate, room: Room
     ): RoomDay {
         return reservationEntities.firstOrNull { reservationEntity: ReservationEntity ->
             val startDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.startDate)
             val endDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.endDate)
-            (currentDay.isAfter(startDate) && currentDay.isBefore(endDate)) || currentDay.isEqual(
-                    startDate
-            ) || currentDay.isEqual(endDate)
+            (currentDay.isAfter(startDate) && currentDay.isBefore(endDate)) ||
+                    currentDay.isEqual(startDate) || currentDay.isEqual(endDate)
         }?.let {
-            val startDate = ChronoLocalDate.from(it.startDate)
-            val endDate = ChronoLocalDate.from(it.endDate)
+            val startDate: ChronoLocalDate = ChronoLocalDate.from(it.startDate)
+            val endDate: ChronoLocalDate = ChronoLocalDate.from(it.endDate)
 
             when {
-                currentDay.isEqual(startDate) -> RoomDay.StartingReservationDay(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)), Reservation(
-                        it, roomEntity
+                currentDay.isEqual(startDate) -> RoomDay.StartingReservation(
+                        Day(date = offsetDateTimeFromLocalDate(currentDay)),
+                        Reservation(it, room)
                 )
+                currentDay.isEqual(endDate) -> RoomDay.EndingReservation(
+                        Day(date = offsetDateTimeFromLocalDate(currentDay)),
+                        Reservation(it, room)
                 )
-                currentDay.isEqual(endDate) -> RoomDay.EndingReservationDay(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)), Reservation(
-                        it, roomEntity
-                )
-                )
-                else -> RoomDay.ReservedDay(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)), Reservation(
-                        it, roomEntity
-                )
+                else -> RoomDay.Reserved(
+                        Day(date = offsetDateTimeFromLocalDate(currentDay)), Reservation(it, room)
                 )
             }
-        } ?: RoomDay.EmptyDay(Day(date = offsetDateTimeFromLocalDate(currentDay)))
+        } ?: RoomDay.Empty(
+                Day(date = offsetDateTimeFromLocalDate(currentDay)),
+                room
+        )
     }
 }

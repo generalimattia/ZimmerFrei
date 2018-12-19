@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference
 class AllRoomsAdapter(
         private val roomDays: List<Pair<Room, List<RoomDay>>>,
         private val syncScroller: SyncScroller,
-        private val onEmptyDayClick: (day: Day) -> Unit
+        private val onEmptyDayClick: (day: RoomDay) -> Unit
 ) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
 
     private var weakViewHolder: WeakReference<AllRoomsViewHolder>? = null
@@ -54,7 +54,7 @@ class AllRoomsAdapter(
 
         fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
                  syncScroller: SyncScroller,
-                 onEmptyDayClick: (day: Day) -> Unit) {
+                 onEmptyDayClick: (day: RoomDay) -> Unit) {
             view.bind(roomDays,
                     syncScroller,
                     onEmptyDayClick)

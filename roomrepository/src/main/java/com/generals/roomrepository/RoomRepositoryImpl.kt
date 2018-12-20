@@ -22,6 +22,7 @@ class RoomRepositoryImpl @Inject constructor(
                 dao.getAllRooms().map { entities: List<RoomEntity> ->
                     entities.map { Room(it) }
                 }.doAfterSuccess {
+                    cache.clear()
                     cache.addAll(it)
                 }.doFinally {
                     isCacheValid.set(true)
@@ -41,7 +42,6 @@ class RoomRepositoryImpl @Inject constructor(
                 try {
                     if (invalidateCache) {
                         isCacheValid.set(false)
-                        cache.clear()
                     }
                     dbOperation()
                     emitter.onSuccess(Unit)

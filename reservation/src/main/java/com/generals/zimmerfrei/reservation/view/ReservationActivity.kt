@@ -23,12 +23,12 @@ class ReservationActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
         if (savedInstanceState == null) {
 
-            val reservation: ParcelableRoomDay? = intent.getParcelableExtra(RESERVATION_START_DATE)
+            val newReservation: ParcelableRoomDay? = intent.getParcelableExtra(RESERVATION)
 
             supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.fragment_container,
-                    ReservationFragment.newInstance(reservation)
+                    ReservationFragment.newInstance(newReservation)
                 )
                 .commitAllowingStateLoss()
         }

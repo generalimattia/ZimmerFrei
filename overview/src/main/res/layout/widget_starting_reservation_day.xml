@@ -3,8 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/row_height"
     android:layout_height="@dimen/row_height"
-    android:clickable="true"
-    android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:background="@drawable/left_half_circle"
     android:padding="2dp"/>

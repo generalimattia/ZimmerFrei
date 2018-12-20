@@ -29,6 +29,8 @@ class EmptyDayView : FrameLayout {
 
     fun bind(roomDay: RoomDay.Empty,
              onClick: (day: RoomDay) -> Unit) {
-        setOnClickListener { onClick(roomDay) }
+        setOnClickListener {
+            onClick(roomDay)
+        }
     }
 }

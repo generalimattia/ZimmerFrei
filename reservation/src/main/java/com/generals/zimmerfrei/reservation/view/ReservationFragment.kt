@@ -41,31 +41,7 @@ class ReservationFragment : Fragment() {
     private var endYear: Int = 0
 
     private lateinit var startDatePickerDialog: DatePickerDialog
-
-    private val endDatePickerDialog: DatePickerDialog by lazy {
-        val calendar: Calendar = Calendar.getInstance()
-        DatePickerDialog(
-                context,
-                { _: DatePicker, year: Int, month: Int, day: Int ->
-
-                    endDay = day
-                    endMonth = month
-                    endYear = year
-
-                    end_date.setText(
-                            DATE_FORMAT.format(
-                                    day.toString(),
-                                    (month + 1).toString(),
-                                    year.toString()
-                            ),
-                            TextView.BufferType.NORMAL
-                    )
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        )
-    }
+    private lateinit var endDatePickerDialog: DatePickerDialog
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -98,9 +74,9 @@ class ReservationFragment : Fragment() {
         setUpToolbar()
 
         viewModel.startDate.observe(this,
-                Observer { nullableStartDate: ParcelableDay? ->
-                    startDatePickerDialog = buildStartDatePickerDialog(nullableStartDate)
-                    nullableStartDate?.let {
+                Observer { nullableDate: ParcelableDay? ->
+                    startDatePickerDialog = buildStartDatePickerDialog(nullableDate)
+                    nullableDate?.let {
                         start_date.setText(
                                 DATE_FORMAT.format(
                                         it.dayOfMonth.toString(),
@@ -112,10 +88,74 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
+        viewModel.endDate.observe(this,
+                Observer { nullableDate: ParcelableDay? ->
+                    endDatePickerDialog = buildEndDatePickerDialog(nullableDate)
+                    nullableDate?.let {
+                        end_date.setText(
+                                DATE_FORMAT.format(
+                                        it.dayOfMonth.toString(),
+                                        it.month.toString(),
+                                        it.year.toString()
+                                ),
+                                TextView.BufferType.NORMAL
+                        )
+                    }
+                })
+
+        viewModel.name.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        name.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
+        viewModel.email.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        email.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
+        viewModel.mobile.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        mobile.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
+        viewModel.adultsCount.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        adult_count.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
+        viewModel.childrenCount.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        children_count.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
+        viewModel.babiesCount.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        babies_count.setText(it, TextView.BufferType.NORMAL)
+                    }
+                })
+
         viewModel.color.observe(this,
                 Observer { color: String? ->
                     color?.let {
                         color_view.setBackgroundColor(Color.parseColor(it))
+                    }
+                })
+
+        viewModel.notes.observe(this,
+                Observer { nullableValue: String? ->
+                    nullableValue?.let {
+                        notes.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
@@ -194,7 +234,7 @@ class ReservationFragment : Fragment() {
         setupListeners()
 
         if (savedInstanceState == null) {
-            viewModel.start(arguments?.getParcelable(RESERVATION_START_DATE))
+            viewModel.start(arguments?.getParcelable(RESERVATION))
         }
     }
 
@@ -233,6 +273,31 @@ class ReservationFragment : Fragment() {
                 startDate?.year ?: calendar.get(Calendar.YEAR),
                 startDate?.month ?: calendar.get(Calendar.MONTH),
                 startDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
+        )
+    }
+
+    private fun buildEndDatePickerDialog(endDate: ParcelableDay?): DatePickerDialog {
+        val calendar: Calendar = Calendar.getInstance()
+        return DatePickerDialog(
+                context,
+                { _: DatePicker, year: Int, month: Int, day: Int ->
+
+                    endDay = day
+                    endMonth = month
+                    endYear = year
+
+                    end_date.setText(
+                            DATE_FORMAT.format(
+                                    day.toString(),
+                                    (month + 1).toString(),
+                                    year.toString()
+                            ),
+                            TextView.BufferType.NORMAL
+                    )
+                },
+                endDate?.year ?: calendar.get(Calendar.YEAR),
+                endDate?.month ?: calendar.get(Calendar.MONTH),
+                endDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
 
@@ -280,7 +345,7 @@ class ReservationFragment : Fragment() {
     companion object {
         fun newInstance(reservation: ParcelableRoomDay?) = ReservationFragment().apply {
             val arguments = Bundle().apply {
-                reservation?.let { putParcelable(RESERVATION_START_DATE, reservation) }
+                reservation?.let { putParcelable(RESERVATION, reservation) }
             }
             setArguments(arguments)
         }

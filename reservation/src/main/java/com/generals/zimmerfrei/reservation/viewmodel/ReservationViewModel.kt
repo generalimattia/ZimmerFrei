@@ -26,16 +26,25 @@ class ReservationViewModel @Inject constructor(
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private val _color = MutableLiveData<String>()
     private val _pressBack = MutableLiveData<Boolean>()
     private val _roomError = MutableLiveData<String>()
     private val _nameError = MutableLiveData<String>()
     private val _startDateError = MutableLiveData<String>()
     private val _endDateError = MutableLiveData<String>()
     private val _rooms = MutableLiveData<List<String>>()
+    private val _preselectedRoom = MutableLiveData<Int>()
+
     private val _selectedRoom = MutableLiveData<String>()
     private val _startDate = MutableLiveData<ParcelableDay>()
-    private val _preselectedRoom = MutableLiveData<Int>()
+    private val _endDate = MutableLiveData<ParcelableDay>()
+    private val _name = MutableLiveData<String>()
+    private val _email = MutableLiveData<String>()
+    private val _mobile = MutableLiveData<String>()
+    private val _adultsCount = MutableLiveData<String>()
+    private val _childrenCount = MutableLiveData<String>()
+    private val _babiesCount = MutableLiveData<String>()
+    private val _color = MutableLiveData<String>()
+    private val _notes = MutableLiveData<String>()
 
     private val availableColors: List<String> = listOf(
             "#d50000",
@@ -55,9 +64,6 @@ class ReservationViewModel @Inject constructor(
             "#4e342e",
             "#546e7a"
     )
-
-    val color: LiveData<String>
-        get() = _color
 
     val pressBack: LiveData<Boolean>
         get() = _pressBack
@@ -83,8 +89,35 @@ class ReservationViewModel @Inject constructor(
     val startDate: LiveData<ParcelableDay>
         get() = _startDate
 
+    val endDate: LiveData<ParcelableDay>
+        get() = _endDate
+
     val preselectedRoom: LiveData<Int>
         get() = _preselectedRoom
+
+    val name: LiveData<String>
+        get() = _name
+
+    val email: LiveData<String>
+        get() = _email
+
+    val mobile: LiveData<String>
+        get() = _mobile
+
+    val adultsCount: LiveData<String>
+        get() = _adultsCount
+
+    val childrenCount: LiveData<String>
+        get() = _childrenCount
+
+    val babiesCount: LiveData<String>
+        get() = _babiesCount
+
+    val color: LiveData<String>
+        get() = _color
+
+    val notes: LiveData<String>
+        get() = _notes
 
     fun start(
             reservation: ParcelableRoomDay?
@@ -92,15 +125,42 @@ class ReservationViewModel @Inject constructor(
         reservation?.let {
             when (it) {
                 is ParcelableRoomDay.Empty -> {
-                    _startDate.value = it.day
-                    fetchRooms(it.room)
+                    handleNewReservationFromDate(it)
+                }
+                is ParcelableRoomDay.Reserved -> {
+                    handleExistingReservation(it)
                 }
             }
+        } ?: let {
+            handleNewReservation()
         }
+    }
 
+    private fun handleNewReservation() {
+        fetchRooms()
+        _startDate.value = null
+        _endDate.value = null
         generateNewColor()
+    }
 
-        //fetchRooms()
+    private fun handleNewReservationFromDate(it: ParcelableRoomDay.Empty) {
+        fetchRooms(it.room)
+        _startDate.value = it.day
+        generateNewColor()
+    }
+
+    private fun handleExistingReservation(it: ParcelableRoomDay.Reserved) {
+        fetchRooms(it.reservation.room)
+        _startDate.value = ParcelableDay(it.reservation.startDate)
+        _endDate.value = ParcelableDay(it.reservation.endDate)
+        _name.value = it.reservation.name
+        _email.value = it.reservation.email
+        _mobile.value = it.reservation.mobile
+        _adultsCount.value = it.reservation.adults.toString()
+        _childrenCount.value = it.reservation.children.toString()
+        _babiesCount.value = it.reservation.babies.toString()
+        _color.value = it.reservation.color
+        _notes.value = it.reservation.notes
     }
 
     fun generateNewColor() {

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
@@ -58,15 +57,11 @@ class AllRoomsPlan : FrameLayout {
 
     fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
              syncScroller: SyncScroller,
-             onEmptyDayClick: (day: RoomDay) -> Unit) {
+             onDayClick: (RoomDay) -> Unit) {
         recyclerView.adapter = AllRoomsAdapter(
                 roomDays,
                 syncScroller,
-                onEmptyDayClick
+                onDayClick
         )
-    }
-
-    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
-        (recyclerView.adapter as AllRoomsAdapter).update(newRoomDays)
     }
 }

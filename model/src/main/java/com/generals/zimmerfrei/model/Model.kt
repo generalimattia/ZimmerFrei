@@ -20,8 +20,14 @@ data class ParcelableDay(
 
     constructor(input: Day) : this(
             dayOfMonth = input.date.dayOfMonth,
-            month = input.date.month.value,
+            month = input.date.monthValue,
             year = input.date.year
+    )
+
+    constructor(input: OffsetDateTime) : this(
+            dayOfMonth = input.dayOfMonth,
+            month = input.monthValue,
+            year = input.year
     )
 
     constructor(source: Parcel) : this(
@@ -238,7 +244,7 @@ sealed class RoomDay {
     ) : RoomDay()
 }
 
-sealed class ParcelableRoomDay: Parcelable {
+sealed class ParcelableRoomDay : Parcelable {
 
     abstract val day: ParcelableDay
 
@@ -277,6 +283,21 @@ sealed class ParcelableRoomDay: Parcelable {
             override val day: ParcelableDay,
             val reservation: Reservation
     ) : ParcelableRoomDay(), Parcelable {
+
+        constructor(input: RoomDay.Reserved) : this(
+                ParcelableDay(input.day),
+                input.reservation
+        )
+
+        constructor(input: RoomDay.StartingReservation) : this(
+                ParcelableDay(input.day),
+                input.reservation
+        )
+
+        constructor(input: RoomDay.EndingReservation) : this(
+                ParcelableDay(input.day),
+                input.reservation
+        )
 
         constructor(source: Parcel) : this(
                 source.readParcelable<ParcelableDay>(ParcelableDay::class.java.classLoader),

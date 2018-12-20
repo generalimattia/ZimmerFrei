@@ -2,7 +2,6 @@ package com.generals.zimmerfrei.overview.view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.TimePlan
@@ -12,7 +11,7 @@ import java.lang.ref.WeakReference
 class AllRoomsAdapter(
         private val roomDays: List<Pair<Room, List<RoomDay>>>,
         private val syncScroller: SyncScroller,
-        private val onEmptyDayClick: (day: RoomDay) -> Unit
+        private val onDayClick: (RoomDay) -> Unit
 ) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
 
     private var weakViewHolder: WeakReference<AllRoomsViewHolder>? = null
@@ -35,7 +34,7 @@ class AllRoomsAdapter(
         holder.bind(
                 roomDays,
                 syncScroller,
-                onEmptyDayClick
+                onDayClick
         )
     }
 
@@ -43,25 +42,16 @@ class AllRoomsAdapter(
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
-        weakViewHolder?.get()
-                ?.update(newRoomDays)
-    }
-
     class AllRoomsViewHolder(
             private val view: TimePlan
     ) : RecyclerView.ViewHolder(view) {
 
         fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
                  syncScroller: SyncScroller,
-                 onEmptyDayClick: (day: RoomDay) -> Unit) {
+                 onDayClick: (RoomDay) -> Unit) {
             view.bind(roomDays,
                     syncScroller,
-                    onEmptyDayClick)
-        }
-
-        fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
-            view.update(newRoomDays)
+                    onDayClick)
         }
     }
 }

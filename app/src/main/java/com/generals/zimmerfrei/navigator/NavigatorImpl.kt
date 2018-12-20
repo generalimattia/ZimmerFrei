@@ -6,7 +6,7 @@ import android.support.annotation.IdRes
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.reservation.view.RESERVATION_START_DATE
+import com.generals.zimmerfrei.reservation.view.RESERVATION
 import com.generals.zimmerfrei.reservation.view.ReservationActivity
 import com.generals.zimmerfrei.room.detail.view.RoomDetailFragment
 import com.generals.zimmerfrei.room.list.view.RoomListFragment
@@ -24,12 +24,15 @@ data class NavigatorImpl @Inject constructor(
                             context,
                             ReservationActivity::class.java
                     ).apply {
-                        reservation?.let {
+                        val parcelableRoomDay: ParcelableRoomDay? = reservation?.let {
                             when (it) {
-                                is RoomDay.Empty -> putExtra(RESERVATION_START_DATE, ParcelableRoomDay.Empty(it))
-                                else -> {}
+                                is RoomDay.Empty -> ParcelableRoomDay.Empty(it)
+                                is RoomDay.Reserved -> ParcelableRoomDay.Reserved(it)
+                                is RoomDay.StartingReservation -> ParcelableRoomDay.Reserved(it)
+                                is RoomDay.EndingReservation -> ParcelableRoomDay.Reserved(it)
                             }
                         }
+                        putExtra(RESERVATION, parcelableRoomDay)
                     }
             )
 

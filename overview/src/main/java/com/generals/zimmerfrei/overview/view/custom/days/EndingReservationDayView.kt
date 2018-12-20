@@ -1,6 +1,7 @@
 package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -27,5 +28,12 @@ class EndingReservationDayView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_ending_reservation_day, this, true)
     }
 
-    fun bind(roomDay: RoomDay.EndingReservation) {}
+    fun bind(
+            roomDay: RoomDay.EndingReservation,
+            onClick: (RoomDay) -> Unit
+    ) {
+        setOnClickListener {
+            onClick(roomDay)
+        }
+    }
 }

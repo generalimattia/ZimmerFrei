@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
-import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
@@ -64,13 +63,9 @@ class TimePlan : FrameLayout {
 
     fun bind(roomDays: List<Pair<Room, List<RoomDay>>>,
              syncScroller: SyncScroller,
-             onEmptyDayClick: (day: RoomDay) -> Unit) {
+             onDayClick: (RoomDay) -> Unit) {
         syncScroller.bindSecond(recyclerView)
             .sync()
-        recyclerView.adapter = TimeAdapter(roomDays, onEmptyDayClick)
-    }
-
-    fun update(newRoomDays: List<Pair<Room, List<RoomDay>>>) {
-        (recyclerView.adapter as TimeAdapter).update(newRoomDays)
+        recyclerView.adapter = TimeAdapter(roomDays, onDayClick)
     }
 }

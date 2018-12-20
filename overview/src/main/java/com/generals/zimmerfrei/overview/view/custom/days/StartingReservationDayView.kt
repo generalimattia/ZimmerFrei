@@ -1,6 +1,9 @@
 package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -18,8 +21,8 @@ class StartingReservationDayView : FrameLayout {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context,
-                                                                              attrs,
-                                                                              defStyle) {
+            attrs,
+            defStyle) {
         init(attrs, defStyle)
     }
 
@@ -27,5 +30,12 @@ class StartingReservationDayView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_starting_reservation_day, this, true)
     }
 
-    fun bind(roomDay: RoomDay.StartingReservation) {}
+    fun bind(
+            roomDay: RoomDay.StartingReservation,
+            onClick: (RoomDay) -> Unit
+    ) {
+        setOnClickListener {
+            onClick(roomDay)
+        }
+    }
 }

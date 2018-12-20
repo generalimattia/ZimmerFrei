@@ -110,11 +110,11 @@ class OverviewFragment : Fragment() {
                 Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
                     roomDays?.let {
 
-                        plan.bind(it, syncScroller, { day: RoomDay ->
+                        plan.bind(it, syncScroller) { day: RoomDay ->
                             activity?.let {
                                 viewModel.onDayClick(day, it)
                             }
-                        })
+                        }
                     }
                 })
 

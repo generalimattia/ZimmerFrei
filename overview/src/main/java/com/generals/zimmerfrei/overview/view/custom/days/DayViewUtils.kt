@@ -21,9 +21,15 @@ private fun buildDrawable(
         context: Context,
         reservation: Reservation,
         @DrawableRes resource: Int
+): GradientDrawable = buildDrawable(context, Color.parseColor(reservation.color), resource)
+
+fun buildDrawable(
+        context: Context,
+        color: Int,
+        @DrawableRes resource: Int
 ): GradientDrawable {
     val drawable = context.getDrawable(resource)
     val gradientDrawable = drawable as GradientDrawable
-    gradientDrawable.color = ColorStateList.valueOf(Color.parseColor(reservation.color))
+    gradientDrawable.color = ColorStateList.valueOf(color)
     return gradientDrawable
 }

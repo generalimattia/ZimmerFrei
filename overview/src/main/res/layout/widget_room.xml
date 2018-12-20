@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/row_height"
     android:layout_height="@dimen/row_height"
-    android:background="@drawable/background_shape"
+    android:background="@drawable/background_empty_day"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"

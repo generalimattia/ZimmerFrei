@@ -1,8 +1,7 @@
 package com.generals.zimmerfrei.common.extension
 
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalTime
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.*
 
 fun offsetDateTimeFromLocalDate(localDate: LocalDate) = OffsetDateTime.of(localDate, LocalTime.NOON, ZoneOffset.UTC)
+
+fun OffsetDateTime.isWeekend(): Boolean = (dayOfWeek == DayOfWeek.SATURDAY) || (dayOfWeek == DayOfWeek.SUNDAY)

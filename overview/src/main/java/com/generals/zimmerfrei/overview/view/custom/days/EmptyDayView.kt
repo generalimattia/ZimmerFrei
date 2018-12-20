@@ -1,9 +1,12 @@
 package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
+import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.generals.zimmerfrei.common.extension.isWeekend
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 
@@ -29,6 +32,13 @@ class EmptyDayView : FrameLayout {
 
     fun bind(roomDay: RoomDay.Empty,
              onClick: (day: RoomDay) -> Unit) {
+
+        /*background = if (roomDay.day.isWeekend) {
+            buildDrawable(context, ContextCompat.getColor(context, R.color.lightGray), R.drawable.background_empty_day)
+        } else {
+            buildDrawable(context, Color.WHITE, R.drawable.background_empty_day)
+        }*/
+
         setOnClickListener {
             onClick(roomDay)
         }

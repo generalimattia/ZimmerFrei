@@ -27,7 +27,8 @@ import javax.inject.Singleton
             ReservationBuilder::class,
             RoomModule::class,
             RoomBuilder::class,
-            RoomRepositoryModule::class
+            RoomRepositoryModule::class,
+            EmittersModule::class
         ]
 )
 interface ApplicationComponent : AndroidInjector<ZimmerFreiApplication> {

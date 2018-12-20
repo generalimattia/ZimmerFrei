@@ -10,11 +10,9 @@ import com.generals.zimmerfrei.overview.view.custom.days.ReservedDayView
 import com.generals.zimmerfrei.overview.view.custom.days.StartingReservationDayView
 
 class RoomsDaysAdapter(
-        roomDays: List<RoomDay>,
+        private val roomDays: List<RoomDay>,
         private val onDayClick: (RoomDay) -> Unit
 ) : RecyclerView.Adapter<RoomsDaysAdapter.RoomDayViewHolder>() {
-
-    private val _roomDays: MutableList<RoomDay> = roomDays.toMutableList()
 
     companion object {
         private const val EMPTY_DAY = 0
@@ -39,18 +37,18 @@ class RoomsDaysAdapter(
 
     override fun onBindViewHolder(holder: RoomDayViewHolder, position: Int) {
         when (holder) {
-            is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(_roomDays[position] as RoomDay.Empty, onDayClick)
-            is RoomDayViewHolder.ReservedDayViewHolder -> holder.bind(_roomDays[position] as RoomDay.Reserved, onDayClick)
-            is RoomDayViewHolder.StartingReservationViewHolder -> holder.bind(_roomDays[position] as RoomDay.StartingReservation, onDayClick)
-            is RoomDayViewHolder.EndingReservationViewHolder -> holder.bind(_roomDays[position] as RoomDay.EndingReservation, onDayClick)
+            is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Empty, onDayClick)
+            is RoomDayViewHolder.ReservedDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Reserved, onDayClick)
+            is RoomDayViewHolder.StartingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.StartingReservation, onDayClick)
+            is RoomDayViewHolder.EndingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.EndingReservation, onDayClick)
         }
     }
 
-    override fun getItemCount(): Int = _roomDays.size
+    override fun getItemCount(): Int = roomDays.size
 
-    override fun getItemId(position: Int): Long = _roomDays[position].hashCode().toLong()
+    override fun getItemId(position: Int): Long = roomDays[position].hashCode().toLong()
 
-    override fun getItemViewType(position: Int): Int = when (_roomDays[position]) {
+    override fun getItemViewType(position: Int): Int = when (roomDays[position]) {
         is RoomDay.Empty -> EMPTY_DAY
         is RoomDay.StartingReservation -> STARTING_RESERVATION
         is RoomDay.EndingReservation -> ENDING_RESERVATION

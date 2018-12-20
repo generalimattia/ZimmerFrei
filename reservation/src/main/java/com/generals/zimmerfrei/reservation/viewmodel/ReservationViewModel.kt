@@ -3,6 +3,7 @@ package com.generals.zimmerfrei.reservation.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.ParcelableDay
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 class ReservationViewModel @Inject constructor(
         private val useCase: ReservationUseCase,
-        private val stringProvider: StringResourcesProvider
+        private val stringProvider: StringResourcesProvider,
+        private val updateOverviewEmitter: UpdateOverviewEmitter
 ) : ViewModel() {
 
     private var roomPosition = 0
@@ -163,15 +165,22 @@ class ReservationViewModel @Inject constructor(
 
     private fun handleNewReservationFromDate(it: ParcelableRoomDay.Empty) {
         fetchRooms(it.room)
-        _startDate.value = it.day
+        onStartDateSelected(ParcelableDay(it.day.dayOfMonth, it.day.month, it.day.year))
         _endDate.value = null
         generateNewColor()
     }
 
     private fun handleExistingReservation(it: ParcelableRoomDay.Reserved) {
         fetchRooms(it.reservation.room)
-        _startDate.value = ParcelableDay(it.reservation.startDate)
-        _endDate.value = ParcelableDay(it.reservation.endDate)
+
+        val startDay = ParcelableDay(it.reservation.startDate)
+        val endDay = ParcelableDay(it.reservation.endDate)
+
+        _startDate.value = startDay
+        _endDate.value = endDay
+        onStartDateSelected(startDay)
+        onEndDateSelected(endDay)
+
         _name.value = it.reservation.name
         _email.value = it.reservation.email
         _mobile.value = it.reservation.mobile
@@ -193,26 +202,20 @@ class ReservationViewModel @Inject constructor(
         roomPosition = position
     }
 
-    fun onStartDateSelected(
-            dayOfMonth: Int,
-            month: Int,
-            year: Int) {
-        startDay = dayOfMonth
-        startMonth = month
-        startYear = year
+    fun onStartDateSelected(day: ParcelableDay) {
+        startDay = day.dayOfMonth
+        startMonth = day.month
+        startYear = day.year
 
-        _startDate.value = ParcelableDay(dayOfMonth, month, year)
+        _startDate.value = day
     }
 
-    fun onEndDateSelected(
-            dayOfMonth: Int,
-            month: Int,
-            year: Int) {
-        endDay = dayOfMonth
-        endMonth = month
-        endYear = year
+    fun onEndDateSelected(day: ParcelableDay) {
+        endDay = day.dayOfMonth
+        endMonth = day.month
+        endYear = day.year
 
-        _endDate.value = ParcelableDay(dayOfMonth, month, year)
+        _endDate.value = day
     }
 
     fun submit(
@@ -255,8 +258,8 @@ class ReservationViewModel @Inject constructor(
                             useCase.save(
                                     Reservation(
                                             name = name,
-                                            startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth + 1, startDay)),
-                                            endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth + 1, endDay)),
+                                            startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
+                                            endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
                                             adults = adultsNumber,
                                             children = childrenNumber,
                                             babies = babiesNumber,
@@ -269,6 +272,7 @@ class ReservationViewModel @Inject constructor(
                             )
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({
+                                        updateOverviewEmitter.emit()
                                         _pressBack.value = true
                                     },
                                             {

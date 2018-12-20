@@ -277,7 +277,7 @@ class ReservationFragment : Fragment() {
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    viewModel.onStartDateSelected(day, month + 1, year)
+                    viewModel.onStartDateSelected(ParcelableDay(day, month + 1, year))
 
                     start_date.setText(
                             formatDateForTextView(day, month + 1, year),
@@ -296,7 +296,7 @@ class ReservationFragment : Fragment() {
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    viewModel.onEndDateSelected(day, month + 1, year)
+                    viewModel.onEndDateSelected(ParcelableDay(day, month + 1, year))
 
                     end_date.setText(
                             formatDateForTextView(day, month + 1, year),

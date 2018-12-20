@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
+import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
@@ -22,8 +23,9 @@ import kotlin.reflect.KProperty
 
 class OverviewViewModel @Inject constructor(
         private val useCase: OverviewUseCase,
-        private val navigator: Navigator
-) : ViewModel() {
+        private val navigator: Navigator,
+        private val updateOverviewEmitter: UpdateOverviewEmitter
+) : ViewModel(), UpdateOverviewEmitter.Observer {
 
     private val _month = MutableLiveData<String>()
     private val _days = MutableLiveData<List<Day>>()
@@ -57,6 +59,8 @@ class OverviewViewModel @Inject constructor(
         get() = _reservations
 
     fun start() {
+        updateOverviewEmitter.subscribe(this)
+
         _selectedDate.value = date
         _reservations.value = mutableListOf()
 
@@ -66,13 +70,15 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadRooms() {
-        compositeDisposable.add(useCase.loadRooms().subscribeOn(Schedulers.newThread()).observeOn(
-                AndroidSchedulers.mainThread()
-        ).subscribe { internalRooms: List<Room>? ->
-            internalRooms?.let {
-                _rooms.value = it
-            }
-        })
+        compositeDisposable.add(
+                useCase.loadRooms()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { internalRooms: List<Room>? ->
+                            internalRooms?.let {
+                                _rooms.value = it
+                            }
+                        })
     }
 
     fun onPreviousMonthClick() {
@@ -95,18 +101,22 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadReservations(currentDate: LocalDate) {
-
-        compositeDisposable.add(useCase.loadReservations(
-                currentDate.withDayOfMonth(1),
-                currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
-        ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
-            roomDay?.let { notNullableRoomDay: Pair<Room, List<RoomDay>> ->
-                val newList: MutableList<Pair<Room, List<RoomDay>>> = _reservations.value?.let {
-                    (it + notNullableRoomDay).toMutableList()
-                } ?: mutableListOf()
-                _reservations.value = newList
-            }
-        })
+        _reservations.value = mutableListOf()
+        compositeDisposable.add(
+                useCase.loadReservations(
+                        currentDate.withDayOfMonth(1),
+                        currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
+                )
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
+                            roomDay?.let { notNullableRoomDay: Pair<Room, List<RoomDay>> ->
+                                val newList: MutableList<Pair<Room, List<RoomDay>>> = _reservations.value?.let {
+                                    (it + notNullableRoomDay).toMutableList()
+                                } ?: mutableListOf()
+                                _reservations.value = newList
+                            }
+                        })
     }
 
     private fun loadCalendar(currentDate: LocalDate) {
@@ -137,7 +147,12 @@ class OverviewViewModel @Inject constructor(
                 .startNewActivity(activity)
     }
 
+    override fun onOverviewUpdated() {
+        loadReservations(date)
+    }
+
     override fun onCleared() {
         compositeDisposable.dispose()
+        updateOverviewEmitter.unsubscribe(this)
     }
 }

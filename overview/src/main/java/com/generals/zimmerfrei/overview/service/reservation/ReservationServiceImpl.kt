@@ -1,6 +1,7 @@
 package com.generals.zimmerfrei.overview.service.reservation
 
 import com.generals.roomrepository.RoomRepository
+import com.generals.zimmerfrei.common.extension.isWeekend
 import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
 import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.database.entities.ReservationEntity
@@ -136,6 +137,9 @@ class ReservationServiceImpl @Inject constructor(
     private fun buildRoomDayForDay(
             reservationEntities: List<ReservationEntity>, currentDay: LocalDate, room: Room
     ): RoomDay {
+
+        val date = offsetDateTimeFromLocalDate(currentDay)
+
         return reservationEntities.firstOrNull { reservationEntity: ReservationEntity ->
             val startDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.startDate)
             val endDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.endDate)
@@ -146,21 +150,24 @@ class ReservationServiceImpl @Inject constructor(
             val endDate: ChronoLocalDate = ChronoLocalDate.from(it.endDate)
 
             when {
-                currentDay.isEqual(startDate) -> RoomDay.StartingReservation(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)),
-                        Reservation(it, room)
-                )
+                currentDay.isEqual(startDate) -> {
+                    RoomDay.StartingReservation(
+                            Day(date = date),
+                            Reservation(it, room)
+                    )
+                }
                 currentDay.isEqual(endDate) -> RoomDay.EndingReservation(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)),
+                        Day(date = date),
                         Reservation(it, room)
                 )
                 else -> RoomDay.Reserved(
-                        Day(date = offsetDateTimeFromLocalDate(currentDay)), Reservation(it, room)
+                        Day(date = date), Reservation(it, room)
                 )
             }
-        } ?: RoomDay.Empty(
-                Day(date = offsetDateTimeFromLocalDate(currentDay)),
+        } ?: let {
+            RoomDay.Empty(
+                Day(date = date, isWeekend = date.isWeekend()),
                 room
-        )
+        )}
     }
 }

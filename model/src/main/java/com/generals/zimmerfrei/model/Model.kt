@@ -9,7 +9,8 @@ import org.threeten.bp.OffsetDateTime
 data class Day(
         val title: String = "",
         val date: OffsetDateTime = OffsetDateTime.now(),
-        val monthDays: Int = 0
+        val monthDays: Int = 0,
+        val isWeekend: Boolean = false
 )
 
 data class ParcelableDay(

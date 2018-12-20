@@ -16,12 +16,6 @@ class CalendarServiceImpl @Inject constructor() : CalendarService {
         private const val MONTH_NAME_PATTERN = "MMMM YYYY"
     }
 
-    override fun monthDays(): Int {
-        val currentDate: LocalDate = LocalDate.now()
-        val currentMoth = currentDate.month
-        return currentMoth.length(currentDate.isLeapYear)
-    }
-
     override fun loadDays(date: LocalDate): Observable<Pair<List<Day>, String>> {
         untilMonthAndYear = date.monthValue to date.year
 
@@ -58,34 +52,4 @@ class CalendarServiceImpl @Inject constructor() : CalendarService {
             )
             emitter.onComplete()
         }
-
-    override fun loadCalendar(): Observable<Day> {
-        val currentDate: LocalDate = LocalDate.now()
-        val currentMoth = currentDate.month
-        val monthDays = currentMoth.length(currentDate.isLeapYear)
-
-        val firstDayOfMonth: LocalDate = currentDate.minusDays(currentDate.dayOfMonth.toLong() - 1)
-
-        return Observable.create { emitter: ObservableEmitter<Day> ->
-
-            (0 until monthDays).toList()
-                .fold(firstDayOfMonth) { acc: LocalDate, _: Int ->
-                    emitter.onNext(
-                        Day(
-                            title = "${acc.dayOfMonth} ${DateTimeFormatter.ofPattern(
-                                DAY_NAME_PATTERN
-                            ).format(acc).toUpperCase()}",
-                            date = OffsetDateTime.of(
-                                acc,
-                                LocalTime.NOON,
-                                ZoneOffset.UTC
-                            ),
-                            monthDays = monthDays
-                        )
-                    )
-                    acc.plusDays(1)
-                }
-            emitter.onComplete()
-        }
-    }
 }

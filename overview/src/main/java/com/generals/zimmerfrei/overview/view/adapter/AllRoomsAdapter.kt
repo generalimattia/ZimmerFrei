@@ -6,7 +6,6 @@ import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.TimePlan
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
-import java.lang.ref.WeakReference
 
 class AllRoomsAdapter(
         private val roomDays: List<Pair<Room, List<RoomDay>>>,
@@ -14,21 +13,14 @@ class AllRoomsAdapter(
         private val onDayClick: (RoomDay) -> Unit
 ) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
 
-    private var weakViewHolder: WeakReference<AllRoomsViewHolder>? = null
-
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(
             parent: ViewGroup, viewType: Int
-    ): AllRoomsViewHolder {
-        val viewHolder = AllRoomsViewHolder(
-                TimePlan(parent.context)
-        )
-        weakViewHolder = WeakReference(viewHolder)
-        return viewHolder
-    }
+    ): AllRoomsViewHolder =
+            AllRoomsViewHolder(TimePlan(parent.context))
 
     override fun onBindViewHolder(holder: AllRoomsViewHolder, position: Int) {
         holder.bind(

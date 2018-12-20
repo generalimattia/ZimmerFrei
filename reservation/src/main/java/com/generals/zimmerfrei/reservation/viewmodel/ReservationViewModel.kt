@@ -24,6 +24,14 @@ class ReservationViewModel @Inject constructor(
 
     private var roomPosition = 0
 
+    private var startDay: Int = 0
+    private var startMonth: Int = 0
+    private var startYear: Int = 0
+
+    private var endDay: Int = 0
+    private var endMonth: Int = 0
+    private var endYear: Int = 0
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val _pressBack = MutableLiveData<Boolean>()
@@ -173,14 +181,30 @@ class ReservationViewModel @Inject constructor(
         roomPosition = position
     }
 
+    fun onStartDateSelected(
+            dayOfMonth: Int,
+            month: Int,
+            year: Int) {
+        startDay = dayOfMonth
+        startMonth = month
+        startYear = year
+
+        _startDate.value = ParcelableDay(dayOfMonth, month, year)
+    }
+
+    fun onEndDateSelected(
+            dayOfMonth: Int,
+            month: Int,
+            year: Int) {
+        endDay = dayOfMonth
+        endMonth = month
+        endYear = year
+
+        _endDate.value = ParcelableDay(dayOfMonth, month, year)
+    }
+
     fun submit(
             name: String,
-            startDay: Int,
-            startMonth: Int,
-            startYear: Int,
-            endDay: Int,
-            endMonth: Int,
-            endYear: Int,
             adults: String,
             children: String,
             babies: String,

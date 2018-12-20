@@ -32,14 +32,6 @@ class ReservationFragment : Fragment() {
 
     private lateinit var viewModel: ReservationViewModel
 
-    private var startDay: Int = 0
-    private var startMonth: Int = 0
-    private var startYear: Int = 0
-
-    private var endDay: Int = 0
-    private var endMonth: Int = 0
-    private var endYear: Int = 0
-
     private lateinit var startDatePickerDialog: DatePickerDialog
     private lateinit var endDatePickerDialog: DatePickerDialog
 
@@ -78,10 +70,10 @@ class ReservationFragment : Fragment() {
                     startDatePickerDialog = buildStartDatePickerDialog(nullableDate)
                     nullableDate?.let {
                         start_date.setText(
-                                DATE_FORMAT.format(
-                                        it.dayOfMonth.toString(),
-                                        it.month.toString(),
-                                        it.year.toString()
+                                formatDateForTextView(
+                                        it.dayOfMonth,
+                                        it.month,
+                                        it.year
                                 ),
                                 TextView.BufferType.NORMAL
                         )
@@ -93,10 +85,10 @@ class ReservationFragment : Fragment() {
                     endDatePickerDialog = buildEndDatePickerDialog(nullableDate)
                     nullableDate?.let {
                         end_date.setText(
-                                DATE_FORMAT.format(
-                                        it.dayOfMonth.toString(),
-                                        it.month.toString(),
-                                        it.year.toString()
+                                formatDateForTextView(
+                                        it.dayOfMonth,
+                                        it.month,
+                                        it.year
                                 ),
                                 TextView.BufferType.NORMAL
                         )
@@ -257,21 +249,15 @@ class ReservationFragment : Fragment() {
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    startDay = day
-                    startMonth = month
-                    startYear = year
+                    viewModel.onStartDateSelected(day, month+1, year)
 
                     start_date.setText(
-                            DATE_FORMAT.format(
-                                    day.toString(),
-                                    (month + 1).toString(),
-                                    year.toString()
-                            ),
+                            formatDateForTextView(day, month+1, year),
                             TextView.BufferType.NORMAL
                     )
                 },
                 startDate?.year ?: calendar.get(Calendar.YEAR),
-                startDate?.month ?: calendar.get(Calendar.MONTH),
+                startDate?.let { it.month-1 } ?: calendar.get(Calendar.MONTH),
                 startDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
@@ -282,24 +268,25 @@ class ReservationFragment : Fragment() {
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    endDay = day
-                    endMonth = month
-                    endYear = year
+                    viewModel.onEndDateSelected(day, month+1, year)
 
                     end_date.setText(
-                            DATE_FORMAT.format(
-                                    day.toString(),
-                                    (month + 1).toString(),
-                                    year.toString()
-                            ),
+                            formatDateForTextView(day, month+1, year),
                             TextView.BufferType.NORMAL
                     )
                 },
                 endDate?.year ?: calendar.get(Calendar.YEAR),
-                endDate?.month ?: calendar.get(Calendar.MONTH),
+                endDate?.let { it.month-1 } ?: calendar.get(Calendar.MONTH),
                 endDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
+
+    private fun formatDateForTextView(day: Int, month: Int, year: Int): String =
+            DATE_FORMAT.format(
+                    day.toString(),
+                    month.toString(),
+                    year.toString()
+            )
 
     private fun setupListeners() {
         room.setOnClickListener {
@@ -326,12 +313,6 @@ class ReservationFragment : Fragment() {
     private fun submit() {
         viewModel.submit(
                 name = name.text.toString(),
-                startDay = startDay,
-                startMonth = startMonth,
-                startYear = startYear,
-                endDay = endDay,
-                endMonth = endMonth,
-                endYear = endYear,
                 adults = adult_count.text.toString(),
                 children = children_count.text.toString(),
                 babies = children_count.text.toString(),

@@ -4,5 +4,4 @@
     android:layout_width="@dimen/row_height"
     android:layout_height="@dimen/row_height"
     android:foreground="?attr/selectableItemBackground"
-    android:background="@drawable/background_reserved_shape"
     android:padding="2dp"/>

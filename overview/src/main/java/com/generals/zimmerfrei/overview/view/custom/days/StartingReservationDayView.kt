@@ -27,13 +27,16 @@ class StartingReservationDayView : FrameLayout {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        LayoutInflater.from(context).inflate(R.layout.widget_starting_reservation_day, this, true)
+        LayoutInflater.from(context).inflate(R.layout.widget_reserved_day, this, true)
     }
 
     fun bind(
             roomDay: RoomDay.StartingReservation,
             onClick: (RoomDay) -> Unit
     ) {
+        buildBackgroundDrawable(context, roomDay) ?.let {
+            background = it
+        }
         setOnClickListener {
             onClick(roomDay)
         }

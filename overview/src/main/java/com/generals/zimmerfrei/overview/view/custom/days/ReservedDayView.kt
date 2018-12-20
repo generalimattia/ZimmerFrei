@@ -1,7 +1,6 @@
 package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -32,7 +31,9 @@ class ReservedDayView : FrameLayout {
             roomDay: RoomDay.Reserved,
             onClick: (RoomDay.Reserved) -> Unit
     ) {
-        setBackgroundColor(Color.parseColor(roomDay.reservation.color))
+        buildBackgroundDrawable(context, roomDay)?.let {
+            background = it
+        }
         setOnClickListener {
             onClick(roomDay)
         }

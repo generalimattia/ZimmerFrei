@@ -131,9 +131,7 @@ class ReservationViewModel @Inject constructor(
                     handleExistingReservation(it)
                 }
             }
-        } ?: let {
-            handleNewReservation()
-        }
+        } ?: handleNewReservation()
     }
 
     private fun handleNewReservation() {
@@ -146,6 +144,7 @@ class ReservationViewModel @Inject constructor(
     private fun handleNewReservationFromDate(it: ParcelableRoomDay.Empty) {
         fetchRooms(it.room)
         _startDate.value = it.day
+        _endDate.value = null
         generateNewColor()
     }
 

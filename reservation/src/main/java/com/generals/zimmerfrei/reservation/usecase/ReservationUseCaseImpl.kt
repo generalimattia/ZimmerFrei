@@ -39,4 +39,14 @@ class ReservationUseCaseImpl @Inject constructor(
                             emitter.onComplete()
                         }
             }
+
+    override fun delete(reservation: Reservation): Single<Unit> =
+            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
+                try {
+                    reservationDao.delete(reservation.toEntity())
+                    emitter.onSuccess(Unit)
+                } catch (e: Exception) {
+                    emitter.onError(e)
+                }
+            }
 }

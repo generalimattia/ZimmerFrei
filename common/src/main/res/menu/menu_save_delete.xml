@@ -6,7 +6,14 @@
         android:id="@+id/save"
         android:icon="@drawable/ic_done_white_24dp"
         android:orderInCategory="100"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/submit" />
+
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom"
+        android:title="@string/delete" />
 
 </menu>

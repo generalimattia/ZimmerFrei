@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/material_triple"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_delete_black_24dp"
+        android:src="@drawable/ic_delete_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/edit"
         app:layout_constraintTop_toTopOf="parent"/>

@@ -13,4 +13,6 @@ interface ReservationUseCase {
     fun getAllRooms(): Maybe<List<Room>>
 
     fun getRoomByListPosition(position: Int): Maybe<Room>
+
+    fun delete(reservation: Reservation): Single<Unit>
 }

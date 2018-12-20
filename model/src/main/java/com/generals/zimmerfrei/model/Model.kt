@@ -103,6 +103,7 @@ data class Reservation(
     )
 
     fun toEntity(): ReservationEntity = ReservationEntity(
+            id = id,
             name = name,
             startDate = startDate,
             endDate = endDate,

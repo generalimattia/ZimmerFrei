@@ -1,10 +1,12 @@
 package com.generals.zimmerfrei.reservation.view
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -223,6 +225,13 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
+        viewModel.isEditing.observe(this,
+                Observer { isEditing: Boolean? ->
+                    isEditing?.let {
+                        toolbar.menu.findItem(R.id.delete).isVisible = it
+                    }
+                })
+
         setupListeners()
 
         if (savedInstanceState == null) {
@@ -231,10 +240,16 @@ class ReservationFragment : Fragment() {
     }
 
     private fun setUpToolbar() {
-        toolbar.inflateMenu(R.menu.menu_save)
+        toolbar.inflateMenu(R.menu.menu_save_delete)
         toolbar.menu.findItem(R.id.save)
                 .setOnMenuItemClickListener { _: MenuItem? ->
                     submit()
+                    true
+                }
+        toolbar.menu.findItem(R.id.delete)
+                .setOnMenuItemClickListener { _: MenuItem? ->
+                    val dialog: AlertDialog = buildDeleteReservationAlertDialog()
+                    dialog.show()
                     true
                 }
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -243,21 +258,34 @@ class ReservationFragment : Fragment() {
         }
     }
 
+    private fun buildDeleteReservationAlertDialog() =
+            AlertDialog.Builder(context)
+                    .apply {
+                        setMessage(R.string.delete_reservation_dialog_message)
+                        setPositiveButton(R.string.yes) { dialog: DialogInterface?, _: Int ->
+                            viewModel.delete()
+                            dialog?.dismiss()
+                        }
+                        setNegativeButton(R.string.no) { dialog: DialogInterface?, _: Int ->
+                            dialog?.dismiss()
+                        }
+                    }.let { it.create() }
+
     private fun buildStartDatePickerDialog(startDate: ParcelableDay?): DatePickerDialog {
         val calendar: Calendar = Calendar.getInstance()
         return DatePickerDialog(
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    viewModel.onStartDateSelected(day, month+1, year)
+                    viewModel.onStartDateSelected(day, month + 1, year)
 
                     start_date.setText(
-                            formatDateForTextView(day, month+1, year),
+                            formatDateForTextView(day, month + 1, year),
                             TextView.BufferType.NORMAL
                     )
                 },
                 startDate?.year ?: calendar.get(Calendar.YEAR),
-                startDate?.let { it.month-1 } ?: calendar.get(Calendar.MONTH),
+                startDate?.let { it.month - 1 } ?: calendar.get(Calendar.MONTH),
                 startDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
@@ -268,15 +296,15 @@ class ReservationFragment : Fragment() {
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
 
-                    viewModel.onEndDateSelected(day, month+1, year)
+                    viewModel.onEndDateSelected(day, month + 1, year)
 
                     end_date.setText(
-                            formatDateForTextView(day, month+1, year),
+                            formatDateForTextView(day, month + 1, year),
                             TextView.BufferType.NORMAL
                     )
                 },
                 endDate?.year ?: calendar.get(Calendar.YEAR),
-                endDate?.let { it.month-1 } ?: calendar.get(Calendar.MONTH),
+                endDate?.let { it.month - 1 } ?: calendar.get(Calendar.MONTH),
                 endDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }

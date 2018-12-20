@@ -32,6 +32,8 @@ class ReservationViewModel @Inject constructor(
     private var endMonth: Int = 0
     private var endYear: Int = 0
 
+    private var reservation: Reservation? = null
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val _pressBack = MutableLiveData<Boolean>()
@@ -41,6 +43,7 @@ class ReservationViewModel @Inject constructor(
     private val _endDateError = MutableLiveData<String>()
     private val _rooms = MutableLiveData<List<String>>()
     private val _preselectedRoom = MutableLiveData<Int>()
+    private val _isEditing = MutableLiveData<Boolean>()
 
     private val _selectedRoom = MutableLiveData<String>()
     private val _startDate = MutableLiveData<ParcelableDay>()
@@ -94,6 +97,9 @@ class ReservationViewModel @Inject constructor(
     val selectedRoom: LiveData<String>
         get() = _selectedRoom
 
+    val isEditing: LiveData<Boolean>
+        get() = _isEditing
+
     val startDate: LiveData<ParcelableDay>
         get() = _startDate
 
@@ -134,12 +140,18 @@ class ReservationViewModel @Inject constructor(
             when (it) {
                 is ParcelableRoomDay.Empty -> {
                     handleNewReservationFromDate(it)
+                    _isEditing.value = false
                 }
                 is ParcelableRoomDay.Reserved -> {
                     handleExistingReservation(it)
+                    this.reservation = it.reservation
+                    _isEditing.value = true
                 }
             }
-        } ?: handleNewReservation()
+        } ?: let {
+            handleNewReservation()
+            _isEditing.value = false
+        }
     }
 
     private fun handleNewReservation() {
@@ -264,6 +276,17 @@ class ReservationViewModel @Inject constructor(
                                             })
                         }
                     })
+        }
+    }
+
+    fun delete() {
+        reservation?.let {
+            useCase.delete(it)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { _: Unit ->
+                        _pressBack.value = true
+                    }
         }
     }
 

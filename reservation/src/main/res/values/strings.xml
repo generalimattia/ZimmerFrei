@@ -11,4 +11,7 @@
     <string name="mobile">Cellulare</string>
     <string name="notes">Note</string>
     <string name="save">SAVE</string>
+    <string name="delete_reservation_dialog_message">Rimuovere la prenotazione corrente?</string>
+    <string name="yes">SI</string>
+    <string name="no">NO</string>
 </resources>

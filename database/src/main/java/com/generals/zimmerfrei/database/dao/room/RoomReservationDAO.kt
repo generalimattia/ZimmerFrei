@@ -1,6 +1,7 @@
 package com.generals.zimmerfrei.database.dao.room
 
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import com.generals.zimmerfrei.database.entities.ReservationEntity
@@ -38,6 +39,9 @@ interface RoomReservationDAO {
     fun findReservationsFromDateToDate(
         startDate: OffsetDateTime, endDate: OffsetDateTime
     ): Flowable<List<ReservationEntity>>
+
+    @Delete
+    fun delete(reservation: ReservationEntity)
 
     @Query("DELETE FROM reservations")
     fun deleteAll()

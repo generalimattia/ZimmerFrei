@@ -26,6 +26,8 @@ interface ReservationDAO {
         startDate: OffsetDateTime, endDate: OffsetDateTime
     ): Flowable<List<ReservationEntity>>
 
+    fun update(reservation: ReservationEntity)
+
     fun delete(reservation: ReservationEntity)
 
     fun deleteAll()

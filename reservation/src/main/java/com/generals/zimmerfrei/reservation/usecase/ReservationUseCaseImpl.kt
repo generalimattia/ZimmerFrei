@@ -40,6 +40,16 @@ class ReservationUseCaseImpl @Inject constructor(
                         }
             }
 
+    override fun update(reservation: Reservation): Single<Unit> =
+            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
+                try {
+                    reservationDao.update(reservation.toEntity())
+                    emitter.onSuccess(Unit)
+                } catch (e: Exception) {
+                    emitter.onError(e)
+                }
+            }
+
     override fun delete(reservation: Reservation): Single<Unit> =
             Single.create<Unit> { emitter: SingleEmitter<Unit> ->
                 try {

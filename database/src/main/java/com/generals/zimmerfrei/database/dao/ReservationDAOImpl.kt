@@ -43,6 +43,10 @@ class ReservationDAOImpl @Inject constructor(
         endDate
     )
 
+    override fun update(reservation: ReservationEntity) {
+        dao.update(reservation)
+    }
+
     override fun delete(reservation: ReservationEntity) {
         dao.delete(reservation)
     }

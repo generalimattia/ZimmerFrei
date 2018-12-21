@@ -255,29 +255,54 @@ class ReservationViewModel @Inject constructor(
                     .subscribeOn(Schedulers.newThread())
                     .subscribe { room: Room? ->
                         room?.let {
-                            useCase.save(
-                                    Reservation(
-                                            name = name,
-                                            startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
-                                            endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
-                                            adults = adultsNumber,
-                                            children = childrenNumber,
-                                            babies = babiesNumber,
-                                            color = _color.value ?: availableColors.first(),
-                                            notes = notes,
-                                            mobile = mobile,
-                                            email = email,
-                                            room = room
+
+                            reservation?.let {
+                                useCase.update(it.copy(
+                                        name = name,
+                                        startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
+                                        endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
+                                        adults = adultsNumber,
+                                        children = childrenNumber,
+                                        babies = babiesNumber,
+                                        color = _color.value ?: availableColors.first(),
+                                        notes = notes,
+                                        mobile = mobile,
+                                        email = email,
+                                        room = room
+                                ))
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe({
+                                            updateOverviewEmitter.emit()
+                                            _pressBack.value = true
+                                        },
+                                                {
+                                                    _pressBack.value = true
+                                                })
+                            }
+                                    ?: useCase.save(
+                                            Reservation(
+                                                    name = name,
+                                                    startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
+                                                    endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
+                                                    adults = adultsNumber,
+                                                    children = childrenNumber,
+                                                    babies = babiesNumber,
+                                                    color = _color.value ?: availableColors.first(),
+                                                    notes = notes,
+                                                    mobile = mobile,
+                                                    email = email,
+                                                    room = room
+                                            )
                                     )
-                            )
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe({
-                                        updateOverviewEmitter.emit()
-                                        _pressBack.value = true
-                                    },
-                                            {
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe({
+                                                updateOverviewEmitter.emit()
                                                 _pressBack.value = true
-                                            })
+                                            },
+                                                    {
+                                                        _pressBack.value = true
+                                                    })
+
                         }
                     })
         }

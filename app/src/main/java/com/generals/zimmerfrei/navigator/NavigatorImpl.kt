@@ -27,6 +27,7 @@ data class NavigatorImpl @Inject constructor(
                         val parcelableRoomDay: ParcelableRoomDay? = reservation?.let {
                             when (it) {
                                 is RoomDay.Empty -> ParcelableRoomDay.Empty(it)
+                                is RoomDay.EmptyWeekend -> ParcelableRoomDay.Empty(it)
                                 is RoomDay.Reserved -> ParcelableRoomDay.Reserved(it)
                                 is RoomDay.StartingReservation -> ParcelableRoomDay.Reserved(it)
                                 is RoomDay.EndingReservation -> ParcelableRoomDay.Reserved(it)

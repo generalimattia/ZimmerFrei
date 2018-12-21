@@ -10,7 +10,7 @@ import com.generals.zimmerfrei.common.extension.isWeekend
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 
-class EmptyDayView : FrameLayout {
+class EmptyWeekendView : FrameLayout {
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -27,10 +27,10 @@ class EmptyDayView : FrameLayout {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        LayoutInflater.from(context).inflate(R.layout.widget_empty_day, this, true)
+        LayoutInflater.from(context).inflate(R.layout.widget_empty_day_weekend, this, true)
     }
 
-    fun bind(roomDay: RoomDay.Empty,
+    fun bind(roomDay: RoomDay.EmptyWeekend,
              onClick: (day: RoomDay) -> Unit) {
         setOnClickListener {
             onClick(roomDay)

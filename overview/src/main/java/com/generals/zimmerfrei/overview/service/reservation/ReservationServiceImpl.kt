@@ -13,6 +13,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import org.threeten.bp.LocalDate
+import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.chrono.ChronoLocalDate
 import javax.inject.Inject
 
@@ -123,10 +124,8 @@ class ReservationServiceImpl @Inject constructor(
                     }
                 }) ?: let {
                     emitter.onNext(room to MutableList(endPeriod.dayOfMonth) { day: Int ->
-                        RoomDay.Empty(
-                               Day(date = offsetDateTimeFromLocalDate(LocalDate.of(endPeriod.year, endPeriod.month, day+1))),
-                               room
-                        )
+                        val date: OffsetDateTime = offsetDateTimeFromLocalDate(LocalDate.of(endPeriod.year, endPeriod.month, day + 1))
+                        buildEmpty(date, room)
                     })
                     emitter.onComplete()
                 }
@@ -135,10 +134,12 @@ class ReservationServiceImpl @Inject constructor(
     }
 
     private fun buildRoomDayForDay(
-            reservationEntities: List<ReservationEntity>, currentDay: LocalDate, room: Room
+            reservationEntities: List<ReservationEntity>,
+            currentDay: LocalDate,
+            room: Room
     ): RoomDay {
 
-        val date = offsetDateTimeFromLocalDate(currentDay)
+        val date: OffsetDateTime = offsetDateTimeFromLocalDate(currentDay)
 
         return reservationEntities.firstOrNull { reservationEntity: ReservationEntity ->
             val startDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.startDate)
@@ -164,10 +165,21 @@ class ReservationServiceImpl @Inject constructor(
                         Day(date = date), Reservation(it, room)
                 )
             }
-        } ?: let {
+        } ?: buildEmpty(date, room)
+    }
+
+
+    private fun buildEmpty(date: OffsetDateTime, room: Room): RoomDay {
+        return if (date.isWeekend()) {
+            RoomDay.EmptyWeekend(
+                    Day(date = date),
+                    room
+            )
+        } else {
             RoomDay.Empty(
-                Day(date = date, isWeekend = date.isWeekend()),
-                room
-        )}
+                    Day(date = date),
+                    room
+            )
+        }
     }
 }

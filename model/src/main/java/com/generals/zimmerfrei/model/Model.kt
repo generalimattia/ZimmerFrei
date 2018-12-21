@@ -8,9 +8,8 @@ import org.threeten.bp.OffsetDateTime
 
 data class Day(
         val title: String = "",
-        val date: OffsetDateTime = OffsetDateTime.now(),
-        val monthDays: Int = 0,
-        val isWeekend: Boolean = false
+        val date: OffsetDateTime,
+        val monthDays: Int = 0
 )
 
 data class ParcelableDay(
@@ -226,22 +225,27 @@ data class Room(
 sealed class RoomDay {
 
     data class Empty(
-            val day: Day = Day(),
+            val day: Day,
+            val room: Room
+    ) : RoomDay()
+
+    data class EmptyWeekend(
+            val day: Day,
             val room: Room
     ) : RoomDay()
 
     data class StartingReservation(
-            val day: Day = Day(),
+            val day: Day,
             val reservation: Reservation = Reservation()
     ) : RoomDay()
 
     data class Reserved(
-            val day: Day = Day(),
+            val day: Day,
             val reservation: Reservation = Reservation()
     ) : RoomDay()
 
     data class EndingReservation(
-            val day: Day = Day(),
+            val day: Day,
             val reservation: Reservation = Reservation()
     ) : RoomDay()
 }
@@ -256,6 +260,11 @@ sealed class ParcelableRoomDay : Parcelable {
     ) : ParcelableRoomDay(), Parcelable {
 
         constructor(input: RoomDay.Empty) : this(
+                ParcelableDay(input.day),
+                input.room
+        )
+
+        constructor(input: RoomDay.EmptyWeekend) : this(
                 ParcelableDay(input.day),
                 input.room
         )

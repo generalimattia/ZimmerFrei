@@ -4,10 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.overview.view.custom.days.EmptyDayView
-import com.generals.zimmerfrei.overview.view.custom.days.EndingReservationDayView
-import com.generals.zimmerfrei.overview.view.custom.days.ReservedDayView
-import com.generals.zimmerfrei.overview.view.custom.days.StartingReservationDayView
+import com.generals.zimmerfrei.overview.view.custom.days.*
 
 class RoomsDaysAdapter(
         private val roomDays: List<RoomDay>,
@@ -16,9 +13,10 @@ class RoomsDaysAdapter(
 
     companion object {
         private const val EMPTY_DAY = 0
-        private const val STARTING_RESERVATION = 1
-        private const val ENDING_RESERVATION = 2
-        private const val RESERVED = 3
+        private const val EMPTY_WEEKEND = 1
+        private const val STARTING_RESERVATION = 2
+        private const val ENDING_RESERVATION = 3
+        private const val RESERVED = 4
     }
 
     init {
@@ -29,20 +27,21 @@ class RoomsDaysAdapter(
             parent: ViewGroup, viewType: Int
     ): RoomDayViewHolder = when (viewType) {
         EMPTY_DAY -> RoomDayViewHolder.EmptyDayViewHolder(EmptyDayView(parent.context))
+        EMPTY_WEEKEND -> RoomDayViewHolder.EmptyWeekendViewHolder(EmptyWeekendView(parent.context))
         RESERVED -> RoomDayViewHolder.ReservedDayViewHolder(ReservedDayView(parent.context))
         STARTING_RESERVATION -> RoomDayViewHolder.StartingReservationViewHolder(StartingReservationDayView(parent.context))
         else -> RoomDayViewHolder.EndingReservationViewHolder(EndingReservationDayView(parent.context))
     }
 
 
-    override fun onBindViewHolder(holder: RoomDayViewHolder, position: Int) {
-        when (holder) {
-            is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Empty, onDayClick)
-            is RoomDayViewHolder.ReservedDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Reserved, onDayClick)
-            is RoomDayViewHolder.StartingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.StartingReservation, onDayClick)
-            is RoomDayViewHolder.EndingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.EndingReservation, onDayClick)
-        }
-    }
+    override fun onBindViewHolder(holder: RoomDayViewHolder, position: Int) =
+            when (holder) {
+                is RoomDayViewHolder.EmptyDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Empty, onDayClick)
+                is RoomDayViewHolder.EmptyWeekendViewHolder -> holder.bind(roomDays[position] as RoomDay.EmptyWeekend, onDayClick)
+                is RoomDayViewHolder.ReservedDayViewHolder -> holder.bind(roomDays[position] as RoomDay.Reserved, onDayClick)
+                is RoomDayViewHolder.StartingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.StartingReservation, onDayClick)
+                is RoomDayViewHolder.EndingReservationViewHolder -> holder.bind(roomDays[position] as RoomDay.EndingReservation, onDayClick)
+            }
 
     override fun getItemCount(): Int = roomDays.size
 
@@ -50,6 +49,7 @@ class RoomsDaysAdapter(
 
     override fun getItemViewType(position: Int): Int = when (roomDays[position]) {
         is RoomDay.Empty -> EMPTY_DAY
+        is RoomDay.EmptyWeekend -> EMPTY_WEEKEND
         is RoomDay.StartingReservation -> STARTING_RESERVATION
         is RoomDay.EndingReservation -> ENDING_RESERVATION
         is RoomDay.Reserved -> RESERVED
@@ -63,6 +63,18 @@ class RoomsDaysAdapter(
 
             fun bind(
                     roomDay: RoomDay.Empty,
+                    onDayClick: (RoomDay) -> Unit
+            ) {
+                view.bind(roomDay, onDayClick)
+            }
+        }
+
+        class EmptyWeekendViewHolder(
+                private val view: EmptyWeekendView
+        ) : RoomDayViewHolder(view) {
+
+            fun bind(
+                    roomDay: RoomDay.EmptyWeekend,
                     onDayClick: (RoomDay) -> Unit
             ) {
                 view.bind(roomDay, onDayClick)

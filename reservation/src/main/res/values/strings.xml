@@ -14,4 +14,5 @@
     <string name="delete_reservation_dialog_message">Rimuovere la prenotazione corrente?</string>
     <string name="yes">SI</string>
     <string name="no">NO</string>
+    <string name="start_date_after_end_date_error">Data di inizio successiva a quella di fine</string>
 </resources>

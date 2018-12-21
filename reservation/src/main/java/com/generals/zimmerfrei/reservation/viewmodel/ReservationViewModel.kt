@@ -341,6 +341,12 @@ class ReservationViewModel @Inject constructor(
             _endDateError.value = stringProvider.provide(R.string.mandatory_field)
             isValid = false
         }
+
+        if(LocalDate.of(startYear, startMonth, startDay).isAfter(LocalDate.of(endYear, endMonth, endDay))) {
+            _startDateError.value = stringProvider.provide(R.string.start_date_after_end_date_error)
+            isValid = false
+        }
+
         return isValid
     }
 

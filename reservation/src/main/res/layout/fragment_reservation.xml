@@ -118,12 +118,11 @@
 
             <android.support.design.widget.TextInputLayout
                     android:id="@+id/email_input_layout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginStart="@dimen/material_double"
                     android:layout_marginTop="@dimen/material_quad"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/action_email"
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
@@ -136,14 +135,24 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                    android:id="@+id/action_email"
+                    android:layout_width="@dimen/material_quad"
+                    android:layout_height="@dimen/material_quad"
+                    android:src="@drawable/ic_email_black_24dp"
+                    app:layout_constraintStart_toEndOf="@id/email_input_layout"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintBottom_toBottomOf="@id/email_input_layout"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
             <android.support.design.widget.TextInputLayout
                     android:id="@+id/mobile_input_layout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginStart="@dimen/material_double"
                     android:layout_marginTop="@dimen/material_quad"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/action_dial"
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/email_input_layout">
 
@@ -155,6 +164,17 @@
                         android:inputType="phone"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                    android:id="@+id/action_dial"
+                    android:layout_width="@dimen/material_quad"
+                    android:layout_height="@dimen/material_quad"
+                    android:src="@drawable/ic_phone_black_24dp"
+                    app:layout_constraintStart_toEndOf="@id/mobile_input_layout"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintBottom_toBottomOf="@id/mobile_input_layout"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             <android.support.design.widget.TextInputLayout
                     android:id="@+id/adult_count_input_layout"

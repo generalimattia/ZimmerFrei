@@ -69,8 +69,6 @@ class ReservationFragment : Fragment() {
 
         setUpToolbar()
 
-        //setUpMobileAsPhoneNumber()
-
         viewModel.startDate.observe(this,
                 Observer { nullableDate: ParcelableDay? ->
                     startDatePickerDialog = buildStartDatePickerDialog(nullableDate)
@@ -243,12 +241,6 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    private fun setUpMobileAsPhoneNumber() {
-        mobile.autoLinkMask = Linkify.PHONE_NUMBERS
-        mobile.linksClickable = true
-        mobile.movementMethod = LinkMovementMethod.getInstance()
-    }
-
     private fun setUpToolbar() {
         toolbar.inflateMenu(R.menu.menu_save_delete)
         toolbar.menu.findItem(R.id.save)
@@ -341,6 +333,18 @@ class ReservationFragment : Fragment() {
 
         color_container.setOnClickListener {
             viewModel.generateNewColor()
+        }
+
+        action_email.setOnClickListener {
+            activity?.let {
+                viewModel.onSendEmailClick(email.text.toString(), it)
+            }
+        }
+
+        action_dial.setOnClickListener {
+            activity?.let {
+                viewModel.onDialMobileClick(mobile.text.toString(), it)
+            }
         }
 
         submit.setOnClickListener {

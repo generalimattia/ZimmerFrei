@@ -48,4 +48,9 @@ data class NavigatorImpl @Inject constructor(
             NavigationRequest.ActivityRequest(Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:$to")
             })
+
+    override fun dial(number: String): NavigationRequest.ActivityRequest =
+            NavigationRequest.ActivityRequest(Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$number")
+            })
 }

@@ -20,6 +20,8 @@ interface Navigator {
     fun roomDetail(room: Room? = null): NavigationRequest.FragmentRequest
 
     fun email(to: String): NavigationRequest.ActivityRequest
+
+    fun dial(number: String): NavigationRequest.ActivityRequest
 }
 
 sealed class NavigationRequest {

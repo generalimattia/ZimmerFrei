@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.reservation.viewmodel
 
+import android.app.Activity
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,7 +23,8 @@ import javax.inject.Inject
 class ReservationViewModel @Inject constructor(
         private val useCase: ReservationUseCase,
         private val stringProvider: StringResourcesProvider,
-        private val updateOverviewEmitter: UpdateOverviewEmitter
+        private val updateOverviewEmitter: UpdateOverviewEmitter,
+        private val navigator: Navigator
 ) : ViewModel() {
 
     private var roomPosition = 0
@@ -342,7 +345,7 @@ class ReservationViewModel @Inject constructor(
             isValid = false
         }
 
-        if(LocalDate.of(startYear, startMonth, startDay).isAfter(LocalDate.of(endYear, endMonth, endDay))) {
+        if (LocalDate.of(startYear, startMonth, startDay).isAfter(LocalDate.of(endYear, endMonth, endDay))) {
             _startDateError.value = stringProvider.provide(R.string.start_date_after_end_date_error)
             isValid = false
         }
@@ -365,6 +368,26 @@ class ReservationViewModel @Inject constructor(
                                 }
                             }
                         })
+    }
+
+    fun onSendEmailClick(
+            to: String,
+            activity: Activity
+    ) {
+        if (to.isNotBlank()) {
+            navigator.email(to)
+                    .startNewActivity(activity)
+        }
+    }
+
+    fun onDialMobileClick(
+            number: String,
+            activity: Activity
+    ) {
+        if (number.isNotBlank()) {
+            navigator.dial(number)
+                    .startNewActivity(activity)
+        }
     }
 
     override fun onCleared() {

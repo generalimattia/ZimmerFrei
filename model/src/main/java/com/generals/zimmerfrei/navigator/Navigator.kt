@@ -18,6 +18,8 @@ interface Navigator {
     fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest
 
     fun roomDetail(room: Room? = null): NavigationRequest.FragmentRequest
+
+    fun email(to: String): NavigationRequest.ActivityRequest
 }
 
 sealed class NavigationRequest {

@@ -2,6 +2,7 @@ package com.generals.zimmerfrei.navigator
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.support.annotation.IdRes
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
@@ -42,4 +43,9 @@ data class NavigatorImpl @Inject constructor(
 
     override fun roomDetail(room: Room?): NavigationRequest.FragmentRequest =
             NavigationRequest.FragmentRequest(RoomDetailFragment.newInstance(room))
+
+    override fun email(to: String): NavigationRequest.ActivityRequest =
+            NavigationRequest.ActivityRequest(Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:$to")
+            })
 }

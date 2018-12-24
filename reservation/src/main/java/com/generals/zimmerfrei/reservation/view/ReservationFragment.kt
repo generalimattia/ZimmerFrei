@@ -69,7 +69,7 @@ class ReservationFragment : Fragment() {
 
         setUpToolbar()
 
-        setUpMobileAsPhoneNumber()
+        //setUpMobileAsPhoneNumber()
 
         viewModel.startDate.observe(this,
                 Observer { nullableDate: ParcelableDay? ->

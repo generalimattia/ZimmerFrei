@@ -10,6 +10,8 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -66,6 +68,8 @@ class ReservationFragment : Fragment() {
         )
 
         setUpToolbar()
+
+        setUpMobileAsPhoneNumber()
 
         viewModel.startDate.observe(this,
                 Observer { nullableDate: ParcelableDay? ->
@@ -237,6 +241,12 @@ class ReservationFragment : Fragment() {
         if (savedInstanceState == null) {
             viewModel.start(arguments?.getParcelable(RESERVATION))
         }
+    }
+
+    private fun setUpMobileAsPhoneNumber() {
+        mobile.autoLinkMask = Linkify.PHONE_NUMBERS
+        mobile.linksClickable = true
+        mobile.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun setUpToolbar() {

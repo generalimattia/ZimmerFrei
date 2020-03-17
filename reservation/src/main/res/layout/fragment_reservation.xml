@@ -234,6 +234,20 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/colors"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
+                    tools:listitem="@layout/layout_color"/>
+
             <android.support.constraint.ConstraintLayout
                     android:id="@+id/color_container"
                     android:layout_width="wrap_content"

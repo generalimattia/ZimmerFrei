@@ -21,6 +21,7 @@ import javax.inject.Singleton
             ApplicationModule::class,
             ViewModelBuilder::class,
             DatabaseModule::class,
+            NetworkModule::class,
             OverviewModule::class,
             OverviewBuilder::class,
             ReservationModule::class,

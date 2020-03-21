@@ -4,36 +4,40 @@ import com.squareup.moshi.Json
 import org.threeten.bp.LocalDate
 
 data class Inbound<T>(
-        @field:Json(name = "_embedded") val embedded: T,
-        @field:Json(name = "_links") val link: Link
+        @Json(name = "_embedded") val embedded: T,
+        @Json(name = "_links") val link: Link
 )
 
-data class Link(val self: Self)
-data class Self(val href: String)
+data class Link(val self: Self = Self())
+data class Self(val href: String = "")
 
-data class RoomListInboud(
+data class RoomListInbound(
         val rooms: List<RoomInbound>
 )
 
 data class RoomInbound(
-        val id: Int,
+        val id: Int = 0,
         val name: String,
         val roomCount: Int,
-        @field:Json(name = "_links") val link: Link
+        @Json(name = "_links") val link: Link? = null
+)
+
+data class ReservationListInbound(
+        val reservations: List<ReservationInbound>
 )
 
 data class ReservationInbound(
-        val id: Int,
+        val id: Int = 0,
         val name: String,
         val numberOfParticipants: Int,
         val startDate: LocalDate,
         val endDate: LocalDate,
         val customer: CustomerInbound,
-        @field:Json(name = "_links") val link: Link
+        @Json(name = "_links") val link: Link? = null
 )
 
 data class CustomerInbound(
-        val id: Int,
+        val id: Int = 0,
         val firstName: String,
         val lastName: String,
         val socialId: String,
@@ -41,5 +45,5 @@ data class CustomerInbound(
         val email: String,
         val address: String,
         val birthDate: LocalDate,
-        @field:Json(name = "_links") val link: Link
+        @Json(name = "_links") val link: Link? = null
 )

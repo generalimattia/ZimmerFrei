@@ -61,6 +61,19 @@ class ReservationsAPITest {
     }
 
     @Test
+    fun shouldGetReservationsByRoomIdAndFromDateToDate() = runBlocking {
+        val reservationsResponse: APIResult<Inbound<ReservationListInbound>> = client.fetchByRoomAndFromDateToDate(
+                roomId = 1,
+                from = LocalDate.now().minusDays(10),
+                to = LocalDate.now().plusDays(10)
+        )
+        assertTrue(reservationsResponse is APIResult.Success<*>)
+        reservationsResponse as APIResult.Success
+        assertNotNull(reservationsResponse.body)
+        assertEquals(2, reservationsResponse.body!!.embedded.reservations.size)
+    }
+
+    @Test
     fun shouldUpdateExistingReservation() = runBlocking {
         val reservationResponse: APIResult<ReservationInbound> = client.fetchById(4)
         reservationResponse as APIResult.Success
@@ -76,6 +89,5 @@ class ReservationsAPITest {
         val reservations: List<ReservationInbound> = reservationsResponse.body!!.embedded.reservations
         assertEquals(4, reservations.size)
         assertEquals(35, reservations.first { it.numberOfParticipants == 1 }.name)
-
     }
 }

@@ -1,6 +1,7 @@
 package com.generals.network.api
 
 import com.generals.network.model.*
+import org.threeten.bp.LocalDate
 import retrofit2.http.*
 
 interface RoomAPI {
@@ -37,4 +38,11 @@ interface ReservationAPI {
 
     @GET("reservations")
     suspend fun fetchAll(): APIResult<Inbound<ReservationListInbound>>
+
+    @GET("reservations")
+    suspend fun fetchByRoomAndFromDateToDate(
+            @Query("roomId") roomId: Int,
+            @Query("from") from: LocalDate,
+            @Query("to") to: LocalDate
+    ): APIResult<Inbound<ReservationListInbound>>
 }

@@ -1,11 +1,11 @@
 package com.generals.zimmerfrei.reservation.viewmodel
 
 import android.app.Activity
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.generals.zimmerfrei.common.UpdateOverviewEmitter
-import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
+import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
@@ -262,8 +262,8 @@ class ReservationViewModel @Inject constructor(
                             reservation?.let {
                                 useCase.update(it.copy(
                                         name = name,
-                                        startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
-                                        endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
+                                        startDate = LocalDate.of(startYear, startMonth, startDay).toOffsetDateTime(),
+                                        endDate = LocalDate.of(endYear, endMonth, endDay).toOffsetDateTime(),
                                         adults = adultsNumber,
                                         children = childrenNumber,
                                         babies = babiesNumber,
@@ -285,8 +285,8 @@ class ReservationViewModel @Inject constructor(
                                     ?: useCase.save(
                                             Reservation(
                                                     name = name,
-                                                    startDate = offsetDateTimeFromLocalDate(LocalDate.of(startYear, startMonth, startDay)),
-                                                    endDate = offsetDateTimeFromLocalDate(LocalDate.of(endYear, endMonth, endDay)),
+                                                    startDate = LocalDate.of(startYear, startMonth, startDay).toOffsetDateTime(),
+                                                    endDate = LocalDate.of(endYear, endMonth, endDay).toOffsetDateTime(),
                                                     adults = adultsNumber,
                                                     children = childrenNumber,
                                                     babies = babiesNumber,

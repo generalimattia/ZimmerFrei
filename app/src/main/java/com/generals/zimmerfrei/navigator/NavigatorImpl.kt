@@ -3,7 +3,7 @@ package com.generals.zimmerfrei.navigator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.support.annotation.IdRes
+import androidx.annotation.IdRes
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay

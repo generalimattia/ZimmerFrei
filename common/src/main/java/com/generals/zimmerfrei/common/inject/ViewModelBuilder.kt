@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.common.inject
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.inject.ZimmerFreiViewModelFactory
 import dagger.Binds
 import dagger.Module

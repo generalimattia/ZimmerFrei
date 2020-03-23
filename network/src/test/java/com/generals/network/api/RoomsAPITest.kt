@@ -6,11 +6,13 @@ import com.generals.network.model.RoomInbound
 import com.generals.network.model.RoomListInbound
 import junit.framework.Assert.*
 import kotlinx.coroutines.runBlocking
+import org.junit.Ignore
 import org.junit.Test
 
-class RoomAPITest {
+@Ignore
+class RoomsAPITest {
 
-    private val client: RoomAPI = retrofit.create(RoomAPI::class.java)
+    private val client: RoomsAPI = retrofit.create(RoomsAPI::class.java)
 
     @Test
     fun shouldGetAllRooms() = runBlocking {
@@ -18,7 +20,7 @@ class RoomAPITest {
         assertTrue(roomsResponse is APIResult.Success<*>)
         roomsResponse as APIResult.Success
         assertNotNull(roomsResponse.body)
-        assertEquals(3, roomsResponse.body!!.embedded.rooms.size)
+        assertEquals(3, roomsResponse.body.orNull()!!.embedded.rooms.size)
     }
 
     @Test
@@ -47,7 +49,7 @@ class RoomAPITest {
         val roomsResponse: APIResult<Inbound<RoomListInbound>> = client.fetchAll()
         roomsResponse as APIResult.Success
         assertNotNull(roomsResponse.body)
-        assertEquals(4, roomsResponse.body!!.embedded.rooms.size)
+        assertEquals(4, roomsResponse.body.orNull()!!.embedded.rooms.size)
     }
 
     @Test
@@ -59,7 +61,7 @@ class RoomAPITest {
         val roomsResponse: APIResult<Inbound<RoomListInbound>> = client.fetchAll()
         roomsResponse as APIResult.Success
         assertNotNull(roomsResponse.body)
-        val rooms: List<RoomInbound> = roomsResponse.body!!.embedded.rooms
+        val rooms: List<RoomInbound> = roomsResponse.body.fold(ifEmpty = { emptyList() }, ifSome = { it.embedded.rooms })
         assertEquals(4, rooms.size)
         assertEquals("TEST", rooms.first { it.id == 1 }.name)
 

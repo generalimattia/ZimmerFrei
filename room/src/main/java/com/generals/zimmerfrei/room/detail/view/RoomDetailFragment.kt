@@ -1,16 +1,15 @@
 package com.generals.zimmerfrei.room.detail.view
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.common.extension.hideKeyboard
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
@@ -26,14 +25,14 @@ class RoomDetailFragment : Fragment() {
 
     private lateinit var viewModel: RoomDetailViewModel
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
+        viewModel = ViewModelProvider(
                 this,
                 viewModelFactory
         )
@@ -52,7 +51,7 @@ class RoomDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpToolbar()
 
-        viewModel.pressBack.observe(this,
+        viewModel.pressBack.observe(viewLifecycleOwner,
                 Observer { shouldPressBack: Boolean? ->
                     shouldPressBack?.let {
                         if (it) {
@@ -61,7 +60,7 @@ class RoomDetailFragment : Fragment() {
                     }
                 })
 
-        viewModel.room.observe(this,
+        viewModel.room.observe(viewLifecycleOwner,
                 Observer { room: Room? ->
                     room?.let {
 
@@ -83,14 +82,14 @@ class RoomDetailFragment : Fragment() {
                     }
                 })
 
-        viewModel.errorOnName.observe(this,
+        viewModel.errorOnName.observe(viewLifecycleOwner,
                 Observer { error: String? ->
                     error?.let {
                         room_input_layout.error = it
                     }
                 })
 
-        viewModel.toolbarTitle.observe(this,
+        viewModel.toolbarTitle.observe(viewLifecycleOwner,
                 Observer { title: String? ->
                     title?.let {
                         toolbar.title = it

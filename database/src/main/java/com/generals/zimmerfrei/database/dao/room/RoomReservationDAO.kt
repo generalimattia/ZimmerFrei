@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.database.dao.room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import io.reactivex.Flowable
 import org.threeten.bp.OffsetDateTime

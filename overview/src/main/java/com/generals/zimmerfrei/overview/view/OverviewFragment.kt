@@ -1,18 +1,17 @@
 package com.generals.zimmerfrei.overview.view
 
 import android.app.DatePickerDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
@@ -33,18 +32,17 @@ class OverviewFragment : Fragment() {
 
     private var datePickerDialog: DatePickerDialog? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
+        viewModel = ViewModelProvider(
                 this,
                 viewModelFactory
-        )
-                .get(OverviewViewModel::class.java)
+        ).get(OverviewViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -65,7 +63,7 @@ class OverviewFragment : Fragment() {
 
         val syncScroller = SyncScroller().bindFirst(rooms_list_view.recyclerView)
 
-        viewModel.selectedDate.observe(this,
+        viewModel.selectedDate.observe(viewLifecycleOwner,
                 Observer { date: LocalDate? ->
                     date?.let {
                         val localPicker: DatePickerDialog =
@@ -91,14 +89,14 @@ class OverviewFragment : Fragment() {
                     }
                 })
 
-        viewModel.days.observe(this,
+        viewModel.days.observe(viewLifecycleOwner,
                 Observer { days: List<Day>? ->
                     days?.let {
                         days_list_view.bind(it)
                     }
                 })
 
-        viewModel.rooms.observe(this,
+        viewModel.rooms.observe(viewLifecycleOwner,
                 Observer { rooms: List<Room>? ->
                     rooms?.let {
                         rooms_list_view.bind(it)
@@ -106,7 +104,7 @@ class OverviewFragment : Fragment() {
                 })
 
         viewModel.reservations.observe(
-                this,
+                viewLifecycleOwner,
                 Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
                     roomDays?.let {
 
@@ -118,7 +116,7 @@ class OverviewFragment : Fragment() {
                     }
                 })
 
-        viewModel.month.observe(this,
+        viewModel.month.observe(viewLifecycleOwner,
                 Observer { month: String? ->
                     month?.let {
                         month_and_year.text = it.capitalize()

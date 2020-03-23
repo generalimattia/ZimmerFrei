@@ -1,7 +1,7 @@
 package com.generals.zimmerfrei.overview.view.layout
 
-import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
 
 class SyncScroller {
@@ -23,20 +23,20 @@ class SyncScroller {
     }
 
     fun sync() {
-        recyclerView1?.get()?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        recyclerView1?.get()?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if(!isSecondScrolling) {
+                if (!isSecondScrolling) {
                     recyclerView2?.get()?.scrollBy(dx, dy)
                 }
             }
         })
 
-        recyclerView1?.get()?.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener{
-            override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
+        recyclerView1?.get()?.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
             }
 
-            override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 isFirstScrolling = true
                 isSecondScrolling = false
                 return false
@@ -47,20 +47,20 @@ class SyncScroller {
         })
 
 
-        recyclerView2?.get()?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        recyclerView2?.get()?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if(!isFirstScrolling) {
+                if (!isFirstScrolling) {
                     recyclerView1?.get()?.scrollBy(dx, dy)
                 }
             }
         })
 
-        recyclerView2?.get()?.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener{
-            override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
+        recyclerView2?.get()?.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
             }
 
-            override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 isSecondScrolling = true
                 isFirstScrolling = false
                 return false

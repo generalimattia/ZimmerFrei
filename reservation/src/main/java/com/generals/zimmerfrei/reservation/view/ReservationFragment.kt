@@ -2,16 +2,10 @@ package com.generals.zimmerfrei.reservation.view
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +14,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.reservation.R
@@ -39,7 +37,7 @@ class ReservationFragment : Fragment() {
     private lateinit var startDatePickerDialog: DatePickerDialog
     private lateinit var endDatePickerDialog: DatePickerDialog
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -69,7 +67,7 @@ class ReservationFragment : Fragment() {
 
         setUpToolbar()
 
-        viewModel.startDate.observe(this,
+        viewModel.startDate.observe(viewLifecycleOwner,
                 Observer { nullableDate: ParcelableDay? ->
                     startDatePickerDialog = buildStartDatePickerDialog(nullableDate)
                     nullableDate?.let {
@@ -84,7 +82,7 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
-        viewModel.endDate.observe(this,
+        viewModel.endDate.observe(viewLifecycleOwner,
                 Observer { nullableDate: ParcelableDay? ->
                     endDatePickerDialog = buildEndDatePickerDialog(nullableDate)
                     nullableDate?.let {
@@ -99,56 +97,56 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
-        viewModel.name.observe(this,
+        viewModel.name.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         name.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.email.observe(this,
+        viewModel.email.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         email.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.mobile.observe(this,
+        viewModel.mobile.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         mobile.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.adultsCount.observe(this,
+        viewModel.adultsCount.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         adult_count.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.childrenCount.observe(this,
+        viewModel.childrenCount.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         children_count.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.babiesCount.observe(this,
+        viewModel.babiesCount.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         babies_count.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
-        viewModel.color.observe(this,
+        viewModel.color.observe(viewLifecycleOwner,
                 Observer { color: String? ->
                     color?.let {
                         color_view.setBackgroundColor(Color.parseColor(it))
                     }
                 })
 
-        viewModel.notes.observe(this,
+        viewModel.notes.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         notes.setText(it, TextView.BufferType.NORMAL)
@@ -156,7 +154,7 @@ class ReservationFragment : Fragment() {
                 })
 
         viewModel.pressBack.observe(
-                this,
+                viewLifecycleOwner,
                 Observer { shouldPressBack: Boolean? ->
                     shouldPressBack?.let {
                         if (it) {
@@ -165,35 +163,35 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
-        viewModel.roomError.observe(this,
+        viewModel.roomError.observe(viewLifecycleOwner,
                 Observer { error: String? ->
                     error?.let {
                         room_input_layout.error = it
                     }
                 })
 
-        viewModel.startDateError.observe(this,
+        viewModel.startDateError.observe(viewLifecycleOwner,
                 Observer { error: String? ->
                     error?.let {
                         start_date_input_layout.error = it
                     }
                 })
 
-        viewModel.endDateError.observe(this,
+        viewModel.endDateError.observe(viewLifecycleOwner,
                 Observer { error: String? ->
                     error?.let {
                         end_date_input_layout.error = it
                     }
                 })
 
-        viewModel.nameError.observe(this,
+        viewModel.nameError.observe(viewLifecycleOwner,
                 Observer { error: String? ->
                     error?.let {
                         name_input_layout.error = it
                     }
                 })
 
-        viewModel.rooms.observe(this,
+        viewModel.rooms.observe(viewLifecycleOwner,
                 Observer { rooms: List<String>? ->
                     rooms?.let {
                         room_spinner.adapter = ArrayAdapter(context,
@@ -212,7 +210,7 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
-        viewModel.selectedRoom.observe(this,
+        viewModel.selectedRoom.observe(viewLifecycleOwner,
                 Observer { nullableRoom: String? ->
                     nullableRoom?.let {
                         room.setText(it, TextView.BufferType.EDITABLE)
@@ -220,14 +218,14 @@ class ReservationFragment : Fragment() {
                 }
         )
 
-        viewModel.preselectedRoom.observe(this,
+        viewModel.preselectedRoom.observe(viewLifecycleOwner,
                 Observer { selection: Int? ->
                     selection?.let {
                         room_spinner.setSelection(it)
                     }
                 })
 
-        viewModel.isEditing.observe(this,
+        viewModel.isEditing.observe(viewLifecycleOwner,
                 Observer { isEditing: Boolean? ->
                     isEditing?.let {
                         toolbar.menu.findItem(R.id.delete).isVisible = it

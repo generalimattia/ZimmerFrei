@@ -4,7 +4,7 @@ import com.generals.network.model.*
 import org.threeten.bp.LocalDate
 import retrofit2.http.*
 
-interface RoomAPI {
+interface RoomsAPI {
 
     @POST("rooms")
     suspend fun create(@Body room: RoomInbound): APIResult<Unit>
@@ -22,7 +22,7 @@ interface RoomAPI {
     suspend fun fetchAll(): APIResult<Inbound<RoomListInbound>>
 }
 
-interface ReservationAPI {
+interface ReservationsAPI {
 
     @POST("reservations")
     suspend fun create(@Body reservation: ReservationInbound): APIResult<Unit>

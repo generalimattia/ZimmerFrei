@@ -1,15 +1,26 @@
 package com.generals.network.model
 
+import arrow.core.Option
+import arrow.core.toOption
 import okhttp3.Request
 import retrofit2.*
-import java.io.IOException
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 sealed class APIResult<out T> {
-    data class Success<T>(val body: T?) : APIResult<T>()
+    data class Success<T>(val body: Option<T>) : APIResult<T>()
     data class Failure(val code: Int) : APIResult<Nothing>()
-    data class Error(val message: String) : APIResult<Nothing>()
+    data class Error(val throwable: Throwable?) : APIResult<Nothing>()
+
+    fun <R> fold(
+            ifSuccess: (Option<T>) -> R,
+            ifFailure: (Int) -> R,
+            ifError: (Throwable?) -> R): R =
+            when (this) {
+                is Success -> ifSuccess(body)
+                is Failure -> ifFailure(code)
+                is Error -> ifError(throwable)
+            }
 }
 
 abstract class CallDelegate<TIn, TOut>(
@@ -34,7 +45,7 @@ class ResultCall<T>(proxy: Call<T>) : CallDelegate<T, APIResult<T>>(proxy) {
             val code: Int = response.code()
             val result: APIResult<T> = if (code in 200 until 300) {
                 val body: T? = response.body()
-                APIResult.Success(body)
+                APIResult.Success(body.toOption())
             } else {
                 APIResult.Failure(code)
             }
@@ -43,8 +54,8 @@ class ResultCall<T>(proxy: Call<T>) : CallDelegate<T, APIResult<T>>(proxy) {
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
-            val result: APIResult<Nothing> = if (t is IOException) {
-                APIResult.Error(t.message.orEmpty())
+            val result: APIResult<Nothing> = if (t is Exception) {
+                APIResult.Error(t)
             } else {
                 APIResult.Failure(400)
             }

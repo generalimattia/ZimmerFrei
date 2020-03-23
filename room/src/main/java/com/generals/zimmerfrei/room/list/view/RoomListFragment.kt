@@ -1,16 +1,16 @@
 package com.generals.zimmerfrei.room.list.view
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 
@@ -29,14 +29,14 @@ class RoomListFragment : Fragment() {
 
     private var containerViewId: Int = 0
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
+        viewModel = ViewModelProvider(
             this,
             viewModelFactory
         )
@@ -57,7 +57,7 @@ class RoomListFragment : Fragment() {
 
         setUpToolbar()
 
-        viewModel.allRooms.observe(this,
+        viewModel.allRooms.observe(viewLifecycleOwner,
                                    Observer { rooms: List<Room>? ->
                                        rooms?.let {
                                            recycler_view.adapter = RoomsAdapter(

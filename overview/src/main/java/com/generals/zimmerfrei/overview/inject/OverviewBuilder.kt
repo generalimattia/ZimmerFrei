@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.overview.inject
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.generals.zimmerfrei.inject.ViewModelKey
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.Binds

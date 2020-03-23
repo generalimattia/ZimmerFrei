@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.database.dao.room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.generals.zimmerfrei.database.entities.RoomEntity
 import io.reactivex.Maybe
 

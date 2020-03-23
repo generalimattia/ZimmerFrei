@@ -1,10 +1,10 @@
 package com.generals.zimmerfrei.reservation.view.adapters
 
 import android.graphics.Color
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.generals.zimmerfrei.reservation.R
 import de.hdodenhof.circleimageview.CircleImageView
 

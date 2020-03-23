@@ -3,10 +3,7 @@ package com.generals.zimmerfrei.overview.view.custom.days
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.TextView
-import com.generals.zimmerfrei.common.extension.isWeekend
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
 

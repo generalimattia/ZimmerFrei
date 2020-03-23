@@ -1,10 +1,10 @@
 package com.generals.zimmerfrei.room.list.viewmodel
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.support.annotation.IdRes
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.room.usecase.RoomUseCase

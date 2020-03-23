@@ -1,7 +1,7 @@
 package com.generals.zimmerfrei.inject
 
-import android.arch.persistence.room.Room
 import android.content.Context
+import androidx.room.Room
 import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.database.dao.ReservationDAOImpl
 import com.generals.zimmerfrei.database.dao.RoomDAO

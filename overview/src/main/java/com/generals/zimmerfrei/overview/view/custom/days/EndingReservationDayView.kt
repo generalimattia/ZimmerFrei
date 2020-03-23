@@ -1,9 +1,6 @@
 package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -34,7 +31,7 @@ class EndingReservationDayView : FrameLayout {
             roomDay: RoomDay.EndingReservation,
             onClick: (RoomDay) -> Unit
     ) {
-        buildBackgroundDrawable(context, roomDay) ?.let {
+        buildBackgroundDrawable(context, roomDay)?.let {
             background = it
         }
         setOnClickListener {

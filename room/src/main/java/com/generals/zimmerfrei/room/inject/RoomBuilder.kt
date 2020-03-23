@@ -1,6 +1,6 @@
 package com.generals.zimmerfrei.room.inject
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.generals.zimmerfrei.inject.ViewModelKey
 import com.generals.zimmerfrei.room.detail.viewmodel.RoomDetailViewModel
 import com.generals.zimmerfrei.room.list.viewmodel.RoomListViewModel

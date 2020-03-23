@@ -2,6 +2,9 @@ package com.generals.zimmerfrei.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.generals.network.model.ReservationInbound
+import com.generals.network.model.RoomInbound
+import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import com.generals.zimmerfrei.database.entities.RoomEntity
 import org.threeten.bp.OffsetDateTime
@@ -102,6 +105,23 @@ data class Reservation(
             email = reservation.email
     )
 
+    constructor(
+            reservation: ReservationInbound, room: Room
+    ) : this(
+            id = reservation.id.toLong(),
+            name = reservation.name,
+            startDate = reservation.startDate.toOffsetDateTime(),
+            endDate = reservation.endDate.toOffsetDateTime(),
+            adults = reservation.numberOfParticipants,
+            children = 0,
+            babies = 0,
+            color = "",
+            room = room,
+            notes = "",
+            mobile = reservation.customer.mobile,
+            email = reservation.customer.email
+    )
+
     fun toEntity(): ReservationEntity = ReservationEntity(
             id = id,
             name = name,
@@ -119,17 +139,17 @@ data class Reservation(
 
     constructor(source: Parcel) : this(
             source.readLong(),
-            source.readString(),
+            source.readString().orEmpty(),
             source.readSerializable() as OffsetDateTime,
             source.readSerializable() as OffsetDateTime,
             source.readInt(),
             source.readInt(),
             source.readInt(),
-            source.readString(),
-            source.readParcelable<Room>(Room::class.java.classLoader),
-            source.readString(),
-            source.readString(),
-            source.readString()
+            source.readString().orEmpty(),
+            source.readParcelable<Room>(Room::class.java.classLoader) ?: Room(),
+            source.readString().orEmpty(),
+            source.readString().orEmpty(),
+            source.readString().orEmpty()
     )
 
     override fun describeContents() = 0
@@ -180,6 +200,15 @@ data class Room(
             isHandicap = entity.isHandicap,
             hasBalcony = entity.hasBalcony
     )
+
+    constructor(inbound: RoomInbound) : this(
+            id = inbound.id.toLong(),
+            name = inbound.name,
+            personsCount = inbound.roomCount,
+            isDouble = false,
+            isSingle = false,
+            isHandicap = false,
+            hasBalcony = false)
 
     fun toEntity(): RoomEntity = RoomEntity(
             id,

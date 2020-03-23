@@ -8,7 +8,7 @@
               android:focusableInTouchMode="true"
               tools:context=".view.ReservationFragment">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -22,12 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/material_quad">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/room_input_layout"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
@@ -37,14 +37,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/room"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="@string/room"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
                     android:id="@+id/room_spinner"
@@ -59,7 +59,7 @@
                     android:visibility="invisible"
                     tools:visibility="visible"/>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -68,16 +68,16 @@
                     app:layout_constraintTop_toBottomOf="@id/room_input_layout"
                     app:layout_constraintEnd_toStartOf="@id/end_date_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="@string/start_date"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/end_date_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -88,16 +88,16 @@
                     app:layout_constraintStart_toEndOf="@id/start_date_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/room_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/end_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="@string/end_date"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,15 +108,15 @@
                     app:layout_constraintStart_toStartOf="@id/room_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/start_date_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -126,14 +126,14 @@
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                     android:id="@+id/action_email"
@@ -146,7 +146,7 @@
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/mobile_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,14 +156,14 @@
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/email_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/mobile"
                         android:inputType="phone"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                     android:id="@+id/action_dial"
@@ -176,7 +176,7 @@
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/adult_count_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -186,16 +186,16 @@
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/adult_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/adult_count"
                         android:inputType="number"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/children_count_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -206,16 +206,16 @@
                     app:layout_constraintStart_toEndOf="@id/adult_count_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/children_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/children_count"
                         android:inputType="number"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/babies_count_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -225,20 +225,20 @@
                     app:layout_constraintStart_toEndOf="@id/children_count_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/babies_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/babies_count"
                         android:inputType="number"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/colors"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -248,7 +248,7 @@
                     android:layout_marginEnd="@dimen/material_double"
                     tools:listitem="@layout/layout_color"/>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/color_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -277,9 +277,9 @@
                         app:layout_constraintStart_toEndOf="@id/color_view"
                         app:layout_constraintTop_toTopOf="@id/color_view"/>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -290,14 +290,14 @@
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/color_container">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/notes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/notes"
                         android:inputType="textEmailAddress"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                     android:id="@+id/submit"
@@ -311,7 +311,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notes_input_layout"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

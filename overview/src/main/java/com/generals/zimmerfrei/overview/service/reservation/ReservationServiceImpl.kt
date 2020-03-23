@@ -2,7 +2,7 @@ package com.generals.zimmerfrei.overview.service.reservation
 
 import com.generals.roomrepository.RoomRepository
 import com.generals.zimmerfrei.common.extension.isWeekend
-import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
+import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import com.generals.zimmerfrei.model.Day
@@ -93,8 +93,8 @@ class ReservationServiceImpl @Inject constructor(
                 val allReservations: Flowable<List<ReservationEntity>>? =
                         reservationDao.findReservationsByRoomAndFromDateToDate(
                                 room.id,
-                                offsetDateTimeFromLocalDate(startPeriod),
-                                offsetDateTimeFromLocalDate(endPeriod)
+                                startPeriod.toOffsetDateTime(),
+                                endPeriod.toOffsetDateTime()
                         )
 
                 allReservations?.subscribe({ reservationEntities: List<ReservationEntity> ->
@@ -124,7 +124,7 @@ class ReservationServiceImpl @Inject constructor(
                     }
                 }) ?: let {
                     emitter.onNext(room to MutableList(endPeriod.dayOfMonth) { day: Int ->
-                        val date: OffsetDateTime = offsetDateTimeFromLocalDate(LocalDate.of(endPeriod.year, endPeriod.month, day + 1))
+                        val date: OffsetDateTime = LocalDate.of(endPeriod.year, endPeriod.month, day + 1).toOffsetDateTime()
                         buildEmpty(date, room)
                     })
                     emitter.onComplete()
@@ -139,7 +139,7 @@ class ReservationServiceImpl @Inject constructor(
             room: Room
     ): RoomDay {
 
-        val date: OffsetDateTime = offsetDateTimeFromLocalDate(currentDay)
+        val date: OffsetDateTime = currentDay.toOffsetDateTime()
 
         return reservationEntities.firstOrNull { reservationEntity: ReservationEntity ->
             val startDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.startDate)

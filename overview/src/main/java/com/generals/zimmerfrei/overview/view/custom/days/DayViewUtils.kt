@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R

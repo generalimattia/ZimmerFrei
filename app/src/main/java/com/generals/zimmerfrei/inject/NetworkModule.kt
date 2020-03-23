@@ -1,11 +1,15 @@
 package com.generals.zimmerfrei.inject
 
+import android.content.Context
 import com.generals.network.adapter.LocalDateAdapter
+import com.generals.network.api.ReservationsAPI
+import com.generals.network.api.RoomsAPI
 import com.generals.network.model.APIResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,9 +28,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHTTPClient(): OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-            .build()
+    fun provideOkHTTPClient(context: Context): OkHttpClient {
+        val cacheSize: Long = 10 * 1024 * 1024
+        return OkHttpClient.Builder()
+                .cache(Cache(context.cacheDir, cacheSize))
+                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+                .build()
+    }
 
     @Provides
     @Singleton
@@ -39,4 +47,12 @@ class NetworkModule {
                     .addConverterFactory(MoshiConverterFactory.create(moshi))
                     .addCallAdapterFactory(APIResponseAdapterFactory())
                     .client(okHttpClient).build()
+
+    @Provides
+    @Singleton
+    fun provideRoomsAPI(retrofit: Retrofit): RoomsAPI = retrofit.create(RoomsAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReservationsAPI(retrofit: Retrofit): ReservationsAPI = retrofit.create(ReservationsAPI::class.java)
 }

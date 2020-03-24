@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDate
 
 @Entity(
         tableName = "reservations",
@@ -18,8 +18,8 @@ import org.threeten.bp.OffsetDateTime
 data class ReservationEntity(
         @PrimaryKey(autoGenerate = true) var id: Long = 0,
         var name: String = "",
-        var startDate: OffsetDateTime = OffsetDateTime.now(),
-        var endDate: OffsetDateTime = OffsetDateTime.now(),
+        var startDate: LocalDate = LocalDate.now(),
+        var endDate: LocalDate = LocalDate.now(),
         var adults: Int = 0,
         var children: Int = 0,
         var babies: Int = 0,

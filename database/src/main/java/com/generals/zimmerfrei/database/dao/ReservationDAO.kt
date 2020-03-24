@@ -2,7 +2,7 @@ package com.generals.zimmerfrei.database.dao
 
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import io.reactivex.Flowable
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDate
 
 interface ReservationDAO {
 
@@ -12,18 +12,18 @@ interface ReservationDAO {
 
     fun findReservationsByRoom(roomId: String): Flowable<List<ReservationEntity>>
 
-    fun findReservationsByDate(date: OffsetDateTime): Flowable<List<ReservationEntity>>
+    fun findReservationsByDate(date: LocalDate): Flowable<List<ReservationEntity>>
 
     fun findReservationsByRoomAndDateBetweenStartDateAndEndDate(
-        roomId: String, date: OffsetDateTime
+            roomId: String, date: LocalDate
     ): Flowable<List<ReservationEntity>>
 
     fun findReservationsByRoomAndFromDateToDate(
-        roomId: Long, startDate: OffsetDateTime, endDate: OffsetDateTime
+            roomId: Long, startDate: LocalDate, endDate: LocalDate
     ): Flowable<List<ReservationEntity>>?
 
     fun findReservationsFromDateToDate(
-        startDate: OffsetDateTime, endDate: OffsetDateTime
+            startDate: LocalDate, endDate: LocalDate
     ): Flowable<List<ReservationEntity>>
 
     fun update(reservation: ReservationEntity)

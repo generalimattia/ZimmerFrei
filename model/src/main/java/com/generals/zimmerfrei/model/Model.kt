@@ -4,14 +4,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.generals.network.model.ReservationInbound
 import com.generals.network.model.RoomInbound
-import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import com.generals.zimmerfrei.database.entities.RoomEntity
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDate
 
 data class Day(
         val title: String = "",
-        val date: OffsetDateTime,
+        val date: LocalDate,
         val monthDays: Int = 0
 )
 
@@ -27,7 +26,7 @@ data class ParcelableDay(
             year = input.date.year
     )
 
-    constructor(input: OffsetDateTime) : this(
+    constructor(input: LocalDate) : this(
             dayOfMonth = input.dayOfMonth,
             month = input.monthValue,
             year = input.year
@@ -59,8 +58,8 @@ data class ParcelableDay(
 data class Reservation(
         val id: Long = 0,
         val name: String = "",
-        val startDate: OffsetDateTime = OffsetDateTime.now(),
-        val endDate: OffsetDateTime = OffsetDateTime.now(),
+        val startDate: LocalDate = LocalDate.now(),
+        val endDate: LocalDate = LocalDate.now(),
         val adults: Int = 0,
         val children: Int = 0,
         val babies: Int = 0,
@@ -110,8 +109,8 @@ data class Reservation(
     ) : this(
             id = reservation.id.toLong(),
             name = reservation.name,
-            startDate = reservation.startDate.toOffsetDateTime(),
-            endDate = reservation.endDate.toOffsetDateTime(),
+            startDate = reservation.startDate,
+            endDate = reservation.endDate,
             adults = reservation.numberOfParticipants,
             children = 0,
             babies = 0,
@@ -140,8 +139,8 @@ data class Reservation(
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readString().orEmpty(),
-            source.readSerializable() as OffsetDateTime,
-            source.readSerializable() as OffsetDateTime,
+            source.readSerializable() as LocalDate,
+            source.readSerializable() as LocalDate,
             source.readInt(),
             source.readInt(),
             source.readInt(),

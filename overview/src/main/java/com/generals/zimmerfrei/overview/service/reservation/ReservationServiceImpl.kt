@@ -2,7 +2,6 @@ package com.generals.zimmerfrei.overview.service.reservation
 
 import com.generals.roomrepository.RoomRepository
 import com.generals.zimmerfrei.common.extension.isWeekend
-import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.database.entities.ReservationEntity
 import com.generals.zimmerfrei.model.Day
@@ -13,7 +12,6 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import org.threeten.bp.LocalDate
-import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.chrono.ChronoLocalDate
 import javax.inject.Inject
 
@@ -93,8 +91,8 @@ class ReservationServiceImpl @Inject constructor(
                 val allReservations: Flowable<List<ReservationEntity>>? =
                         reservationDao.findReservationsByRoomAndFromDateToDate(
                                 room.id,
-                                startPeriod.toOffsetDateTime(),
-                                endPeriod.toOffsetDateTime()
+                                startPeriod,
+                                endPeriod
                         )
 
                 allReservations?.subscribe({ reservationEntities: List<ReservationEntity> ->
@@ -124,7 +122,7 @@ class ReservationServiceImpl @Inject constructor(
                     }
                 }) ?: let {
                     emitter.onNext(room to MutableList(endPeriod.dayOfMonth) { day: Int ->
-                        val date: OffsetDateTime = LocalDate.of(endPeriod.year, endPeriod.month, day + 1).toOffsetDateTime()
+                        val date: LocalDate = LocalDate.of(endPeriod.year, endPeriod.month, day + 1)
                         buildEmpty(date, room)
                     })
                     emitter.onComplete()
@@ -139,7 +137,7 @@ class ReservationServiceImpl @Inject constructor(
             room: Room
     ): RoomDay {
 
-        val date: OffsetDateTime = currentDay.toOffsetDateTime()
+        val date: LocalDate = currentDay
 
         return reservationEntities.firstOrNull { reservationEntity: ReservationEntity ->
             val startDate: ChronoLocalDate = ChronoLocalDate.from(reservationEntity.startDate)
@@ -169,7 +167,7 @@ class ReservationServiceImpl @Inject constructor(
     }
 
 
-    private fun buildEmpty(date: OffsetDateTime, room: Room): RoomDay {
+    private fun buildEmpty(date: LocalDate, room: Room): RoomDay {
         return if (date.isWeekend()) {
             RoomDay.EmptyWeekend(
                     Day(date = date),

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.generals.zimmerfrei.common.UpdateOverviewEmitter
-import com.generals.zimmerfrei.common.extension.toOffsetDateTime
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
@@ -262,8 +261,8 @@ class ReservationViewModel @Inject constructor(
                             reservation?.let {
                                 useCase.update(it.copy(
                                         name = name,
-                                        startDate = LocalDate.of(startYear, startMonth, startDay).toOffsetDateTime(),
-                                        endDate = LocalDate.of(endYear, endMonth, endDay).toOffsetDateTime(),
+                                        startDate = LocalDate.of(startYear, startMonth, startDay),
+                                        endDate = LocalDate.of(endYear, endMonth, endDay),
                                         adults = adultsNumber,
                                         children = childrenNumber,
                                         babies = babiesNumber,
@@ -285,8 +284,8 @@ class ReservationViewModel @Inject constructor(
                                     ?: useCase.save(
                                             Reservation(
                                                     name = name,
-                                                    startDate = LocalDate.of(startYear, startMonth, startDay).toOffsetDateTime(),
-                                                    endDate = LocalDate.of(endYear, endMonth, endDay).toOffsetDateTime(),
+                                                    startDate = LocalDate.of(startYear, startMonth, startDay),
+                                                    endDate = LocalDate.of(endYear, endMonth, endDay),
                                                     adults = adultsNumber,
                                                     children = childrenNumber,
                                                     babies = babiesNumber,

@@ -63,8 +63,4 @@ class DaysListView : FrameLayout {
     fun bind(days: List<Day>) {
         recyclerView.adapter = DaysAdapter(days)
     }
-
-    fun moreDays(days: List<Day>) {
-        (recyclerView.adapter as DaysAdapter).moreDays(days)
-    }
 }

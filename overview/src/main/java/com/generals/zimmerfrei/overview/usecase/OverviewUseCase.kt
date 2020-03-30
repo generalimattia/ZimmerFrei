@@ -40,7 +40,7 @@ class OverviewUseCaseImpl @Inject constructor(
                     val accumulator: LocalDate = date.withDayOfMonth(index)
 
                     Day(
-                            title = "$index ${DateTimeFormatter.ofPattern(DAY_NAME_PATTERN)
+                            title = "${DateTimeFormatter.ofPattern(DAY_NAME_PATTERN)
                                     .format(accumulator).toUpperCase()}",
                             date = accumulator,
                             monthDays = monthLength
@@ -148,7 +148,6 @@ class OverviewUseCaseImpl @Inject constructor(
         } ?: buildEmpty(currentDay, room)
     }
 
-
     private fun buildEmpty(date: LocalDate, room: Room): RoomDay =
             if (date.isWeekend()) {
                 RoomDay.EmptyWeekend(
@@ -163,7 +162,7 @@ class OverviewUseCaseImpl @Inject constructor(
             }
 
     companion object {
-        private const val DAY_NAME_PATTERN = "E"
+        private const val DAY_NAME_PATTERN = "d EEEEE"
         private const val MONTH_NAME_PATTERN = "MMMM YYYY"
     }
 }

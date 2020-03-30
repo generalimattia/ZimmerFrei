@@ -12,14 +12,9 @@ import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.navigator.Navigator
-import com.generals.zimmerfrei.overview.usecase.CalendarUseCase
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
-
 import javax.inject.Inject
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
@@ -27,8 +22,7 @@ import kotlin.reflect.KProperty
 class OverviewViewModel @Inject constructor(
         private val useCase: OverviewUseCase,
         private val navigator: Navigator,
-        private val updateOverviewEmitter: UpdateOverviewEmitter,
-        private val calendarUseCase: CalendarUseCase
+        private val updateOverviewEmitter: UpdateOverviewEmitter
 ) : ViewModel(), UpdateOverviewEmitter.Observer {
 
     private val _month = MutableLiveData<String>()
@@ -44,8 +38,6 @@ class OverviewViewModel @Inject constructor(
             processNewDate(it)
         }
     }
-
-    private val compositeDisposable = CompositeDisposable()
 
     val month: LiveData<String>
         get() = _month
@@ -74,15 +66,11 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun loadRooms() {
-        /*compositeDisposable.add(
-                useCase.loadRooms()
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { internalRooms: List<Room>? ->
-                            internalRooms?.let {
-                                _rooms.value = it
-                            }
-                        })*/
+        viewModelScope.launch {
+            val rooms: List<Room> = useCase.loadRooms()
+            _rooms.value = rooms
+        }
+
     }
 
     fun onPreviousMonthClick() {
@@ -100,42 +88,22 @@ class OverviewViewModel @Inject constructor(
 
     private fun processNewDate(newDate: LocalDate) {
         loadCalendar(newDate)
-
         loadReservations(newDate)
     }
 
     private fun loadReservations(currentDate: LocalDate) {
-        /*compositeDisposable.add(
-                useCase.loadReservations(
-                        currentDate.withDayOfMonth(1),
-                        currentDate.withDayOfMonth(currentDate.month.length(currentDate.isLeapYear))
-                )
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { roomDay: Pair<Room, List<RoomDay>>? ->
-                            roomDay?.let { notNullableRoomDay: Pair<Room, List<RoomDay>> ->
-                                val newList: MutableList<Pair<Room, List<RoomDay>>> = _reservations.value?.let {
-                                    (it + notNullableRoomDay).toMutableList()
-                                } ?: mutableListOf()
-                                _reservations.value = newList
-                            }
-                        })*/
-
         viewModelScope.launch {
-            val reservationByRoom: List<Pair<Room, List<RoomDay>>> = calendarUseCase.loadReservationsByPeriod(currentDate)
-            val rooms: List<Room> = reservationByRoom.map { it.first }
+            val reservationByRoom: List<Pair<Room, List<RoomDay>>> = useCase.loadReservationsByPeriod(currentDate)
             _reservations.value = reservationByRoom
-            _rooms.value = rooms
         }
     }
 
     private fun loadCalendar(currentDate: LocalDate) {
-        compositeDisposable.add(useCase.loadDays(currentDate).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe { daysAndMonth: Pair<List<Day>, String>? ->
-            daysAndMonth?.let {
-                _days.value = it.first
-                _month.value = it.second
-            }
-        })
+        viewModelScope.launch {
+            val daysAndMonth: Pair<List<Day>, String> = useCase.loadDays(currentDate)
+            _days.value = daysAndMonth.first
+            _month.value = daysAndMonth.second
+        }
     }
 
     fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
@@ -162,7 +130,6 @@ class OverviewViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        compositeDisposable.dispose()
         updateOverviewEmitter.unsubscribe(this)
     }
 }

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.generals.zimmerfrei.common.extension.toColor
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.reservation.R
@@ -142,7 +142,7 @@ class ReservationFragment : Fragment() {
         viewModel.color.observe(viewLifecycleOwner,
                 Observer { color: String? ->
                     color?.let {
-                        color_view.setBackgroundColor(Color.parseColor(it))
+                        color_view.setBackgroundColor(it.toColor())
                     }
                 })
 

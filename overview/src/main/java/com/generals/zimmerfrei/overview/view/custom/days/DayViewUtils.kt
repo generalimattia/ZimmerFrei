@@ -2,9 +2,9 @@ package com.generals.zimmerfrei.overview.view.custom.days
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import androidx.annotation.DrawableRes
+import com.generals.zimmerfrei.common.extension.toColor
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
@@ -32,10 +32,4 @@ fun buildDrawable(
     val gradientDrawable = drawable as GradientDrawable
     gradientDrawable.color = ColorStateList.valueOf(color)
     return gradientDrawable
-}
-
-fun String.toColor(): Int = try {
-    Color.parseColor(this)
-} catch (e: Exception) {
-    Color.CYAN
 }

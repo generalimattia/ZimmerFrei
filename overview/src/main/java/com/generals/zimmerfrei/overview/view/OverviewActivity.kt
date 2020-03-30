@@ -20,14 +20,13 @@ class OverviewActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
-
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    OverviewFragment.newInstance()
-                )
-                .commitAllowingStateLoss()
+                    .replace(
+                            R.id.fragment_container,
+                            OverviewFragment.newInstance()
+                    )
+                    .commitAllowingStateLoss()
         }
     }
 

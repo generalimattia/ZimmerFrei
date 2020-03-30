@@ -23,7 +23,7 @@ data class RoomInbound(
 )
 
 data class ReservationListInbound(
-        val reservations: List<ReservationInbound>
+        val reservations: List<ReservationInbound> = emptyList()
 )
 
 data class ReservationInbound(

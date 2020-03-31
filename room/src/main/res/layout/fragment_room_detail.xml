@@ -1,142 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".detail.view.RoomDetailFragment">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".detail.view.RoomDetailFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="@dimen/elevation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@android:color/white"/>
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="@dimen/elevation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@android:color/white" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/material_quad">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:paddingBottom="@dimen/material_quad">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/room_input_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                    android:id="@+id/room_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintEnd_toStartOf="@id/persons_input_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/room"/>
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/room" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/persons_input_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/room_input_layout">
+                    android:id="@+id/persons_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintBottom_toBottomOf="@id/room_input_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/room_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/persons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/persons_count"
-                    android:inputType="number"/>
+                        android:id="@+id/persons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/max_persons"
+                        android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
-                android:id="@+id/double_bed"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/material_sixth"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:text="@string/double_bed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/persons_input_layout"/>
+                    android:id="@+id/double_bed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/material_sixth"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:text="@string/double_bed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/persons_input_layout" />
 
             <CheckBox
-                android:id="@+id/single_bed"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/material_sixth"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                android:background="?attr/selectableItemBackground"
-                android:checkMark="?android:attr/textCheckMark"
-                android:gravity="center_vertical"
-                android:text="@string/single_bed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/double_bed"/>
+                    android:id="@+id/single_bed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/material_sixth"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_single"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="?attr/selectableItemBackground"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:gravity="center_vertical"
+                    android:text="@string/single_bed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/double_bed" />
 
             <CheckBox
-                android:id="@+id/handicap"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/material_sixth"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                android:background="?attr/selectableItemBackground"
-                android:checkMark="?android:attr/textCheckMark"
-                android:gravity="center_vertical"
-                android:text="@string/handicap"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/single_bed"/>
+                    android:id="@+id/handicap"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/material_sixth"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_single"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="?attr/selectableItemBackground"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:gravity="center_vertical"
+                    android:text="@string/handicap"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/single_bed" />
 
             <CheckBox
-                android:id="@+id/balcony"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/material_sixth"
-                android:layout_marginEnd="@dimen/material_double"
-                android:layout_marginStart="@dimen/material_double"
-                android:layout_marginTop="@dimen/material_quad"
-                android:background="?attr/selectableItemBackground"
-                android:checkMark="?android:attr/textCheckMark"
-                android:gravity="center_vertical"
-                android:text="@string/balcony"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/handicap"/>
+                    android:id="@+id/balcony"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/material_sixth"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_single"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="?attr/selectableItemBackground"
+                    android:checkMark="?android:attr/textCheckMark"
+                    android:gravity="center_vertical"
+                    android:text="@string/balcony"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/handicap" />
 
             <Button
-                android:id="@+id/submit"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="200dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="@dimen/material_quad"
-                android:layout_marginTop="@dimen/material_quad"
-                android:text="@string/submit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/balcony"/>
+                    android:id="@+id/submit"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="200dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginBottom="@dimen/material_quad"
+                    android:text="@string/submit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/balcony" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

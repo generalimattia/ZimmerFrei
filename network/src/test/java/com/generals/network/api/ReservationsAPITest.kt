@@ -39,7 +39,7 @@ class ReservationsAPITest {
     fun shouldCreateNewReservation() = runBlocking {
         val newReservation = ReservationInbound(
                 name = "Reserved",
-                numberOfParticipants = 10,
+                persons = 10,
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusWeeks(2),
                 customer = CustomerInbound(
@@ -81,7 +81,7 @@ class ReservationsAPITest {
         reservationResponse as APIResult.Success
         assertNotNull(reservationResponse.body)
 
-        val updatedReservation: ReservationInbound = reservationResponse.body.orNull()!!.copy(numberOfParticipants = 35)
+        val updatedReservation: ReservationInbound = reservationResponse.body.orNull()!!.copy(persons = 35)
         val response: APIResult<Unit> = client.update(4, updatedReservation)
         assertTrue(response is APIResult.Success<*>)
 
@@ -90,6 +90,6 @@ class ReservationsAPITest {
         assertNotNull(reservationsResponse.body)
         val reservations: List<ReservationInbound> = reservationsResponse.body.fold(ifEmpty = { emptyList() }, ifSome = { it.embedded.reservations })
         assertEquals(4, reservations.size)
-        assertEquals(35, reservations.first { it.numberOfParticipants == 1 }.name)
+        assertEquals(35, reservations.first { it.persons == 1 }.name)
     }
 }

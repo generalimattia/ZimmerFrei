@@ -41,7 +41,7 @@ class RoomsAPITest {
 
     @Test
     fun shouldCreateNewRoom() = runBlocking {
-        val newRoom = RoomInbound(name = "TEST", roomCount = 3)
+        val newRoom = RoomInbound(name = "TEST", maxPersons = 3)
         val response: APIResult<Unit> = client.create(newRoom)
         assertTrue(response is APIResult.Success<*>)
         response as APIResult.Success
@@ -54,7 +54,7 @@ class RoomsAPITest {
 
     @Test
     fun shouldUpdateExistingRoom() = runBlocking {
-        val updatedRoom = RoomInbound(id = 1, name = "TEST", roomCount = 3)
+        val updatedRoom = RoomInbound(id = 1, name = "TEST", maxPersons = 3)
         val response: APIResult<Unit> = client.update(1, updatedRoom)
         assertTrue(response is APIResult.Success<*>)
 

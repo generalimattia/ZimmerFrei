@@ -7,11 +7,11 @@ import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.custom.TimePlan
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 
-class AllRoomsAdapter(
+class ReservationsAdapter(
         private val roomDays: List<Pair<Room, List<RoomDay>>>,
         private val syncScroller: SyncScroller,
         private val onDayClick: (RoomDay) -> Unit
-) : RecyclerView.Adapter<AllRoomsAdapter.AllRoomsViewHolder>() {
+) : RecyclerView.Adapter<ReservationsAdapter.ReservationsViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -19,10 +19,10 @@ class AllRoomsAdapter(
 
     override fun onCreateViewHolder(
             parent: ViewGroup, viewType: Int
-    ): AllRoomsViewHolder =
-            AllRoomsViewHolder(TimePlan(parent.context))
+    ): ReservationsViewHolder =
+            ReservationsViewHolder(TimePlan(parent.context))
 
-    override fun onBindViewHolder(holder: AllRoomsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ReservationsViewHolder, position: Int) {
         holder.bind(
                 roomDays,
                 syncScroller,
@@ -34,7 +34,7 @@ class AllRoomsAdapter(
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    class AllRoomsViewHolder(
+    class ReservationsViewHolder(
             private val view: TimePlan
     ) : RecyclerView.ViewHolder(view) {
 

@@ -27,15 +27,16 @@
                 android:layout_height="@dimen/material_sixth"
                 android:background="@color/primary"
                 android:elevation="4dp"
-                app:layout_constraintBottom_toTopOf="@id/days_list_view"
+                app:layout_constraintBottom_toTopOf="@id/days_recycler_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <ImageView
                 android:id="@+id/previous_month"
-                android:layout_width="@dimen/material_sixth"
-                android:layout_height="@dimen/material_sixth"
+                android:layout_width="@dimen/material_quad"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
                 android:elevation="4dp"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
@@ -60,56 +61,70 @@
 
         <ImageView
                 android:id="@+id/next_month"
-                android:layout_width="@dimen/material_sixth"
-                android:layout_height="@dimen/material_sixth"
+                android:layout_width="@dimen/material_quad"
+                android:layout_height="0dp"
+                android:layout_marginEnd="5dp"
                 android:elevation="4dp"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                app:layout_constraintBottom_toTopOf="@id/days_list_view"
+                app:layout_constraintBottom_toTopOf="@id/days_recycler_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <com.generals.zimmerfrei.overview.view.custom.DaysListView
-                android:id="@+id/days_list_view"
-                android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/days_recycler_view"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
                 android:elevation="4dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/month_and_year" />
+                app:layout_constraintTop_toBottomOf="@id/month_and_year"
+                tools:listitem="@layout/widget_day" />
 
         <ProgressBar
                 android:id="@+id/progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="0dp"
                 android:layout_height="3dp"
-                android:progress="50"
                 android:progressBackgroundTint="@android:color/white"
                 android:progressTint="@color/accent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/days_list_view" />
+                app:layout_constraintTop_toBottomOf="@id/days_recycler_view" />
 
-        <com.generals.zimmerfrei.overview.view.custom.RoomsListView
-                android:id="@+id/rooms_list_view"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rooms_recycler_view"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:elevation="2dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
                 android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/plan"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/days_list_view" />
+                app:layout_constraintTop_toBottomOf="@id/days_recycler_view"
+                tools:listitem="@layout/widget_empty_day" />
 
-        <com.generals.zimmerfrei.overview.view.custom.AllRoomsPlan
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plan"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
                 android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/rooms_list_view"
-                app:layout_constraintTop_toBottomOf="@id/days_list_view" />
+                app:layout_constraintStart_toEndOf="@id/rooms_recycler_view"
+                app:layout_constraintTop_toBottomOf="@id/days_recycler_view"
+                tools:listitem="@layout/widget_empty_day" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

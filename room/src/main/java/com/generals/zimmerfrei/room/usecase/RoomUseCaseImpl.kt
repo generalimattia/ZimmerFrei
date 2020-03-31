@@ -66,5 +66,5 @@ class RoomUseCaseImpl @Inject constructor(
 fun Room.toInbound(): RoomInbound = RoomInbound(
         id = id.toInt(),
         name = name,
-        roomCount = 0
+        maxPersons = 0
 )

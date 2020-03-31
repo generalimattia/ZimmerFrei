@@ -60,6 +60,7 @@ data class Reservation(
         val name: String = "",
         val startDate: LocalDate = LocalDate.now(),
         val endDate: LocalDate = LocalDate.now(),
+        val persons: Int = 0,
         val adults: Int = 0,
         val children: Int = 0,
         val babies: Int = 0,
@@ -69,6 +70,21 @@ data class Reservation(
         val mobile: String = "",
         val email: String = ""
 ) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+            parcel.readLong(),
+            parcel.readString().orEmpty(),
+            parcel.readSerializable() as LocalDate,
+            parcel.readSerializable() as LocalDate,
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.readString().orEmpty(),
+            parcel.readParcelable(Room::class.java.classLoader) ?: Room(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty())
 
     constructor(
             reservation: ReservationEntity, room: RoomEntity
@@ -111,12 +127,13 @@ data class Reservation(
             name = reservation.name,
             startDate = reservation.startDate,
             endDate = reservation.endDate,
-            adults = reservation.numberOfParticipants,
-            children = 0,
-            babies = 0,
-            color = "",
+            persons = reservation.persons,
+            adults = reservation.adults,
+            children = reservation.children,
+            babies = reservation.babies,
+            color = reservation.color,
             room = room,
-            notes = "",
+            notes = reservation.notes,
             mobile = reservation.customer.mobile,
             email = reservation.customer.email
     )
@@ -136,47 +153,26 @@ data class Reservation(
             mobile = mobile
     )
 
-    constructor(source: Parcel) : this(
-            source.readLong(),
-            source.readString().orEmpty(),
-            source.readSerializable() as LocalDate,
-            source.readSerializable() as LocalDate,
-            source.readInt(),
-            source.readInt(),
-            source.readInt(),
-            source.readString().orEmpty(),
-            source.readParcelable<Room>(Room::class.java.classLoader) ?: Room(),
-            source.readString().orEmpty(),
-            source.readString().orEmpty(),
-            source.readString().orEmpty()
-    )
-
-    override fun describeContents() = 0
-
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeLong(id)
-        writeString(name)
-        writeSerializable(startDate)
-        writeSerializable(endDate)
-        writeInt(adults)
-        writeInt(children)
-        writeInt(babies)
-        writeString(color)
-        writeParcelable(
-                room,
-                0
-        )
-        writeString(notes)
-        writeString(mobile)
-        writeString(email)
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(name)
+        parcel.writeInt(persons)
+        parcel.writeInt(adults)
+        parcel.writeInt(children)
+        parcel.writeInt(babies)
+        parcel.writeString(color)
+        parcel.writeParcelable(room, flags)
+        parcel.writeString(notes)
+        parcel.writeString(mobile)
+        parcel.writeString(email)
     }
 
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<Reservation> = object : Parcelable.Creator<Reservation> {
-            override fun createFromParcel(source: Parcel): Reservation = Reservation(source)
-            override fun newArray(size: Int): Array<Reservation?> = arrayOfNulls(size)
-        }
+    override fun describeContents(): Int = 0
+
+    companion object CREATOR : Parcelable.Creator<Reservation> {
+        override fun createFromParcel(parcel: Parcel): Reservation = Reservation(parcel)
+
+        override fun newArray(size: Int): Array<Reservation?> = arrayOfNulls(size)
     }
 }
 
@@ -203,7 +199,7 @@ data class Room(
     constructor(inbound: RoomInbound) : this(
             id = inbound.id.toLong(),
             name = inbound.name,
-            personsCount = inbound.roomCount,
+            personsCount = inbound.maxPersons,
             isDouble = false,
             isSingle = false,
             isHandicap = false,

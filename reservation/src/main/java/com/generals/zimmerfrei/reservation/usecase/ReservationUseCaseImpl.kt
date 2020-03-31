@@ -10,6 +10,14 @@ import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import javax.inject.Inject
 
+interface ReservationUseCase {
+    fun save(reservation: Reservation): Single<Unit>
+    fun getAllRooms(): Maybe<List<Room>>
+    fun getRoomByListPosition(position: Int): Maybe<Room>
+    fun update(reservation: Reservation): Single<Unit>
+    fun delete(reservation: Reservation): Single<Unit>
+}
+
 class ReservationUseCaseImpl @Inject constructor(
         private val reservationDao: ReservationDAO,
         private val roomRepository: RoomRepository

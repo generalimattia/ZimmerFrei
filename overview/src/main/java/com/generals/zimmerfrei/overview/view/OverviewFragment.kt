@@ -1,15 +1,17 @@
 package com.generals.zimmerfrei.overview.view
 
+import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +19,9 @@ import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.R
+import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter
+import com.generals.zimmerfrei.overview.view.adapter.ReservationsAdapter
+import com.generals.zimmerfrei.overview.view.adapter.RoomsAdapter
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -58,11 +63,11 @@ class OverviewFragment : Fragment() {
 
         setUpToolbar()
 
-        SyncScroller().bindFirst(days_list_view.recyclerView)
-                .bindSecond(plan.recyclerView)
+        SyncScroller().bindFirst(days_recycler_view)
+                .bindSecond(plan)
                 .sync()
 
-        val syncScroller = SyncScroller().bindFirst(rooms_list_view.recyclerView)
+        val syncScroller = SyncScroller().bindFirst(rooms_recycler_view)
 
         viewModel.selectedDate.observe(viewLifecycleOwner,
                 Observer { date: LocalDate? ->
@@ -93,14 +98,14 @@ class OverviewFragment : Fragment() {
         viewModel.days.observe(viewLifecycleOwner,
                 Observer { days: List<Day>? ->
                     days?.let {
-                        days_list_view.bind(it)
+                        days_recycler_view.adapter = DaysAdapter(it)
                     }
                 })
 
         viewModel.rooms.observe(viewLifecycleOwner,
                 Observer { rooms: List<Room>? ->
                     rooms?.let {
-                        rooms_list_view.bind(it)
+                        rooms_recycler_view.adapter = RoomsAdapter(it)
                     }
                 })
 
@@ -109,19 +114,24 @@ class OverviewFragment : Fragment() {
                 Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
 
                     roomDays?.let {
-                        plan.bind(it, syncScroller) { day: RoomDay ->
+                        plan.adapter = ReservationsAdapter(
+                                roomDays,
+                                syncScroller
+                        ) { day: RoomDay ->
                             activity?.let {
                                 viewModel.onDayClick(day, it)
                             }
                         }
 
-                        progress.setProgress(100, true)
-
-                        Handler().postDelayed({
-                            rooms_list_view.visibility = View.VISIBLE
-                            plan.visibility = View.VISIBLE
-                            progress.visibility = View.GONE
-                        }, 100)
+                        ObjectAnimator.ofInt(progress, "progress", progress.progress, progress.max).apply {
+                            duration = 1000
+                            interpolator = AccelerateDecelerateInterpolator()
+                            addListener(onEnd = {
+                                rooms_recycler_view.visibility = View.VISIBLE
+                                plan.visibility = View.VISIBLE
+                                progress.visibility = View.GONE
+                            })
+                        }.start()
                     }
                 })
 
@@ -153,6 +163,11 @@ class OverviewFragment : Fragment() {
         if (savedInstanceState == null) {
             viewModel.start()
         }
+
+        ObjectAnimator.ofInt(progress, "progress", 0, 80).apply {
+            duration = 2000
+            interpolator = AccelerateDecelerateInterpolator()
+        }.start()
     }
 
     private fun setUpToolbar() {

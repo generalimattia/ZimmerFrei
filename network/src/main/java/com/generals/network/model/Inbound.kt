@@ -18,7 +18,7 @@ data class RoomListInbound(
 data class RoomInbound(
         val id: Int = 0,
         val name: String,
-        val roomCount: Int,
+        val maxPersons: Int,
         @Json(name = "_links") val link: Link? = null
 )
 
@@ -29,10 +29,15 @@ data class ReservationListInbound(
 data class ReservationInbound(
         val id: Int = 0,
         val name: String,
-        val numberOfParticipants: Int,
+        val persons: Int,
         val startDate: LocalDate,
         val endDate: LocalDate,
         val customer: CustomerInbound,
+        val adults: Int,
+        val children: Int,
+        val babies: Int,
+        val notes: String,
+        val color: String,
         @Json(name = "_links") val link: Link? = null
 )
 

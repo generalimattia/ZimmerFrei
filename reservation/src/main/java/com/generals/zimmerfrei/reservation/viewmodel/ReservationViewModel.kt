@@ -12,7 +12,6 @@ import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
-import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

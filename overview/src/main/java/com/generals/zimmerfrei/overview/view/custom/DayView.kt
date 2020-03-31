@@ -1,10 +1,13 @@
 package com.generals.zimmerfrei.overview.view.custom
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.generals.zimmerfrei.common.extension.isWeekend
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.overview.R
 
@@ -21,8 +24,8 @@ class DayView : FrameLayout {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context,
-                                                                              attrs,
-                                                                              defStyle) {
+            attrs,
+            defStyle) {
         init(attrs, defStyle)
     }
 
@@ -34,5 +37,12 @@ class DayView : FrameLayout {
 
     fun bind(day: Day) {
         this.day.text = day.title
+
+        val textColor: Int = if (day.date.isWeekend()) {
+            ContextCompat.getColor(context, R.color.amber)
+        } else {
+            Color.WHITE
+        }
+        this.day.setTextColor(textColor)
     }
 }

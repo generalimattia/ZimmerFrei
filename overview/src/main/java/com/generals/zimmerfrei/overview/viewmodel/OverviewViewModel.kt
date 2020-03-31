@@ -58,7 +58,6 @@ class OverviewViewModel @Inject constructor(
         updateOverviewEmitter.subscribe(this)
 
         _selectedDate.value = date
-        _reservations.value = mutableListOf()
 
         loadRooms()
 

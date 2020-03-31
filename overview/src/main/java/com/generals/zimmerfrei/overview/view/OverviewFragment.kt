@@ -3,6 +3,7 @@ package com.generals.zimmerfrei.overview.view
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -106,13 +107,21 @@ class OverviewFragment : Fragment() {
         viewModel.reservations.observe(
                 viewLifecycleOwner,
                 Observer { roomDays: List<Pair<Room, List<RoomDay>>>? ->
-                    roomDays?.let {
 
+                    roomDays?.let {
                         plan.bind(it, syncScroller) { day: RoomDay ->
                             activity?.let {
                                 viewModel.onDayClick(day, it)
                             }
                         }
+
+                        progress.setProgress(100, true)
+
+                        Handler().postDelayed({
+                            rooms_list_view.visibility = View.VISIBLE
+                            plan.visibility = View.VISIBLE
+                            progress.visibility = View.GONE
+                        }, 100)
                     }
                 })
 

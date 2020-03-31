@@ -3,21 +3,18 @@ package com.generals.zimmerfrei.room.detail.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 import com.generals.zimmerfrei.room.usecase.RoomUseCase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailViewModel @Inject constructor(
         private val useCase: RoomUseCase,
         private val stringProvider: StringResourcesProvider
 ) : ViewModel() {
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val _room: MutableLiveData<Room> = MutableLiveData()
     private val _pressBack: MutableLiveData<Boolean> = MutableLiveData()
@@ -72,37 +69,48 @@ class RoomDetailViewModel @Inject constructor(
         }
     }
 
-    private fun saveNewRoom(name: String, persons: Int, isDouble: Boolean, isSingle: Boolean, isHandicap: Boolean, hasBalcony: Boolean): Boolean {
-        return compositeDisposable.add(
-                useCase.save(
-                        Room(
-                                name = name,
-                                personsCount = persons,
-                                isDouble = isDouble,
-                                isSingle = isSingle,
-                                isHandicap = isHandicap,
-                                hasBalcony = hasBalcony
-                        )
-                ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe()
-        )
+    private fun saveNewRoom(
+            name: String,
+            persons: Int,
+            isDouble: Boolean,
+            isSingle: Boolean,
+            isHandicap: Boolean,
+            hasBalcony: Boolean
+    ) {
+        viewModelScope.launch {
+            useCase.save(
+                    Room(
+                            name = name,
+                            personsCount = persons,
+                            isDouble = isDouble,
+                            isSingle = isSingle,
+                            isHandicap = isHandicap,
+                            hasBalcony = hasBalcony
+                    )
+            )
+        }
     }
 
-    private fun updateExistingRoom(it: Room, name: String, persons: Int, isDouble: Boolean, isSingle: Boolean, isHandicap: Boolean, hasBalcony: Boolean): Boolean {
-        return compositeDisposable.add(
-                useCase.update(
-                        it.copy(
-                                name = name,
-                                personsCount = persons,
-                                isDouble = isDouble,
-                                isSingle = isSingle,
-                                isHandicap = isHandicap,
-                                hasBalcony = hasBalcony
-                        )
-                ).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe()
-        )
-    }
-
-    override fun onCleared() {
-        compositeDisposable.dispose()
+    private fun updateExistingRoom(
+            updated: Room,
+            name: String,
+            persons: Int,
+            isDouble: Boolean,
+            isSingle: Boolean,
+            isHandicap: Boolean,
+            hasBalcony: Boolean
+    ) {
+        viewModelScope.launch {
+            useCase.update(
+                    updated.copy(
+                            name = name,
+                            personsCount = persons,
+                            isDouble = isDouble,
+                            isSingle = isSingle,
+                            isHandicap = isHandicap,
+                            hasBalcony = hasBalcony
+                    )
+            )
+        }
     }
 }

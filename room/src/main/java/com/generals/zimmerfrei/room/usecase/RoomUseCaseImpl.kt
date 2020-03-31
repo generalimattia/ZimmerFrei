@@ -1,19 +1,70 @@
 package com.generals.zimmerfrei.room.usecase
 
-import com.generals.roomrepository.RoomRepository
+import arrow.core.Option
+import com.generals.network.api.RoomsAPI
+import com.generals.network.model.Inbound
+import com.generals.network.model.RoomInbound
+import com.generals.network.model.RoomListInbound
 import com.generals.zimmerfrei.model.Room
-import io.reactivex.Maybe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
+interface RoomUseCase {
+    suspend fun save(room: Room)
+    suspend fun update(room: Room)
+    suspend fun delete(room: Room)
+    suspend fun getAllRooms(): List<Room>
+}
+
 class RoomUseCaseImpl @Inject constructor(
-        private val repository: RoomRepository
+        private val api: RoomsAPI
 ) : RoomUseCase {
 
-    override fun save(room: Room): Maybe<Unit> = repository.save(room)
+    override suspend fun save(room: Room) = withContext(Dispatchers.IO) {
+        api.create(room.toInbound()).fold(
+                ifSuccess = {},
+                ifFailure = {},
+                ifError = { Timber.e(it) }
+        )
+    }
 
-    override fun update(room: Room): Maybe<Unit> = repository.update(room)
+    override suspend fun update(room: Room) = withContext(Dispatchers.IO) {
+        api.update(room.id.toInt(), room.toInbound()).fold(
+                ifSuccess = {},
+                ifFailure = {},
+                ifError = { Timber.e(it) }
+        )
+    }
 
-    override fun delete(room: Room): Maybe<Unit> = repository.delete(room)
+    override suspend fun delete(room: Room) = withContext(Dispatchers.IO) {
+        api.delete(room.id.toInt()).fold(
+                ifSuccess = {},
+                ifFailure = {},
+                ifError = { Timber.e(it) }
+        )
+    }
 
-    override fun getAllRooms(): Maybe<List<Room>> = repository.getAllRooms()
+    override suspend fun getAllRooms(): List<Room> = withContext(Dispatchers.IO) {
+        api.fetchAll().fold(
+                ifSuccess = { result: Option<Inbound<RoomListInbound>> ->
+                    result.fold(
+                            ifSome = { inbound: Inbound<RoomListInbound> -> inbound.embedded.rooms.map(::Room) },
+                            ifEmpty = { emptyList() }
+                    )
+                },
+                ifFailure = { emptyList() },
+                ifError = {
+                    Timber.e(it)
+                    emptyList()
+                }
+        )
+    }
 }
+
+fun Room.toInbound(): RoomInbound = RoomInbound(
+        id = id.toInt(),
+        name = name,
+        roomCount = 0
+)

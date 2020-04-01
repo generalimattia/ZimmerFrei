@@ -4,6 +4,8 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import arrow.core.Option
 import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.model.ParcelableDay
@@ -12,9 +14,9 @@ import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -252,11 +254,11 @@ class ReservationViewModel @Inject constructor(
                 0
             }
 
-            compositeDisposable.add(useCase.getRoomByListPosition(roomPosition)
-                    .subscribeOn(Schedulers.newThread())
-                    .subscribe { room: Room? ->
-                        room?.let {
-
+            viewModelScope.launch {
+                val room: Option<Room> = useCase.getRoomByListPosition(roomPosition)
+                room.fold(
+                        ifEmpty = {},
+                        ifSome = { notNullRoom: Room ->
                             reservation?.let {
                                 useCase.update(it.copy(
                                         name = name,
@@ -269,54 +271,39 @@ class ReservationViewModel @Inject constructor(
                                         notes = notes,
                                         mobile = mobile,
                                         email = email,
-                                        room = room
+                                        room = notNullRoom
                                 ))
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe({
-                                            updateOverviewEmitter.emit()
-                                            _pressBack.value = true
-                                        },
-                                                {
-                                                    _pressBack.value = true
-                                                })
+                            } ?: viewModelScope.launch {
+                                useCase.save(Reservation(
+                                        name = name,
+                                        startDate = LocalDate.of(startYear, startMonth, startDay),
+                                        endDate = LocalDate.of(endYear, endMonth, endDay),
+                                        adults = adultsNumber,
+                                        children = childrenNumber,
+                                        babies = babiesNumber,
+                                        color = _color.value
+                                                ?: availableColors.first(),
+                                        notes = notes,
+                                        mobile = mobile,
+                                        email = email,
+                                        room = notNullRoom
+                                ))
                             }
-                                    ?: useCase.save(
-                                            Reservation(
-                                                    name = name,
-                                                    startDate = LocalDate.of(startYear, startMonth, startDay),
-                                                    endDate = LocalDate.of(endYear, endMonth, endDay),
-                                                    adults = adultsNumber,
-                                                    children = childrenNumber,
-                                                    babies = babiesNumber,
-                                                    color = _color.value ?: availableColors.first(),
-                                                    notes = notes,
-                                                    mobile = mobile,
-                                                    email = email,
-                                                    room = room
-                                            )
-                                    )
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe({
-                                                updateOverviewEmitter.emit()
-                                                _pressBack.value = true
-                                            },
-                                                    {
-                                                        _pressBack.value = true
-                                                    })
 
+                            updateOverviewEmitter.emit()
+                            _pressBack.value = true
                         }
-                    })
+                )
+            }
         }
     }
 
     fun delete() {
-        reservation?.let {
-            useCase.delete(it)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { _: Unit ->
-                        _pressBack.value = true
-                    }
+        viewModelScope.launch {
+            reservation?.also {
+                useCase.delete(it)
+                _pressBack.value = true
+            }
         }
     }
 
@@ -352,20 +339,15 @@ class ReservationViewModel @Inject constructor(
     }
 
     private fun fetchRooms(preselected: Room? = null) {
-        compositeDisposable.addAll(
-                useCase.getAllRooms()
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { entities: List<Room>? ->
-                            entities?.let { rooms: List<Room> ->
-                                _rooms.value = rooms.map { entity: Room -> entity.name }
-                                preselected?.let {
-                                    if (rooms.contains(it)) {
-                                        _preselectedRoom.value = rooms.indexOf(it)
-                                    }
-                                }
-                            }
-                        })
+        viewModelScope.launch {
+            val allRooms: List<Room> = useCase.getAllRooms()
+            _rooms.value = allRooms.map { entity: Room -> entity.name }
+            preselected?.let {
+                if (allRooms.contains(it)) {
+                    _preselectedRoom.value = allRooms.indexOf(it)
+                }
+            }
+        }
     }
 
     fun onSendEmailClick(

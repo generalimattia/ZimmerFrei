@@ -1,70 +1,111 @@
 package com.generals.zimmerfrei.reservation.usecase
 
-import com.generals.roomrepository.RoomRepository
-import com.generals.zimmerfrei.database.dao.ReservationDAO
+import arrow.core.Option
+import com.generals.network.api.ReservationsAPI
+import com.generals.network.api.RoomsAPI
+import com.generals.network.model.CustomerInbound
+import com.generals.network.model.Inbound
+import com.generals.network.model.ReservationInbound
+import com.generals.network.model.RoomListInbound
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
-import io.reactivex.Maybe
-import io.reactivex.MaybeEmitter
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.threeten.bp.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 
 interface ReservationUseCase {
-    fun save(reservation: Reservation): Single<Unit>
-    fun getAllRooms(): Maybe<List<Room>>
-    fun getRoomByListPosition(position: Int): Maybe<Room>
-    fun update(reservation: Reservation): Single<Unit>
-    fun delete(reservation: Reservation): Single<Unit>
+    suspend fun save(reservation: Reservation)
+    suspend fun getAllRooms(): List<Room>
+    suspend fun getRoomByListPosition(position: Int): Option<Room>
+    suspend fun update(reservation: Reservation)
+    suspend fun delete(reservation: Reservation)
 }
 
 class ReservationUseCaseImpl @Inject constructor(
-        private val reservationDao: ReservationDAO,
-        private val roomRepository: RoomRepository
+        private val reservationsAPI: ReservationsAPI,
+        private val roomsAPI: RoomsAPI
 ) : ReservationUseCase {
 
-    override fun save(reservation: Reservation): Single<Unit> =
-            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
-                try {
-                    reservationDao.insert(reservation.toEntity())
-                    emitter.onSuccess(Unit)
-                } catch (e: Exception) {
-                    emitter.onError(e)
+    override suspend fun save(reservation: Reservation) = withContext(Dispatchers.IO) {
+        reservationsAPI.create(reservation.toInbound())
+                .fold(
+                        ifSuccess = {},
+                        ifFailure = {},
+                        ifError = {}
+                )
+    }
+
+    override suspend fun getAllRooms(): List<Room> = withContext(Dispatchers.IO) {
+        roomsAPI.fetchAll().fold(
+                ifSuccess = { result: Option<Inbound<RoomListInbound>> ->
+                    result.fold(
+                            ifSome = { inbound: Inbound<RoomListInbound> -> inbound.embedded.rooms.map(::Room) },
+                            ifEmpty = { emptyList() }
+                    )
+                },
+                ifFailure = { emptyList() },
+                ifError = {
+                    Timber.e(it)
+                    emptyList()
                 }
-            }
+        )
+    }
 
-    override fun getAllRooms(): Maybe<List<Room>> = roomRepository.getAllRooms()
+    override suspend fun getRoomByListPosition(position: Int): Option<Room> = withContext(Dispatchers.IO) {
+        roomsAPI.fetchAll().fold(
+                ifSuccess = { result: Option<Inbound<RoomListInbound>> ->
+                    result.fold(
+                            ifSome = { inbound: Inbound<RoomListInbound> ->
+                                val room: Room? = inbound.embedded.rooms.getOrNull(position)?.let(::Room)
+                                Option.fromNullable(room)
+                            },
+                            ifEmpty = { Option.empty() }
+                    )
+                },
+                ifFailure = { Option.empty() },
+                ifError = { Option.empty() }
+        )
+    }
 
-    override fun getRoomByListPosition(position: Int): Maybe<Room> =
-            Maybe.create { emitter: MaybeEmitter<Room> ->
-                roomRepository.getAllRooms()
-                        .subscribe { rooms: List<Room> ->
-                            if (rooms.isEmpty() || rooms.size <= position) {
-                                emitter.onError(Throwable("No room available"))
-                            } else {
-                                emitter.onSuccess(rooms[position])
-                            }
-                            emitter.onComplete()
-                        }
-            }
+    override suspend fun update(reservation: Reservation) = withContext(Dispatchers.IO) {
+        reservationsAPI.update(reservation.id.toInt(), reservation.toInbound())
+                .fold(
+                        ifSuccess = {},
+                        ifFailure = {},
+                        ifError = {}
+                )
+    }
 
-    override fun update(reservation: Reservation): Single<Unit> =
-            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
-                try {
-                    reservationDao.update(reservation.toEntity())
-                    emitter.onSuccess(Unit)
-                } catch (e: Exception) {
-                    emitter.onError(e)
-                }
-            }
-
-    override fun delete(reservation: Reservation): Single<Unit> =
-            Single.create<Unit> { emitter: SingleEmitter<Unit> ->
-                try {
-                    reservationDao.delete(reservation.toEntity())
-                    emitter.onSuccess(Unit)
-                } catch (e: Exception) {
-                    emitter.onError(e)
-                }
-            }
+    override suspend fun delete(reservation: Reservation) = withContext(Dispatchers.IO) {
+        reservationsAPI.delete(reservation.id.toInt())
+                .fold(
+                        ifSuccess = {},
+                        ifFailure = {},
+                        ifError = {}
+                )
+    }
 }
+
+fun Reservation.toInbound(): ReservationInbound = ReservationInbound(
+        id = id.toInt(),
+        name = name,
+        persons = persons,
+        startDate = startDate,
+        endDate = endDate,
+        adults = adults,
+        children = children,
+        babies = babies,
+        notes = notes,
+        color = color,
+        customer = CustomerInbound(
+                firstName = name,
+                lastName = name,
+                socialId = "",
+                mobile = mobile,
+                email = email,
+                address = "",
+                birthDate = LocalDate.now()
+        )
+)

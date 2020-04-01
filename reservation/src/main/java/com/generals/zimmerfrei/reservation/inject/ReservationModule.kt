@@ -1,5 +1,6 @@
 package com.generals.zimmerfrei.reservation.inject
 
+import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
 import com.generals.zimmerfrei.reservation.usecase.ReservationUseCaseImpl
 import com.generals.zimmerfrei.reservation.view.ReservationActivity
 import com.generals.zimmerfrei.reservation.view.ReservationFragment

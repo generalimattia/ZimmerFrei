@@ -97,6 +97,7 @@ class OverviewUseCaseImpl @Inject constructor(
                                                     from.year,
                                                     to.monthValue,
                                                     day
+
                                             )
                                             buildRoomDayForDay(
                                                     reservations,

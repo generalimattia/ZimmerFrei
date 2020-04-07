@@ -2,6 +2,7 @@ package com.generals.zimmerfrei.inject
 
 import android.content.Context
 import com.generals.network.adapter.LocalDateAdapter
+import com.generals.network.api.CustomersAPI
 import com.generals.network.api.ReservationsAPI
 import com.generals.network.api.RoomsAPI
 import com.generals.network.model.APIResponseAdapterFactory
@@ -55,4 +56,8 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideReservationsAPI(retrofit: Retrofit): ReservationsAPI = retrofit.create(ReservationsAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCustomersAPI(retrofit: Retrofit): CustomersAPI = retrofit.create(CustomersAPI::class.java)
 }

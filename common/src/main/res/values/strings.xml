@@ -4,4 +4,17 @@
     <string name="submit">SALVA</string>
     <string name="delete">ELIMINA</string>
     <string name="mandatory_field">Campo obbligatorio</string>
+    <string name="first_name">Nome</string>
+    <string name="last_name">Cognome</string>
+    <string name="mobile">Mobile</string>
+    <string name="email">E-mail</string>
+    <string name="birth_date">Data di nascita</string>
+    <string name="social_id">Codice Fiscale</string>
+    <string name="address">Indirizzo</string>
+    <string name="city">Città</string>
+    <string name="province">Provincia</string>
+    <string name="state">Stato</string>
+    <string name="zip">CAP</string>
+    <string name="gender">Sesso</string>
+    <string name="birth_place">Luogo di nascita</string>
 </resources>

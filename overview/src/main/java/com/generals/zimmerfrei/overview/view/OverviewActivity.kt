@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.generals.zimmerfrei.overview.R
+import com.generals.zimmerfrei.overview.view.customer.list.CustomerListFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -24,7 +25,7 @@ class OverviewActivity : AppCompatActivity(), HasSupportFragmentInjector {
             supportFragmentManager.beginTransaction()
                     .replace(
                             R.id.fragment_container,
-                            OverviewFragment.newInstance()
+                            CustomerListFragment.newInstance()
                     )
                     .commitAllowingStateLoss()
         }

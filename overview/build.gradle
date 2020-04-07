@@ -72,5 +72,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
+    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
+
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 }

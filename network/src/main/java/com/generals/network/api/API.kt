@@ -46,3 +46,24 @@ interface ReservationsAPI {
             @Query("to") to: LocalDate
     ): APIResult<Inbound<ReservationListInbound>>
 }
+
+interface CustomersAPI {
+
+    @POST("customers")
+    suspend fun create(@Body customer: CustomerInbound): APIResult<Unit>
+
+    @PUT("customers/{id}")
+    suspend fun update(@Path("id") id: Int, @Body customer: CustomerInbound): APIResult<Unit>
+
+    @DELETE("customers/{id}")
+    suspend fun delete(@Path("id") id: Int): APIResult<Unit>
+
+    @GET("customers/{id}")
+    suspend fun fetchById(@Path("id") id: Int): APIResult<CustomerInbound>
+
+    @GET("customers")
+    suspend fun fetchAll(): APIResult<Inbound<CustomerListInbound>>
+
+    @GET
+    suspend fun get(@Url url: String): APIResult<CustomerInbound>
+}

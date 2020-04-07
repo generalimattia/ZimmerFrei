@@ -2,6 +2,7 @@ package com.generals.zimmerfrei.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.generals.network.model.CustomerInbound
 import com.generals.network.model.ReservationInbound
 import com.generals.network.model.RoomInbound
 import com.generals.zimmerfrei.database.entities.ReservationEntity
@@ -353,5 +354,57 @@ sealed class ParcelableRoomDay : Parcelable {
                 override fun newArray(size: Int): Array<Reserved?> = arrayOfNulls(size)
             }
         }
+    }
+}
+
+data class Customer(
+        val id: Int = 0,
+        val firstName: String,
+        val lastName: String,
+        val socialId: String,
+        val mobile: String,
+        val email: String,
+        val address: String,
+        val birthDate: LocalDate
+) : Parcelable {
+
+    constructor(inbound: CustomerInbound) : this(
+            id = inbound.id,
+            firstName = inbound.firstName,
+            lastName = inbound.lastName,
+            socialId = inbound.socialId,
+            mobile = inbound.mobile,
+            email = inbound.email,
+            address = inbound.address,
+            birthDate = inbound.birthDate
+    )
+
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readSerializable() as LocalDate
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(firstName)
+        parcel.writeString(lastName)
+        parcel.writeString(socialId)
+        parcel.writeString(mobile)
+        parcel.writeString(email)
+        parcel.writeString(address)
+    }
+
+    override fun describeContents(): Int = 0
+
+    companion object CREATOR : Parcelable.Creator<Customer> {
+        override fun createFromParcel(parcel: Parcel): Customer = Customer(parcel)
+
+        override fun newArray(size: Int): Array<Customer?> = arrayOfNulls(size)
     }
 }

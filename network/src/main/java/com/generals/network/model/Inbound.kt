@@ -41,6 +41,10 @@ data class ReservationInbound(
         @Json(name = "_links") val link: Link? = null
 )
 
+data class CustomerListInbound(
+        val customers: List<CustomerInbound>
+)
+
 data class CustomerInbound(
         val id: Int = 0,
         val firstName: String,

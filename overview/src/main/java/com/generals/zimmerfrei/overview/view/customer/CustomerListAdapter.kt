@@ -3,8 +3,12 @@ package com.generals.zimmerfrei.overview.view.customer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.generals.zimmerfrei.common.extension.toColor
+import com.generals.zimmerfrei.common.utils.buildDrawable
+import com.generals.zimmerfrei.common.utils.randomColor
 import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.overview.R
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
@@ -35,12 +39,16 @@ class CustomerListAdapter(
 }
 
 class CustomerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val firstLetter: TextView = view.findViewById(R.id.first_letter)
+    private val firstLetterBackground: ImageView = view.findViewById(R.id.first_letter_background)
     private val fullName: TextView = view.findViewById(R.id.name)
 
     fun bind(
             customer: Customer,
             onClick: (Customer) -> Unit
     ) {
+        firstLetterBackground.background = buildDrawable(itemView.context, randomColor().toColor(), R.drawable.shape_circular_solid)
+        firstLetter.text = customer.firstName.first().toString()
         fullName.text = "${customer.firstName} ${customer.lastName}"
         itemView.setOnClickListener { onClick(customer) }
     }

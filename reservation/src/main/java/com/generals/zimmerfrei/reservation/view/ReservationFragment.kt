@@ -16,10 +16,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.generals.zimmerfrei.common.extension.toColor
+import com.generals.zimmerfrei.common.utils.buildDrawable
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
+import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -31,6 +32,9 @@ class ReservationFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var navigator: Navigator
 
     private lateinit var viewModel: ReservationViewModel
 
@@ -44,11 +48,10 @@ class ReservationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
+        viewModel = ViewModelProvider(
                 this,
                 viewModelFactory
-        )
-                .get(ReservationViewModel::class.java)
+        ).get(ReservationViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -107,14 +110,14 @@ class ReservationFragment : Fragment() {
         viewModel.email.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
-                        email.setText(it, TextView.BufferType.NORMAL)
+                        //email.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
         viewModel.mobile.observe(viewLifecycleOwner,
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
-                        mobile.setText(it, TextView.BufferType.NORMAL)
+                        //mobile.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
@@ -141,8 +144,10 @@ class ReservationFragment : Fragment() {
 
         viewModel.color.observe(viewLifecycleOwner,
                 Observer { color: String? ->
-                    color?.let {
-                        color_view.setBackgroundColor(it.toColor())
+                    color?.let { seletected: String ->
+                        context?.let {
+                            color_view.background = buildDrawable(it, seletected.toColor(), R.drawable.shape_circular_filled)
+                        }
                     }
                 })
 
@@ -333,7 +338,7 @@ class ReservationFragment : Fragment() {
             viewModel.generateNewColor()
         }
 
-        action_email.setOnClickListener {
+        /*action_email.setOnClickListener {
             activity?.let {
                 viewModel.onSendEmailClick(email.text.toString(), it)
             }
@@ -343,10 +348,17 @@ class ReservationFragment : Fragment() {
             activity?.let {
                 viewModel.onDialMobileClick(mobile.text.toString(), it)
             }
-        }
+        }*/
 
-        submit.setOnClickListener {
-            submit()
+        add_contact.setOnClickListener {
+            activity?.also {
+                navigator.customerList()
+                        .start(
+                                it,
+                                R.id.fragment_container,
+                                true
+                        )
+            }
         }
     }
 
@@ -357,8 +369,8 @@ class ReservationFragment : Fragment() {
                 children = children_count.text.toString(),
                 babies = children_count.text.toString(),
                 notes = notes.text.toString(),
-                email = email.text.toString(),
-                mobile = mobile.text.toString(),
+                email = "",
+                mobile = "",
                 roomName = room.text.toString()
         )
     }

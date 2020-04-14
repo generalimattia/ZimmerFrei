@@ -1,8 +1,5 @@
 package com.generals.zimmerfrei.overview.viewmodel
 
-import android.app.Activity
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +8,6 @@ import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
-import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
@@ -21,7 +17,6 @@ import kotlin.reflect.KProperty
 
 class OverviewViewModel @Inject constructor(
         private val useCase: OverviewUseCase,
-        private val navigator: Navigator,
         private val updateOverviewEmitter: UpdateOverviewEmitter
 ) : ViewModel(), UpdateOverviewEmitter.Observer {
 
@@ -103,25 +98,6 @@ class OverviewViewModel @Inject constructor(
             _days.value = daysAndMonth.first
             _month.value = daysAndMonth.second
         }
-    }
-
-    fun onRoomsMenuItemClick(activity: AppCompatActivity, @IdRes containerViewId: Int) {
-        navigator.roomList(containerViewId)
-                .startNewFragment(
-                        activity = activity,
-                        containerViewId = containerViewId,
-                        addToBackStack = true
-                )
-    }
-
-    fun onFABClick(activity: Activity) {
-        navigator.reservation()
-                .startNewActivity(activity)
-    }
-
-    fun onDayClick(day: RoomDay, activity: Activity) {
-        navigator.reservation(day)
-                .startNewActivity(activity)
     }
 
     override fun onOverviewUpdated() {

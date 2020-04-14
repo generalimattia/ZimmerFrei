@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Option
 import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
+import com.generals.zimmerfrei.common.utils.randomColor
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Reservation
@@ -61,25 +62,6 @@ class ReservationViewModel @Inject constructor(
     private val _babiesCount = MutableLiveData<String>()
     private val _color = MutableLiveData<String>()
     private val _notes = MutableLiveData<String>()
-
-    private val availableColors: List<String> = listOf(
-            "#d50000",
-            "#c51162",
-            "#8e24aa",
-            "#6200ea",
-            "#283593",
-            "#2962ff",
-            "#0091ea",
-            "#00b8d4",
-            "#00695c",
-            "#4caf50",
-            "#8bc34a",
-            "#fbc02d",
-            "#ff6f00",
-            "#e65100",
-            "#4e342e",
-            "#546e7a"
-    )
 
     val pressBack: LiveData<Boolean>
         get() = _pressBack
@@ -195,8 +177,7 @@ class ReservationViewModel @Inject constructor(
     }
 
     fun generateNewColor() {
-        val colorsCount = availableColors.size
-        _color.value = availableColors[(0 until colorsCount).shuffled().first()]
+        _color.value = randomColor()
     }
 
     fun onRoomSelected(position: Int) {
@@ -267,7 +248,7 @@ class ReservationViewModel @Inject constructor(
                                         adults = adultsNumber,
                                         children = childrenNumber,
                                         babies = babiesNumber,
-                                        color = _color.value ?: availableColors.first(),
+                                        color = _color.value ?: randomColor(),
                                         notes = notes,
                                         mobile = mobile,
                                         email = email,
@@ -282,7 +263,7 @@ class ReservationViewModel @Inject constructor(
                                         children = childrenNumber,
                                         babies = babiesNumber,
                                         color = _color.value
-                                                ?: availableColors.first(),
+                                                ?: randomColor(),
                                         notes = notes,
                                         mobile = mobile,
                                         email = email,

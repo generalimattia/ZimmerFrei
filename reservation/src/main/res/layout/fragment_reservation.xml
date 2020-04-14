@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:focusableInTouchMode="true"
-              tools:context=".view.ReservationFragment">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:context=".view.ReservationFragment">
 
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -16,7 +16,7 @@
             android:elevation="@dimen/elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
             android:layout_width="match_parent"
@@ -31,9 +31,9 @@
                     android:id="@+id/room_input_layout"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="@string/room"/>
+                        android:hint="@string/room" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,30 +50,30 @@
                     android:id="@+id/room_spinner"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     android:background="@android:color/transparent"
                     android:visibility="invisible"
-                    tools:visibility="visible"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
+                    app:layout_constraintEnd_toStartOf="@id/end_date_input_layout"
                     app:layout_constraintStart_toStartOf="@id/room_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/room_input_layout"
-                    app:layout_constraintEnd_toStartOf="@id/end_date_input_layout">
+                    app:layout_constraintTop_toBottomOf="@id/room_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="@string/start_date"/>
+                        android:hint="@string/start_date" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,9 +81,9 @@
                     android:id="@+id/end_date_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
                     android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/start_date_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/room_input_layout">
@@ -93,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="@string/end_date"/>
+                        android:hint="@string/end_date" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,9 +101,9 @@
                     android:id="@+id/name_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/room_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/start_date_input_layout">
@@ -112,11 +112,11 @@
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name"/>
+                        android:hint="@string/name" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -175,23 +175,24 @@
                     app:layout_constraintBottom_toBottomOf="@id/mobile_input_layout"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintEnd_toEndOf="parent"/>
+                    -->
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/adult_count_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/material_double"
                     android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
                     app:layout_constraintEnd_toStartOf="@id/children_count_input_layout"
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
+                    app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/adult_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/adult_count"
-                        android:inputType="number"/>
+                        android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -199,19 +200,19 @@
                     android:id="@+id/children_count_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintEnd_toStartOf="@id/babies_count_input_layout"
                     app:layout_constraintStart_toEndOf="@id/adult_count_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
+                    app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/children_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/children_count"
-                        android:inputType="number"/>
+                        android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -220,17 +221,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
                     app:layout_constraintEnd_toEndOf="@id/name_input_layout"
                     app:layout_constraintStart_toEndOf="@id/children_count_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/mobile_input_layout">
+                    app:layout_constraintTop_toBottomOf="@id/name_input_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/babies_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/babies_count"
-                        android:inputType="number"/>
+                        android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -238,21 +239,21 @@
                     android:id="@+id/colors"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout"
-                    android:layout_marginTop="@dimen/material_quad"
                     android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_double"
                     android:layout_marginEnd="@dimen/material_double"
-                    tools:listitem="@layout/layout_color"/>
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout"
+                    tools:listitem="@layout/layout_color" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/color_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
                     android:background="@drawable/background_color_selectable"
                     android:elevation="2dp"
                     android:foreground="?attr/selectableItemBackground"
@@ -262,11 +263,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout">
 
-                <View
+                <ImageView
                         android:id="@+id/color_view"
                         android:layout_width="@dimen/material_quad"
                         android:layout_height="@dimen/material_quad"
-                        tools:background="@color/accent"/>
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:background="@color/accent" />
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -275,7 +279,7 @@
                         android:text="@string/change"
                         app:layout_constraintBottom_toBottomOf="@id/color_view"
                         app:layout_constraintStart_toEndOf="@id/color_view"
-                        app:layout_constraintTop_toTopOf="@id/color_view"/>
+                        app:layout_constraintTop_toTopOf="@id/color_view" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -283,9 +287,9 @@
                     android:id="@+id/notes_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
                     android:layout_marginStart="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/color_container">
@@ -294,22 +298,21 @@
                         android:id="@+id/notes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/notes"
-                        android:inputType="textEmailAddress"/>
+                        android:hint="@string/notes" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                    android:id="@+id/submit"
+                    android:id="@+id/add_contact"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="200dp"
                     android:layout_height="60dp"
-                    android:layout_marginBottom="@dimen/material_quad"
                     android:layout_marginTop="@dimen/material_quad"
-                    android:text="@string/submit"
+                    android:layout_marginBottom="@dimen/material_quad"
+                    android:text="@string/add_contact"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/notes_input_layout"/>
+                    app:layout_constraintTop_toBottomOf="@id/notes_input_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

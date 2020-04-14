@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.DatePicker
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.model.Day
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
+import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.adapter.DaysAdapter
 import com.generals.zimmerfrei.overview.view.adapter.ReservationsAdapter
@@ -33,6 +33,9 @@ class OverviewFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var navigator: Navigator
 
     private lateinit var viewModel: OverviewViewModel
 
@@ -119,7 +122,8 @@ class OverviewFragment : Fragment() {
                                 syncScroller
                         ) { day: RoomDay ->
                             activity?.let {
-                                viewModel.onDayClick(day, it)
+                                navigator.reservation(day)
+                                        .startNewActivity(it)
                             }
                         }
 
@@ -143,8 +147,9 @@ class OverviewFragment : Fragment() {
                 })
 
         add_fab.setOnClickListener {
-            activity?.let {
-                viewModel.onFABClick(it)
+            activity?.also {
+                navigator.reservation()
+                        .startNewActivity(it)
             }
         }
 
@@ -174,11 +179,13 @@ class OverviewFragment : Fragment() {
         toolbar.inflateMenu(R.menu.menu_overview)
         toolbar.menu.findItem(R.id.rooms)
                 .setOnMenuItemClickListener { _: MenuItem? ->
-                    activity?.let {
-                        viewModel.onRoomsMenuItemClick(
-                                it as AppCompatActivity,
-                                R.id.fragment_container
-                        )
+                    activity?.also {
+                        navigator.roomList(R.id.fragment_container)
+                                .start(
+                                        activity = it,
+                                        containerViewId = R.id.fragment_container,
+                                        addToBackStack = true
+                                )
                     }
                     true
                 }

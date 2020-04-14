@@ -25,7 +25,7 @@ class OverviewActivity : AppCompatActivity(), HasSupportFragmentInjector {
             supportFragmentManager.beginTransaction()
                     .replace(
                             R.id.fragment_container,
-                            CustomerListFragment.newInstance()
+                            OverviewFragment.newInstance()
                     )
                     .commitAllowingStateLoss()
         }

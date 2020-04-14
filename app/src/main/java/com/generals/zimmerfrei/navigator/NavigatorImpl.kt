@@ -7,6 +7,8 @@ import androidx.annotation.IdRes
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
+import com.generals.zimmerfrei.overview.view.customer.detail.CustomerDetailFragment
+import com.generals.zimmerfrei.overview.view.customer.list.CustomerListFragment
 import com.generals.zimmerfrei.reservation.view.RESERVATION
 import com.generals.zimmerfrei.reservation.view.ReservationActivity
 import com.generals.zimmerfrei.room.detail.view.RoomDetailFragment
@@ -39,10 +41,16 @@ data class NavigatorImpl @Inject constructor(
             )
 
     override fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest(RoomListFragment.newInstance(containerViewId))
+            NavigationRequest.FragmentRequest.Replace(RoomListFragment.newInstance(containerViewId))
 
     override fun roomDetail(room: Room?): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest(RoomDetailFragment.newInstance(room))
+            NavigationRequest.FragmentRequest.Replace(RoomDetailFragment.newInstance(room))
+
+    override fun customerList(): NavigationRequest.FragmentRequest =
+            NavigationRequest.FragmentRequest.Add(CustomerListFragment.newInstance())
+
+    override fun customerDetail(url: String?): NavigationRequest.FragmentRequest =
+            NavigationRequest.FragmentRequest.Add(CustomerDetailFragment.newInstance(url))
 
     override fun email(to: String): NavigationRequest.ActivityRequest =
             NavigationRequest.ActivityRequest(Intent(Intent.ACTION_SENDTO).apply {

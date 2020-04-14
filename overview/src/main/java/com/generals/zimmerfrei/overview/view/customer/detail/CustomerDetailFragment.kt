@@ -37,7 +37,7 @@ class CustomerDetailFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(url: String) =
+        fun newInstance(url: String?) =
                 CustomerDetailFragment().apply {
                     arguments = Bundle().apply {
                         putString(CUSTOMER_URL_ARG_KEY, url)

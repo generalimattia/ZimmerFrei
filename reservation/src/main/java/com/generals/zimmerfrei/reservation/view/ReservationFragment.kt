@@ -22,6 +22,7 @@ import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.view.adapters.ColorItem
 import com.generals.zimmerfrei.reservation.view.adapters.ColorsAdapter
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_reservation.*
 import java.util.*
@@ -103,20 +104,6 @@ class ReservationFragment : Fragment() {
                 Observer { nullableValue: String? ->
                     nullableValue?.let {
                         name.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.email.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        //email.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.mobile.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        //mobile.setText(it, TextView.BufferType.NORMAL)
                     }
                 })
 
@@ -231,6 +218,14 @@ class ReservationFragment : Fragment() {
                 Observer { isEditing: Boolean? ->
                     isEditing?.let {
                         toolbar.menu.findItem(R.id.delete).isVisible = it
+                    }
+                })
+
+        viewModel.result.observe(viewLifecycleOwner,
+                Observer { value: String? ->
+                    value?.also {
+                        Snackbar.make(root, it, Snackbar.LENGTH_LONG)
+                                .show()
                     }
                 })
 
@@ -366,10 +361,8 @@ class ReservationFragment : Fragment() {
                 name = name.text.toString(),
                 adults = adult_count.text.toString(),
                 children = children_count.text.toString(),
-                babies = children_count.text.toString(),
+                babies = babies_count.text.toString(),
                 notes = notes.text.toString(),
-                email = "",
-                mobile = "",
                 roomName = room.text.toString()
         )
     }

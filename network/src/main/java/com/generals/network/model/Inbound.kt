@@ -32,12 +32,13 @@ data class ReservationInbound(
         val persons: Int,
         val startDate: LocalDate,
         val endDate: LocalDate,
-        val customer: CustomerInbound,
+        val customer: CustomerInbound?,
         val adults: Int,
         val children: Int,
         val babies: Int,
         val notes: String,
         val color: String,
+        val room: RoomInbound? = null,
         @Json(name = "_links") val link: Link? = null
 )
 

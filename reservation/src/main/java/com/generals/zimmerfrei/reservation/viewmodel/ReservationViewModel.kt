@@ -56,13 +56,12 @@ class ReservationViewModel @Inject constructor(
     private val _startDate = MutableLiveData<ParcelableDay>()
     private val _endDate = MutableLiveData<ParcelableDay>()
     private val _name = MutableLiveData<String>()
-    private val _email = MutableLiveData<String>()
-    private val _mobile = MutableLiveData<String>()
     private val _adultsCount = MutableLiveData<String>()
     private val _childrenCount = MutableLiveData<String>()
     private val _babiesCount = MutableLiveData<String>()
     private val _selectedColor = MutableLiveData<ColorItem>()
     private val _notes = MutableLiveData<String>()
+    private val _result = MutableLiveData<String>()
 
     val pressBack: LiveData<Boolean>
         get() = _pressBack
@@ -100,12 +99,6 @@ class ReservationViewModel @Inject constructor(
     val name: LiveData<String>
         get() = _name
 
-    val email: LiveData<String>
-        get() = _email
-
-    val mobile: LiveData<String>
-        get() = _mobile
-
     val adultsCount: LiveData<String>
         get() = _adultsCount
 
@@ -120,6 +113,9 @@ class ReservationViewModel @Inject constructor(
 
     val notes: LiveData<String>
         get() = _notes
+
+    val result: LiveData<String>
+        get() = _result
 
     fun start(
             reservation: ParcelableRoomDay?
@@ -166,8 +162,6 @@ class ReservationViewModel @Inject constructor(
         onEndDateSelected(endDay)
 
         _name.value = it.reservation.name
-        _email.value = it.reservation.email
-        _mobile.value = it.reservation.mobile
         _adultsCount.value = it.reservation.adults.toString()
         _childrenCount.value = it.reservation.children.toString()
         _babiesCount.value = it.reservation.babies.toString()
@@ -203,12 +197,10 @@ class ReservationViewModel @Inject constructor(
             children: String,
             babies: String,
             roomName: String,
-            notes: String,
-            mobile: String,
-            email: String
+            notes: String
     ) {
 
-        val isValid = validate(roomName, name, startDay, endDay)
+        val isValid: Boolean = validate(roomName, name, startDay, endDay)
 
         if (isValid) {
 
@@ -235,38 +227,36 @@ class ReservationViewModel @Inject constructor(
                 room.fold(
                         ifEmpty = {},
                         ifSome = { notNullRoom: Room ->
-                            reservation?.let {
-                                useCase.update(it.copy(
-                                        name = name,
-                                        startDate = LocalDate.of(startYear, startMonth, startDay),
-                                        endDate = LocalDate.of(endYear, endMonth, endDay),
-                                        adults = adultsNumber,
-                                        children = childrenNumber,
-                                        babies = babiesNumber,
-                                        color = _selectedColor.value?.hex ?: randomColor(),
-                                        notes = notes,
-                                        mobile = mobile,
-                                        email = email,
-                                        room = notNullRoom
-                                ))
-                            } ?: viewModelScope.launch {
-                                useCase.save(Reservation(
-                                        name = name,
-                                        startDate = LocalDate.of(startYear, startMonth, startDay),
-                                        endDate = LocalDate.of(endYear, endMonth, endDay),
-                                        adults = adultsNumber,
-                                        children = childrenNumber,
-                                        babies = babiesNumber,
-                                        color = _selectedColor.value?.hex ?: randomColor(),
-                                        notes = notes,
-                                        mobile = mobile,
-                                        email = email,
-                                        room = notNullRoom
-                                ))
-                            }
+                            val message: String = reservation?.let { validReservation: Reservation ->
+                                useCase.update(
+                                        validReservation.copy(
+                                                name = name,
+                                                startDate = LocalDate.of(startYear, startMonth, startDay),
+                                                endDate = LocalDate.of(endYear, endMonth, endDay),
+                                                adults = adultsNumber,
+                                                children = childrenNumber,
+                                                babies = babiesNumber,
+                                                color = _selectedColor.value?.hex
+                                                        ?: randomColor(),
+                                                notes = notes,
+                                                room = notNullRoom
+                                        ))
+                            } ?: useCase.save(
+                                    Reservation(
+                                            name = name,
+                                            startDate = LocalDate.of(startYear, startMonth, startDay),
+                                            endDate = LocalDate.of(endYear, endMonth, endDay),
+                                            adults = adultsNumber,
+                                            children = childrenNumber,
+                                            babies = babiesNumber,
+                                            color = _selectedColor.value?.hex ?: randomColor(),
+                                            notes = notes,
+                                            room = notNullRoom
+                                    ))
+
+                            _result.value = message
 
                             updateOverviewEmitter.emit()
-                            _pressBack.value = true
                         }
                 )
             }

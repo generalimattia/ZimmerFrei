@@ -67,9 +67,7 @@ data class Reservation(
         val babies: Int = 0,
         val color: String = "#546e7a",
         val room: Room = Room(),
-        val notes: String = "",
-        val mobile: String = "",
-        val email: String = ""
+        val notes: String = ""
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -83,9 +81,8 @@ data class Reservation(
             parcel.readInt(),
             parcel.readString().orEmpty(),
             parcel.readParcelable(Room::class.java.classLoader) ?: Room(),
-            parcel.readString().orEmpty(),
-            parcel.readString().orEmpty(),
-            parcel.readString().orEmpty())
+            parcel.readString().orEmpty()
+    )
 
     constructor(
             reservation: ReservationEntity, room: RoomEntity
@@ -99,9 +96,7 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = Room(room),
-            notes = reservation.notes,
-            mobile = reservation.mobile,
-            email = reservation.email
+            notes = reservation.notes
     )
 
     constructor(
@@ -116,9 +111,7 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = room,
-            notes = reservation.notes,
-            mobile = reservation.mobile,
-            email = reservation.email
+            notes = reservation.notes
     )
 
     constructor(
@@ -134,9 +127,7 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = room,
-            notes = reservation.notes,
-            mobile = reservation.customer.mobile,
-            email = reservation.customer.email
+            notes = reservation.notes
     )
 
     fun toEntity(): ReservationEntity = ReservationEntity(
@@ -149,9 +140,7 @@ data class Reservation(
             babies = babies,
             color = color,
             roomId = room.id,
-            notes = notes,
-            email = email,
-            mobile = mobile
+            notes = notes
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -164,8 +153,6 @@ data class Reservation(
         parcel.writeString(color)
         parcel.writeParcelable(room, flags)
         parcel.writeString(notes)
-        parcel.writeString(mobile)
-        parcel.writeString(email)
     }
 
     override fun describeContents(): Int = 0

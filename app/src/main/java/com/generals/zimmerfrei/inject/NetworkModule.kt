@@ -1,6 +1,7 @@
 package com.generals.zimmerfrei.inject
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.generals.network.adapter.LocalDateAdapter
 import com.generals.network.api.CustomersAPI
 import com.generals.network.api.ReservationsAPI
@@ -33,6 +34,7 @@ class NetworkModule {
         val cacheSize: Long = 10 * 1024 * 1024
         return OkHttpClient.Builder()
                 .cache(Cache(context.cacheDir, cacheSize))
+                .addInterceptor(ChuckerInterceptor(context))
                 .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
                 .build()
     }

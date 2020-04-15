@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.overview.R
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_customer_detail.*
 import javax.inject.Inject
 
 class CustomerDetailFragment : Fragment() {
@@ -34,6 +35,20 @@ class CustomerDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_customer_detail, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpToolbar()
+    }
+
+    private fun setUpToolbar() {
+        toolbar.setTitle(R.string.create_customer)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+    }
 
     companion object {
         @JvmStatic

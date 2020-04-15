@@ -2,6 +2,8 @@ package com.generals.zimmerfrei.overview.view.customer.list
 
 import android.content.Context
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +48,8 @@ class CustomerListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpToolbar()
+
         if (savedInstanceState == null) {
             viewModel.customers.observe(viewLifecycleOwner, Observer { values: List<Customer> ->
                 customers.adapter = CustomerListAdapter(values, viewModel::onCustomerClick)
@@ -54,7 +58,10 @@ class CustomerListFragment : Fragment() {
 
         add_fab.setOnClickListener {
             activity?.also {
-                navigator.customerDetail()
+                navigator.customerDetail(
+                        enterTransition = Slide(Gravity.BOTTOM),
+                        exitTransition = Slide(Gravity.BOTTOM)
+                )
                         .start(
                                 it,
                                 R.id.fragment_container,
@@ -64,6 +71,14 @@ class CustomerListFragment : Fragment() {
         }
 
         viewModel.start()
+    }
+
+    private fun setUpToolbar() {
+        toolbar.setTitle(R.string.select_customer)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     companion object {

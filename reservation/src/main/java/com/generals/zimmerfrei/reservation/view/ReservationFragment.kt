@@ -5,10 +5,8 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.transition.Slide
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
@@ -16,12 +14,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.generals.zimmerfrei.common.extension.toColor
-import com.generals.zimmerfrei.common.utils.buildDrawable
+import com.generals.zimmerfrei.common.utils.availableColors
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
+import com.generals.zimmerfrei.reservation.view.adapters.ColorItem
+import com.generals.zimmerfrei.reservation.view.adapters.ColorsAdapter
 import com.generals.zimmerfrei.reservation.viewmodel.ReservationViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_reservation.*
@@ -142,12 +141,10 @@ class ReservationFragment : Fragment() {
                     }
                 })
 
-        viewModel.color.observe(viewLifecycleOwner,
-                Observer { color: String? ->
-                    color?.let { seletected: String ->
-                        context?.let {
-                            color_view.background = buildDrawable(it, seletected.toColor(), R.drawable.shape_circular_filled)
-                        }
+        viewModel.selectedColor.observe(viewLifecycleOwner,
+                Observer { colorItem: ColorItem? ->
+                    colorItem?.let { selected: ColorItem ->
+                        (colors.adapter as ColorsAdapter).update(selected)
                     }
                 })
 
@@ -245,6 +242,7 @@ class ReservationFragment : Fragment() {
     }
 
     private fun setUpToolbar() {
+        toolbar.setTitle(R.string.create_reservation)
         toolbar.inflateMenu(R.menu.menu_save_delete)
         toolbar.menu.findItem(R.id.save)
                 .setOnMenuItemClickListener { _: MenuItem? ->
@@ -263,7 +261,7 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    private fun buildDeleteReservationAlertDialog() =
+    private fun buildDeleteReservationAlertDialog(): AlertDialog =
             AlertDialog.Builder(context)
                     .apply {
                         setMessage(R.string.delete_reservation_dialog_message)
@@ -274,7 +272,7 @@ class ReservationFragment : Fragment() {
                         setNegativeButton(R.string.no) { dialog: DialogInterface?, _: Int ->
                             dialog?.dismiss()
                         }
-                    }.let { it.create() }
+                    }.create()
 
     private fun buildStartDatePickerDialog(startDate: ParcelableDay?): DatePickerDialog {
         val calendar: Calendar = Calendar.getInstance()
@@ -334,9 +332,7 @@ class ReservationFragment : Fragment() {
             endDatePickerDialog.show()
         }
 
-        color_container.setOnClickListener {
-            viewModel.generateNewColor()
-        }
+        colors.adapter = ColorsAdapter(availableColors.map { ColorItem(it, false) }, viewModel::onColorClick)
 
         /*action_email.setOnClickListener {
             activity?.let {
@@ -350,9 +346,12 @@ class ReservationFragment : Fragment() {
             }
         }*/
 
-        add_contact.setOnClickListener {
+        add_customer.setOnClickListener {
             activity?.also {
-                navigator.customerList()
+                navigator.customerList(
+                        enterTransition = Slide(Gravity.END),
+                        exitTransition = Slide(Gravity.END)
+                )
                         .start(
                                 it,
                                 R.id.fragment_container,

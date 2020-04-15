@@ -3,12 +3,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless">
 
     <ImageView
             android:id="@+id/selection"
-            android:layout_width="@dimen/material_seventh"
-            android:layout_height="@dimen/material_seventh"
+            android:layout_width="@dimen/material_sixth"
+            android:layout_height="@dimen/material_sixth"
             android:src="@drawable/shape_circular_stroke"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -17,12 +18,12 @@
 
     <ImageView
             android:id="@+id/color"
-            android:layout_width="@dimen/material_sixth"
-            android:layout_height="@dimen/material_sixth"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="@dimen/material_fifth"
+            android:layout_height="@dimen/material_fifth"
+            app:layout_constraintBottom_toBottomOf="@id/selection"
+            app:layout_constraintEnd_toEndOf="@id/selection"
+            app:layout_constraintStart_toStartOf="@id/selection"
+            app:layout_constraintTop_toTopOf="@id/selection"
             tools:src="@color/amber" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

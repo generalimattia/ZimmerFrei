@@ -16,6 +16,7 @@ import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
+import com.generals.zimmerfrei.reservation.view.adapters.ColorItem
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
@@ -60,7 +61,7 @@ class ReservationViewModel @Inject constructor(
     private val _adultsCount = MutableLiveData<String>()
     private val _childrenCount = MutableLiveData<String>()
     private val _babiesCount = MutableLiveData<String>()
-    private val _color = MutableLiveData<String>()
+    private val _selectedColor = MutableLiveData<ColorItem>()
     private val _notes = MutableLiveData<String>()
 
     val pressBack: LiveData<Boolean>
@@ -114,8 +115,8 @@ class ReservationViewModel @Inject constructor(
     val babiesCount: LiveData<String>
         get() = _babiesCount
 
-    val color: LiveData<String>
-        get() = _color
+    val selectedColor: LiveData<ColorItem>
+        get() = _selectedColor
 
     val notes: LiveData<String>
         get() = _notes
@@ -145,14 +146,12 @@ class ReservationViewModel @Inject constructor(
         fetchRooms()
         _startDate.value = null
         _endDate.value = null
-        generateNewColor()
     }
 
     private fun handleNewReservationFromDate(it: ParcelableRoomDay.Empty) {
         fetchRooms(it.room)
         onStartDateSelected(ParcelableDay(it.day.dayOfMonth, it.day.month, it.day.year))
         _endDate.value = null
-        generateNewColor()
     }
 
     private fun handleExistingReservation(it: ParcelableRoomDay.Reserved) {
@@ -172,12 +171,8 @@ class ReservationViewModel @Inject constructor(
         _adultsCount.value = it.reservation.adults.toString()
         _childrenCount.value = it.reservation.children.toString()
         _babiesCount.value = it.reservation.babies.toString()
-        _color.value = it.reservation.color
+        _selectedColor.value = ColorItem(hex = it.reservation.color, selected = true)
         _notes.value = it.reservation.notes
-    }
-
-    fun generateNewColor() {
-        _color.value = randomColor()
     }
 
     fun onRoomSelected(position: Int) {
@@ -248,7 +243,7 @@ class ReservationViewModel @Inject constructor(
                                         adults = adultsNumber,
                                         children = childrenNumber,
                                         babies = babiesNumber,
-                                        color = _color.value ?: randomColor(),
+                                        color = _selectedColor.value?.hex ?: randomColor(),
                                         notes = notes,
                                         mobile = mobile,
                                         email = email,
@@ -262,8 +257,7 @@ class ReservationViewModel @Inject constructor(
                                         adults = adultsNumber,
                                         children = childrenNumber,
                                         babies = babiesNumber,
-                                        color = _color.value
-                                                ?: randomColor(),
+                                        color = _selectedColor.value?.hex ?: randomColor(),
                                         notes = notes,
                                         mobile = mobile,
                                         email = email,
@@ -349,6 +343,11 @@ class ReservationViewModel @Inject constructor(
             navigator.dial(number)
                     .startNewActivity(activity)
         }
+    }
+
+    fun onColorClick(color: ColorItem) {
+        color.selected = !color.selected
+        _selectedColor.value = color
     }
 
     override fun onCleared() {

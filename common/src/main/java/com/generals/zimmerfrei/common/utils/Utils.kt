@@ -17,7 +17,7 @@ fun buildDrawable(
     return gradientDrawable
 }
 
-private val availableColors: List<String> = listOf(
+val availableColors: List<String> = listOf(
         "#d50000",
         "#c51162",
         "#8e24aa",

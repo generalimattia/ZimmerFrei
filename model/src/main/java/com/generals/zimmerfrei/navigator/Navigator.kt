@@ -2,6 +2,7 @@ package com.generals.zimmerfrei.navigator
 
 import android.app.Activity
 import android.content.Intent
+import android.transition.Transition
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,9 +21,16 @@ interface Navigator {
 
     fun roomDetail(room: Room? = null): NavigationRequest.FragmentRequest
 
-    fun customerList(): NavigationRequest.FragmentRequest
+    fun customerList(
+            enterTransition: Transition? = null,
+            exitTransition: Transition? = null
+    ): NavigationRequest.FragmentRequest
 
-    fun customerDetail(url: String? = null): NavigationRequest.FragmentRequest
+    fun customerDetail(
+            url: String? = null,
+            enterTransition: Transition? = null,
+            exitTransition: Transition? = null
+    ): NavigationRequest.FragmentRequest
 
     fun email(to: String): NavigationRequest.ActivityRequest
 
@@ -37,7 +45,11 @@ sealed class NavigationRequest {
 
     }
 
-    sealed class FragmentRequest(private val fragment: Fragment) : NavigationRequest() {
+    sealed class FragmentRequest(
+            private val fragment: Fragment,
+            private val enterTransition: Transition?,
+            private val exitTransition: Transition?
+    ) : NavigationRequest() {
 
         abstract fun start(
                 activity: AppCompatActivity,
@@ -51,13 +63,19 @@ sealed class NavigationRequest {
                 addToBackStack: Boolean = false
         )
 
-        data class Add(private val fragment: Fragment) : FragmentRequest(fragment) {
+        data class Add(
+                private val fragment: Fragment,
+                private val enterTransition: Transition? = null,
+                private val exitTransition: Transition? = null
+        ) : FragmentRequest(fragment, enterTransition, exitTransition) {
+
             override fun start(activity: AppCompatActivity, containerViewId: Int, addToBackStack: Boolean) {
                 val fragmentTransaction: FragmentTransaction = activity.supportFragmentManager.beginTransaction()
                         .add(
                                 containerViewId,
                                 fragment
                         )
+                fragment.setTransitions(enterTransition, exitTransition)
                 commitTransaction(addToBackStack, fragmentTransaction)
             }
 
@@ -67,17 +85,23 @@ sealed class NavigationRequest {
                                 containerViewId,
                                 fragment
                         )
+                fragment.setTransitions(enterTransition, exitTransition)
                 commitTransaction(addToBackStack, fragmentTransaction)
             }
         }
 
-        data class Replace(private val fragment: Fragment) : FragmentRequest(fragment) {
+        data class Replace(
+                private val fragment: Fragment,
+                private val enterTransition: Transition? = null,
+                private val exitTransition: Transition? = null
+        ) : FragmentRequest(fragment, enterTransition, exitTransition) {
             override fun start(activity: AppCompatActivity, containerViewId: Int, addToBackStack: Boolean) {
                 val fragmentTransaction: FragmentTransaction = activity.supportFragmentManager.beginTransaction()
                         .replace(
                                 containerViewId,
                                 fragment
                         )
+                fragment.setTransitions(enterTransition, exitTransition)
                 commitTransaction(addToBackStack, fragmentTransaction)
             }
 
@@ -87,13 +111,25 @@ sealed class NavigationRequest {
                                 containerViewId,
                                 fragment
                         )
+                fragment.setTransitions(enterTransition, exitTransition)
                 commitTransaction(addToBackStack, fragmentTransaction)
             }
         }
     }
 }
 
-private fun commitTransaction(addToBackStack: Boolean, fragmentTransaction: FragmentTransaction) {
+private fun Fragment.setTransitions(
+        enterTransition: Transition?,
+        exitTransition: Transition?
+) {
+    this.enterTransition = enterTransition
+    this.exitTransition = exitTransition
+}
+
+private fun commitTransaction(
+        addToBackStack: Boolean,
+        fragmentTransaction: FragmentTransaction
+) {
     if (addToBackStack) {
         fragmentTransaction.addToBackStack(null)
     }

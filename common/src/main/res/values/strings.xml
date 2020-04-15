@@ -17,5 +17,8 @@
     <string name="zip">CAP</string>
     <string name="gender">Sesso</string>
     <string name="birth_place">Luogo di nascita</string>
-    <string name="add_contact">Aggiungi un contatto</string>
+    <string name="add_contact">Associa un cliente</string>
+    <string name="create_reservation">Crea Prenotazione</string>
+    <string name="select_customer">Seleziona Cliente</string>
+    <string name="create_customer">Crea Cliente</string>
 </resources>

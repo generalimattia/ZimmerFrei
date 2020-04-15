@@ -3,6 +3,7 @@ package com.generals.zimmerfrei.navigator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.transition.Transition
 import androidx.annotation.IdRes
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Room
@@ -43,14 +44,22 @@ data class NavigatorImpl @Inject constructor(
     override fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest =
             NavigationRequest.FragmentRequest.Replace(RoomListFragment.newInstance(containerViewId))
 
-    override fun roomDetail(room: Room?): NavigationRequest.FragmentRequest =
+    override fun roomDetail(
+            room: Room?): NavigationRequest.FragmentRequest =
             NavigationRequest.FragmentRequest.Replace(RoomDetailFragment.newInstance(room))
 
-    override fun customerList(): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest.Add(CustomerListFragment.newInstance())
+    override fun customerList(
+            enterTransition: Transition?,
+            exitTransition: Transition?
+    ): NavigationRequest.FragmentRequest =
+            NavigationRequest.FragmentRequest.Add(CustomerListFragment.newInstance(), enterTransition, exitTransition)
 
-    override fun customerDetail(url: String?): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest.Add(CustomerDetailFragment.newInstance(url))
+    override fun customerDetail(
+            url: String?,
+            enterTransition: Transition?,
+            exitTransition: Transition?
+    ): NavigationRequest.FragmentRequest =
+            NavigationRequest.FragmentRequest.Add(CustomerDetailFragment.newInstance(url), enterTransition, exitTransition)
 
     override fun email(to: String): NavigationRequest.ActivityRequest =
             NavigationRequest.ActivityRequest(Intent(Intent.ACTION_SENDTO).apply {

@@ -54,6 +54,12 @@ data class CustomerInbound(
         val mobile: String,
         val email: String,
         val address: String,
+        val city: String,
+        val province: String,
+        val state: String,
+        val zip: String,
+        val gender: String,
         val birthDate: LocalDate,
+        val birthPlace: String,
         @Json(name = "_links") val link: Link? = null
 )

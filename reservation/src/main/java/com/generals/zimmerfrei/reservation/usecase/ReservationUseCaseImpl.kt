@@ -30,7 +30,7 @@ class ReservationUseCaseImpl @Inject constructor(
     override suspend fun save(reservation: Reservation): String = withContext(Dispatchers.IO) {
         reservationsAPI.create(reservation.toInbound())
                 .fold(
-                        ifSuccess = { "Prenotazione creata con successo!" },
+                        ifSuccess = { "Prenotazione creata!" },
                         ifFailure = { "Errore" },
                         ifError = { "Errore" }
                 )
@@ -71,7 +71,7 @@ class ReservationUseCaseImpl @Inject constructor(
     override suspend fun update(reservation: Reservation): String = withContext(Dispatchers.IO) {
         reservationsAPI.update(reservation.id.toInt(), reservation.toInbound())
                 .fold(
-                        ifSuccess = { "Prenotazione salvata con successo! " },
+                        ifSuccess = { "Prenotazione aggiornata! " },
                         ifFailure = { "" },
                         ifError = { "" }
                 )
@@ -80,7 +80,7 @@ class ReservationUseCaseImpl @Inject constructor(
     override suspend fun delete(reservation: Reservation): String = withContext(Dispatchers.IO) {
         reservationsAPI.delete(reservation.id.toInt())
                 .fold(
-                        ifSuccess = { "Prenotazione cancellata con successo!" },
+                        ifSuccess = { "Prenotazione cancellata!" },
                         ifFailure = { "Errore" },
                         ifError = { "Errore" }
                 )

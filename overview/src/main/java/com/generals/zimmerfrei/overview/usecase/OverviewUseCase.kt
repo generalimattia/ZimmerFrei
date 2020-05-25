@@ -40,8 +40,7 @@ class OverviewUseCaseImpl @Inject constructor(
                     val accumulator: LocalDate = date.withDayOfMonth(index)
 
                     Day(
-                            title = "${DateTimeFormatter.ofPattern(DAY_NAME_PATTERN)
-                                    .format(accumulator).toUpperCase()}",
+                            title = DateTimeFormatter.ofPattern(DAY_NAME_PATTERN).format(accumulator).toUpperCase(),
                             date = accumulator,
                             monthDays = monthLength
                     )
@@ -53,8 +52,8 @@ class OverviewUseCaseImpl @Inject constructor(
         roomsAPI.fetchAll().fold(
                 ifSuccess = { inbound: Option<Inbound<RoomListInbound>> ->
                     inbound.fold(
-                            ifEmpty = { emptyList<Room>() },
-                            ifSome = { it.embedded.rooms.map(::Room) }
+                            ifSome = { it.embedded.rooms.map(::Room) },
+                            ifEmpty = { emptyList() }
                     )
                 },
                 ifFailure = { emptyList() },
@@ -79,8 +78,6 @@ class OverviewUseCaseImpl @Inject constructor(
 
     private suspend fun loadReservationsByRoomAndPeriod(room: Room, date: LocalDate): Pair<Room, List<RoomDay>> =
             withContext(Dispatchers.IO) {
-                val defaultResult: Pair<Room, List<RoomDay>> = room to emptyList()
-
                 val from: LocalDate = date.withDayOfMonth(1)
                 val to: LocalDate = date.withDayOfMonth(date.lengthOfMonth())
                 reservationsAPI.fetchByRoomAndFromDateToDate(
@@ -92,62 +89,64 @@ class OverviewUseCaseImpl @Inject constructor(
                             inbound.fold(
                                     ifSome = { reservationsFromNetwork: Inbound<ReservationListInbound> ->
                                         val reservations: List<Reservation> = reservationsFromNetwork.embedded.reservations.map { Reservation(it, room) }
-                                        val roomDays: List<RoomDay> = (from.dayOfMonth..to.dayOfMonth).toList().map { day: Int ->
-                                            val currentDay: LocalDate = LocalDate.of(
-                                                    from.year,
-                                                    to.monthValue,
-                                                    day
-
-                                            )
-                                            buildRoomDayForDay(
-                                                    reservations,
-                                                    currentDay,
-                                                    room
-                                            )
-                                        }
-                                        room to roomDays
+                                        buildOverview(from, to, reservations, room)
                                     },
-                                    ifEmpty = { defaultResult }
+                                    ifEmpty = { buildOverview(from, to, emptyList(), room) }
                             )
                         },
-                        ifFailure = { defaultResult },
-                        ifError = { defaultResult }
+                        ifFailure = { buildOverview(from, to, emptyList(), room) },
+                        ifError = { buildOverview(from, to, emptyList(), room) }
                 )
             }
+
+    private fun buildOverview(from: LocalDate, to: LocalDate, reservations: List<Reservation>, room: Room): Pair<Room, List<RoomDay>> {
+        val roomDays: List<RoomDay> = (from.dayOfMonth..to.dayOfMonth).toList().map { day: Int ->
+            val currentDay: LocalDate = LocalDate.of(
+                    from.year,
+                    to.monthValue,
+                    day
+
+            )
+            buildRoomDayForDay(
+                    reservations,
+                    currentDay,
+                    room
+            )
+        }
+        return room to roomDays
+    }
 
     private fun buildRoomDayForDay(
             reservations: List<Reservation>,
             currentDay: LocalDate,
             room: Room
-    ): RoomDay {
+    ): RoomDay =
+            reservations.firstOrNull { reservation: Reservation ->
+                val startDate: ChronoLocalDate = ChronoLocalDate.from(reservation.startDate)
+                val endDate: ChronoLocalDate = ChronoLocalDate.from(reservation.endDate)
+                (currentDay.isAfter(startDate) && currentDay.isBefore(endDate)) ||
+                        currentDay.isEqual(startDate) || currentDay.isEqual(endDate)
+            }?.let { reservation: Reservation ->
+                val startDate: ChronoLocalDate = ChronoLocalDate.from(reservation.startDate)
+                val endDate: ChronoLocalDate = ChronoLocalDate.from(reservation.endDate)
 
-        return reservations.firstOrNull { reservation: Reservation ->
-            val startDate: ChronoLocalDate = ChronoLocalDate.from(reservation.startDate)
-            val endDate: ChronoLocalDate = ChronoLocalDate.from(reservation.endDate)
-            (currentDay.isAfter(startDate) && currentDay.isBefore(endDate)) ||
-                    currentDay.isEqual(startDate) || currentDay.isEqual(endDate)
-        }?.let { reservation: Reservation ->
-            val startDate: ChronoLocalDate = ChronoLocalDate.from(reservation.startDate)
-            val endDate: ChronoLocalDate = ChronoLocalDate.from(reservation.endDate)
-
-            when {
-                currentDay.isEqual(startDate) -> {
-                    RoomDay.StartingReservation(
+                when {
+                    currentDay.isEqual(startDate) -> {
+                        RoomDay.StartingReservation(
+                                Day(date = currentDay),
+                                reservation
+                        )
+                    }
+                    currentDay.isEqual(endDate) -> RoomDay.EndingReservation(
+                            Day(date = currentDay),
+                            reservation
+                    )
+                    else -> RoomDay.Reserved(
                             Day(date = currentDay),
                             reservation
                     )
                 }
-                currentDay.isEqual(endDate) -> RoomDay.EndingReservation(
-                        Day(date = currentDay),
-                        reservation
-                )
-                else -> RoomDay.Reserved(
-                        Day(date = currentDay),
-                        reservation
-                )
-            }
-        } ?: buildEmpty(currentDay, room)
-    }
+            } ?: buildEmpty(currentDay, room)
 
     private fun buildEmpty(date: LocalDate, room: Room): RoomDay =
             if (date.isWeekend()) {

@@ -14,6 +14,9 @@ import javax.inject.Inject
 interface CustomerUseCase {
     suspend fun getAll(): List<Customer>
     suspend fun get(url: String): Option<Customer>
+    suspend fun save(customer: Customer): String
+    suspend fun update(customer: Customer): String
+    suspend fun delete(customer: Customer): String
 }
 
 class CustomerUseCaseImpl @Inject constructor(
@@ -46,4 +49,55 @@ class CustomerUseCaseImpl @Inject constructor(
                 }
         )
     }
+
+    override suspend fun save(customer: Customer): String = withContext(Dispatchers.IO) {
+        api.create(customer.toInbound()).fold(
+                ifSuccess = { "Cliente creato!" },
+                ifFailure = { "Errore" },
+                ifError = {
+                    Timber.e(it)
+                    "Errore"
+                }
+        )
+    }
+
+    override suspend fun update(customer: Customer): String = withContext(Dispatchers.IO) {
+        api.update(customer.id, customer.toInbound()).fold(
+                ifSuccess = { "Cliente aggiornato!" },
+                ifFailure = { "Errore" },
+                ifError = {
+                    Timber.e(it)
+                    "Errore"
+                }
+        )
+    }
+
+    override suspend fun delete(customer: Customer): String = withContext(Dispatchers.IO) {
+        api.delete(customer.id).fold(
+                ifSuccess = { "Cliente rimosso!" },
+                ifFailure = { "Errore" },
+                ifError = {
+                    Timber.e(it)
+                    "Errore"
+                }
+        )
+    }
+
 }
+
+fun Customer.toInbound(): CustomerInbound =
+        CustomerInbound(
+                firstName = firstName,
+                lastName = lastName,
+                socialId = socialId,
+                mobile = mobile,
+                email = email,
+                address = address,
+                city = city,
+                province = province,
+                state = state,
+                gender = gender,
+                zip = zip,
+                birthDate = birthDate,
+                birthPlace = birthPlace
+        )

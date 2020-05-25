@@ -15,8 +15,11 @@ class CustomerListViewModel @Inject constructor(
 
     val customers: LiveData<List<Customer>>
         get() = _customers
-
     private val _customers: MutableLiveData<List<Customer>> = MutableLiveData()
+
+    val selected: LiveData<String?>
+        get() = _selected
+    private val _selected: MutableLiveData<String?> = MutableLiveData()
 
     fun start() {
         viewModelScope.launch {
@@ -25,5 +28,7 @@ class CustomerListViewModel @Inject constructor(
         }
     }
 
-    fun onCustomerClick(customer: Customer) {}
+    fun onCustomerClick(customer: Customer) {
+        _selected.value = customer.link
+    }
 }

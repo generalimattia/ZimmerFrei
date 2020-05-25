@@ -352,7 +352,14 @@ data class Customer(
         val mobile: String,
         val email: String,
         val address: String,
-        val birthDate: LocalDate
+        val city: String,
+        val province: String,
+        val state: String,
+        val zip: String,
+        val gender: String,
+        val birthDate: LocalDate,
+        val birthPlace: String,
+        val link: String? = null
 ) : Parcelable {
 
     constructor(inbound: CustomerInbound) : this(
@@ -363,7 +370,14 @@ data class Customer(
             mobile = inbound.mobile,
             email = inbound.email,
             address = inbound.address,
-            birthDate = inbound.birthDate
+            city = inbound.city,
+            province = inbound.province,
+            state = inbound.state,
+            zip = inbound.zip,
+            gender = inbound.gender,
+            birthDate = inbound.birthDate,
+            birthPlace = inbound.birthPlace,
+            link = inbound.link?.self?.href
     )
 
     constructor(parcel: Parcel) : this(
@@ -374,8 +388,14 @@ data class Customer(
             parcel.readString().orEmpty(),
             parcel.readString().orEmpty(),
             parcel.readString().orEmpty(),
-            parcel.readSerializable() as LocalDate
-    )
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readString().orEmpty(),
+            parcel.readSerializable() as LocalDate,
+            parcel.readString().orEmpty(),
+            parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
@@ -385,6 +405,13 @@ data class Customer(
         parcel.writeString(mobile)
         parcel.writeString(email)
         parcel.writeString(address)
+        parcel.writeString(city)
+        parcel.writeString(province)
+        parcel.writeString(state)
+        parcel.writeString(zip)
+        parcel.writeString(gender)
+        parcel.writeString(birthPlace)
+        parcel.writeString(link)
     }
 
     override fun describeContents(): Int = 0

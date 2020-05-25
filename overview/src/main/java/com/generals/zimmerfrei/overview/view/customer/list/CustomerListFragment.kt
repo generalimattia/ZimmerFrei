@@ -54,23 +54,31 @@ class CustomerListFragment : Fragment() {
             viewModel.customers.observe(viewLifecycleOwner, Observer { values: List<Customer> ->
                 customers.adapter = CustomerListAdapter(values, viewModel::onCustomerClick)
             })
+
+            viewModel.selected.observe(viewLifecycleOwner, Observer(this@CustomerListFragment::navigateToCustomerDetail))
         }
 
         add_fab.setOnClickListener {
             activity?.also {
-                navigator.customerDetail(
-                        enterTransition = Slide(Gravity.BOTTOM),
-                        exitTransition = Slide(Gravity.BOTTOM)
-                )
-                        .start(
-                                it,
-                                R.id.fragment_container,
-                                true
-                        )
+                navigateToCustomerDetail()
             }
         }
 
         viewModel.start()
+    }
+
+    private fun navigateToCustomerDetail(url: String? = null) {
+        activity?.also {
+            navigator.customerDetail(
+                    url = url,
+                    enterTransition = Slide(Gravity.BOTTOM),
+                    exitTransition = Slide(Gravity.BOTTOM)
+            ).start(
+                    it,
+                    R.id.fragment_container,
+                    true
+            )
+        }
     }
 
     private fun setUpToolbar() {

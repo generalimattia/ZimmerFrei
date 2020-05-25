@@ -37,3 +37,12 @@ val availableColors: List<String> = listOf(
 )
 
 fun randomColor(): String = availableColors[(availableColors.indices).shuffled().first()]
+
+fun formatDateForTextView(day: Int, month: Int, year: Int): String =
+        DATE_FORMAT.format(
+                day.toString(),
+                month.toString(),
+                year.toString()
+        )
+
+private const val DATE_FORMAT = "%s/%s/%s"

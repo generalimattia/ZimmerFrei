@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.common.utils.availableColors
+import com.generals.zimmerfrei.common.utils.formatDateForTextView
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.navigator.Navigator
@@ -70,170 +71,182 @@ class ReservationFragment : Fragment() {
 
         setUpToolbar()
 
-        viewModel.startDate.observe(viewLifecycleOwner,
-                Observer { nullableDate: ParcelableDay? ->
-                    startDatePickerDialog = buildStartDatePickerDialog(nullableDate)
-                    nullableDate?.let {
-                        start_date.setText(
-                                formatDateForTextView(
-                                        it.dayOfMonth,
-                                        it.month,
-                                        it.year
-                                ),
-                                TextView.BufferType.NORMAL
-                        )
-                    }
-                })
-
-        viewModel.endDate.observe(viewLifecycleOwner,
-                Observer { nullableDate: ParcelableDay? ->
-                    endDatePickerDialog = buildEndDatePickerDialog(nullableDate)
-                    nullableDate?.let {
-                        end_date.setText(
-                                formatDateForTextView(
-                                        it.dayOfMonth,
-                                        it.month,
-                                        it.year
-                                ),
-                                TextView.BufferType.NORMAL
-                        )
-                    }
-                })
-
-        viewModel.name.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        name.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.adultsCount.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        adult_count.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.childrenCount.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        children_count.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.babiesCount.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        babies_count.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.selectedColor.observe(viewLifecycleOwner,
-                Observer { colorItem: ColorItem? ->
-                    colorItem?.let { selected: ColorItem ->
-                        (colors.adapter as ColorsAdapter).update(selected)
-                    }
-                })
-
-        viewModel.notes.observe(viewLifecycleOwner,
-                Observer { nullableValue: String? ->
-                    nullableValue?.let {
-                        notes.setText(it, TextView.BufferType.NORMAL)
-                    }
-                })
-
-        viewModel.pressBack.observe(
-                viewLifecycleOwner,
-                Observer { shouldPressBack: Boolean? ->
-                    shouldPressBack?.let {
-                        if (it) {
-                            activity?.onBackPressed()
+        if (savedInstanceState == null) {
+            viewModel.startDate.observe(viewLifecycleOwner,
+                    Observer { nullableDate: ParcelableDay? ->
+                        startDatePickerDialog = buildDatePicker(nullableDate) {
+                            viewModel.onStartDateSelected(it)
+                            start_date.setText(
+                                    formatDateForTextView(it.dayOfMonth, it.month + 1, it.year),
+                                    TextView.BufferType.NORMAL
+                            )
                         }
-                    }
-                })
-
-        viewModel.roomError.observe(viewLifecycleOwner,
-                Observer { error: String? ->
-                    error?.let {
-                        room_input_layout.error = it
-                    }
-                })
-
-        viewModel.startDateError.observe(viewLifecycleOwner,
-                Observer { error: String? ->
-                    error?.let {
-                        start_date_input_layout.error = it
-                    }
-                })
-
-        viewModel.endDateError.observe(viewLifecycleOwner,
-                Observer { error: String? ->
-                    error?.let {
-                        end_date_input_layout.error = it
-                    }
-                })
-
-        viewModel.nameError.observe(viewLifecycleOwner,
-                Observer { error: String? ->
-                    error?.let {
-                        name_input_layout.error = it
-                    }
-                })
-
-        viewModel.rooms.observe(viewLifecycleOwner,
-                Observer { rooms: List<String>? ->
-                    rooms?.let {
-                        room_spinner.adapter = ArrayAdapter(context,
-                                android.R.layout.simple_spinner_item,
-                                it).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        nullableDate?.let {
+                            start_date.setText(
+                                    formatDateForTextView(
+                                            it.dayOfMonth,
+                                            it.month,
+                                            it.year
+                                    ),
+                                    TextView.BufferType.NORMAL
+                            )
                         }
+                    })
 
-                        room_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            viewModel.endDate.observe(viewLifecycleOwner,
+                    Observer { nullableDate: ParcelableDay? ->
+                        endDatePickerDialog = buildDatePicker(nullableDate) {
+                            viewModel.onEndDateSelected(it)
+                            end_date.setText(
+                                    formatDateForTextView(it.dayOfMonth, it.month + 1, it.year),
+                                    TextView.BufferType.NORMAL
+                            )
+                        }
+                        nullableDate?.let {
+                            end_date.setText(
+                                    formatDateForTextView(
+                                            it.dayOfMonth,
+                                            it.month,
+                                            it.year
+                                    ),
+                                    TextView.BufferType.NORMAL
+                            )
+                        }
+                    })
 
-                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                viewModel.onRoomSelected(position)
+            viewModel.name.observe(viewLifecycleOwner,
+                    Observer { nullableValue: String? ->
+                        nullableValue?.let {
+                            name.setText(it, TextView.BufferType.NORMAL)
+                        }
+                    })
+
+            viewModel.adultsCount.observe(viewLifecycleOwner,
+                    Observer { nullableValue: String? ->
+                        nullableValue?.let {
+                            adult_count.setText(it, TextView.BufferType.NORMAL)
+                        }
+                    })
+
+            viewModel.childrenCount.observe(viewLifecycleOwner,
+                    Observer { nullableValue: String? ->
+                        nullableValue?.let {
+                            children_count.setText(it, TextView.BufferType.NORMAL)
+                        }
+                    })
+
+            viewModel.babiesCount.observe(viewLifecycleOwner,
+                    Observer { nullableValue: String? ->
+                        nullableValue?.let {
+                            babies_count.setText(it, TextView.BufferType.NORMAL)
+                        }
+                    })
+
+            viewModel.selectedColor.observe(viewLifecycleOwner,
+                    Observer { colorItem: ColorItem? ->
+                        colorItem?.let { selected: ColorItem ->
+                            (colors.adapter as ColorsAdapter).update(selected)
+                        }
+                    })
+
+            viewModel.notes.observe(viewLifecycleOwner,
+                    Observer { nullableValue: String? ->
+                        nullableValue?.let {
+                            notes.setText(it, TextView.BufferType.NORMAL)
+                        }
+                    })
+
+            viewModel.pressBack.observe(
+                    viewLifecycleOwner,
+                    Observer { shouldPressBack: Boolean? ->
+                        shouldPressBack?.let {
+                            if (it) {
+                                activity?.onBackPressed()
                             }
                         }
-                    }
-                })
+                    })
 
-        viewModel.selectedRoom.observe(viewLifecycleOwner,
-                Observer { nullableRoom: String? ->
-                    nullableRoom?.let {
-                        room.setText(it, TextView.BufferType.EDITABLE)
-                    }
-                }
-        )
+            viewModel.roomError.observe(viewLifecycleOwner,
+                    Observer { error: String? ->
+                        error?.let {
+                            room_input_layout.error = it
+                        }
+                    })
 
-        viewModel.preselectedRoom.observe(viewLifecycleOwner,
-                Observer { selection: Int? ->
-                    selection?.let {
-                        room_spinner.setSelection(it)
-                    }
-                })
+            viewModel.startDateError.observe(viewLifecycleOwner,
+                    Observer { error: String? ->
+                        error?.let {
+                            start_date_input_layout.error = it
+                        }
+                    })
 
-        viewModel.isEditing.observe(viewLifecycleOwner,
-                Observer { isEditing: Boolean? ->
-                    isEditing?.let {
-                        toolbar.menu.findItem(R.id.delete).isVisible = it
-                    }
-                })
+            viewModel.endDateError.observe(viewLifecycleOwner,
+                    Observer { error: String? ->
+                        error?.let {
+                            end_date_input_layout.error = it
+                        }
+                    })
 
-        viewModel.result.observe(viewLifecycleOwner,
-                Observer { value: String? ->
-                    value?.also {
-                        Snackbar.make(root, it, Snackbar.LENGTH_LONG)
-                                .show()
+            viewModel.nameError.observe(viewLifecycleOwner,
+                    Observer { error: String? ->
+                        error?.let {
+                            name_input_layout.error = it
+                        }
+                    })
+
+            viewModel.rooms.observe(viewLifecycleOwner,
+                    Observer { rooms: List<String>? ->
+                        rooms?.let {
+                            room_spinner.adapter = ArrayAdapter(context,
+                                    android.R.layout.simple_spinner_item,
+                                    it).apply {
+                                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            }
+
+                            room_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                    viewModel.onRoomSelected(position)
+                                }
+                            }
+                        }
+                    })
+
+            viewModel.selectedRoom.observe(viewLifecycleOwner,
+                    Observer { nullableRoom: String? ->
+                        nullableRoom?.let {
+                            room.setText(it, TextView.BufferType.EDITABLE)
+                        }
                     }
-                })
+            )
+
+            viewModel.preselectedRoom.observe(viewLifecycleOwner,
+                    Observer { selection: Int? ->
+                        selection?.let {
+                            room_spinner.setSelection(it)
+                        }
+                    })
+
+            viewModel.isEditing.observe(viewLifecycleOwner,
+                    Observer { isEditing: Boolean? ->
+                        isEditing?.let {
+                            toolbar.menu.findItem(R.id.delete).isVisible = it
+                        }
+                    })
+
+            viewModel.result.observe(viewLifecycleOwner,
+                    Observer { value: String? ->
+                        value?.also {
+                            Snackbar.make(root, it, Snackbar.LENGTH_LONG)
+                                    .show()
+                        }
+                    })
+        }
 
         setupListeners()
 
-        if (savedInstanceState == null) {
-            viewModel.start(arguments?.getParcelable(RESERVATION))
-        }
+        viewModel.start(arguments?.getParcelable(RESERVATION))
     }
 
     private fun setUpToolbar() {
@@ -269,50 +282,21 @@ class ReservationFragment : Fragment() {
                         }
                     }.create()
 
-    private fun buildStartDatePickerDialog(startDate: ParcelableDay?): DatePickerDialog {
+    private fun buildDatePicker(
+            date: ParcelableDay?,
+            onDateSelected: (ParcelableDay) -> Unit
+    ): DatePickerDialog {
         val calendar: Calendar = Calendar.getInstance()
         return DatePickerDialog(
                 context,
                 { _: DatePicker, year: Int, month: Int, day: Int ->
-
-                    viewModel.onStartDateSelected(ParcelableDay(day, month + 1, year))
-
-                    start_date.setText(
-                            formatDateForTextView(day, month + 1, year),
-                            TextView.BufferType.NORMAL
-                    )
+                    onDateSelected(ParcelableDay(day, month + 1, year))
                 },
-                startDate?.year ?: calendar.get(Calendar.YEAR),
-                startDate?.let { it.month - 1 } ?: calendar.get(Calendar.MONTH),
-                startDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
+                date?.year ?: calendar.get(Calendar.YEAR),
+                date?.let { it.month - 1 } ?: calendar.get(Calendar.MONTH),
+                date?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
-
-    private fun buildEndDatePickerDialog(endDate: ParcelableDay?): DatePickerDialog {
-        val calendar: Calendar = Calendar.getInstance()
-        return DatePickerDialog(
-                context,
-                { _: DatePicker, year: Int, month: Int, day: Int ->
-
-                    viewModel.onEndDateSelected(ParcelableDay(day, month + 1, year))
-
-                    end_date.setText(
-                            formatDateForTextView(day, month + 1, year),
-                            TextView.BufferType.NORMAL
-                    )
-                },
-                endDate?.year ?: calendar.get(Calendar.YEAR),
-                endDate?.let { it.month - 1 } ?: calendar.get(Calendar.MONTH),
-                endDate?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
-        )
-    }
-
-    private fun formatDateForTextView(day: Int, month: Int, year: Int): String =
-            DATE_FORMAT.format(
-                    day.toString(),
-                    month.toString(),
-                    year.toString()
-            )
 
     private fun setupListeners() {
         room.setOnClickListener {
@@ -374,8 +358,6 @@ class ReservationFragment : Fragment() {
             }
             setArguments(arguments)
         }
-
-        private const val DATE_FORMAT = "%s/%s/%s"
     }
 
 }

@@ -121,6 +121,11 @@ class CustomerDetailFragment : Fragment() {
                     submit()
                     true
                 }
+        toolbar.menu.findItem(R.id.delete)
+                .setOnMenuItemClickListener { _: MenuItem? ->
+                    viewModel.delete()
+                    true
+                }
     }
 
     private fun setUpListeners() {

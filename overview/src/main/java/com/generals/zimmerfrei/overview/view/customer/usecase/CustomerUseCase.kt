@@ -16,7 +16,7 @@ interface CustomerUseCase {
     suspend fun get(url: String): Option<Customer>
     suspend fun save(customer: Customer): String
     suspend fun update(customer: Customer): String
-    suspend fun delete(customer: Customer): String
+    suspend fun delete(url: String): String
 }
 
 class CustomerUseCaseImpl @Inject constructor(
@@ -72,8 +72,8 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun delete(customer: Customer): String = withContext(Dispatchers.IO) {
-        api.delete(customer.id).fold(
+    override suspend fun delete(url: String): String = withContext(Dispatchers.IO) {
+        api.delete(url).fold(
                 ifSuccess = { "Cliente rimosso!" },
                 ifFailure = { "Errore" },
                 ifError = {

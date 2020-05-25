@@ -15,6 +15,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface ReservationUseCase {
+    suspend fun get(url: String): Option<Reservation>
     suspend fun save(reservation: Reservation): String
     suspend fun getAllRooms(): List<Room>
     suspend fun getRoomByListPosition(position: Int): Option<Room>
@@ -26,6 +27,24 @@ class ReservationUseCaseImpl @Inject constructor(
         private val reservationsAPI: ReservationsAPI,
         private val roomsAPI: RoomsAPI
 ) : ReservationUseCase {
+
+    override suspend fun get(url: String): Option<Reservation> = withContext(Dispatchers.IO) {
+        reservationsAPI.get(url).fold(
+                ifSuccess = { result: Option<ReservationInbound> ->
+                    result.map {
+                        Reservation(
+                                reservation = it,
+                                room = it.room?.let { Room(it) } ?: Room()
+                        )
+                    }
+                },
+                ifFailure = { Option.empty() },
+                ifError = {
+                    Timber.e(it)
+                    Option.empty()
+                }
+        )
+    }
 
     override suspend fun save(reservation: Reservation): String = withContext(Dispatchers.IO) {
         reservationsAPI.create(reservation.toInbound())

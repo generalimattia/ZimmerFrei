@@ -27,10 +27,12 @@ class CustomerDetailViewModel @Inject constructor(
         get() = _isEditing
     private val _isEditing: MutableLiveData<Boolean> = MutableLiveData()
 
+    private var url: String? = null
     private var currentCustomer: Option<Customer> = Option.empty()
     private var currentBirthDate: LocalDate? = null
 
     fun start(url: String?) {
+        this.url = url
         viewModelScope.launch {
             currentCustomer = url?.let { useCase.get(it) } ?: Option.empty()
             currentCustomer.fold(
@@ -103,6 +105,12 @@ class CustomerDetailViewModel @Inject constructor(
                         ))
                     }
             )
+        }
+    }
+
+    fun delete() {
+        viewModelScope.launch {
+            val message: String? = url?.let { useCase.delete(it) }
         }
     }
 }

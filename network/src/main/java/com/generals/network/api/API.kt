@@ -45,6 +45,12 @@ interface ReservationsAPI {
             @Query("from") from: LocalDate,
             @Query("to") to: LocalDate
     ): APIResult<Inbound<ReservationListInbound>>
+
+    @GET
+    suspend fun get(@Url url: String): APIResult<ReservationInbound>
+
+    @DELETE
+    suspend fun delete(@Url url: String): APIResult<Unit>
 }
 
 interface CustomersAPI {
@@ -55,15 +61,12 @@ interface CustomersAPI {
     @PUT("customers/{id}")
     suspend fun update(@Path("id") id: Int, @Body customer: CustomerInbound): APIResult<Unit>
 
-    @DELETE("customers/{id}")
-    suspend fun delete(@Path("id") id: Int): APIResult<Unit>
-
-    @GET("customers/{id}")
-    suspend fun fetchById(@Path("id") id: Int): APIResult<CustomerInbound>
-
     @GET("customers")
     suspend fun fetchAll(): APIResult<Inbound<CustomerListInbound>>
 
     @GET
     suspend fun get(@Url url: String): APIResult<CustomerInbound>
+
+    @DELETE
+    suspend fun delete(@Url url: String): APIResult<Unit>
 }

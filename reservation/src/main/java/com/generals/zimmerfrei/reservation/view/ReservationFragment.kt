@@ -292,18 +292,6 @@ class ReservationFragment : Fragment() {
 
         colors.adapter = ColorsAdapter(availableColors.map { ColorItem(it, false) }, viewModel::onColorClick)
 
-        /*action_email.setOnClickListener {
-            activity?.let {
-                viewModel.onSendEmailClick(email.text.toString(), it)
-            }
-        }
-
-        action_dial.setOnClickListener {
-            activity?.let {
-                viewModel.onDialMobileClick(mobile.text.toString(), it)
-            }
-        }*/
-
         add_customer.setOnClickListener {
             activity?.also {
                 navigator.customerList(

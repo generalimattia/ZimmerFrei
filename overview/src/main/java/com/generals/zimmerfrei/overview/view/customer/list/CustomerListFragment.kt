@@ -53,7 +53,22 @@ class CustomerListFragment : Fragment() {
 
         if (savedInstanceState == null) {
             viewModel.customers.observe(viewLifecycleOwner, Observer { values: List<Customer> ->
-                customers.adapter = CustomerListAdapter(values, viewModel::onCustomerClick)
+                customers.adapter = CustomerListAdapter(
+                        customers = values,
+                        onCustomerClick = viewModel::onCustomerClick,
+                        onEmail = { email: String ->
+                            activity?.also {
+                                navigator.email(email)
+                                        .startNewActivity(it)
+                            }
+                        },
+                        onDial = { mobile: String ->
+                            activity?.also {
+                                navigator.dial(mobile)
+                                        .startNewActivity(it)
+                            }
+                        }
+                )
             })
 
             viewModel.selected.observe(viewLifecycleOwner, Observer(this@CustomerListFragment::navigateToCustomerDetail))

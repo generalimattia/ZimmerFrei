@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/material_double"
                     android:layout_marginEnd="@dimen/material_double"
-                    app:layout_constraintEnd_toStartOf="@id/action_email"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/first_name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/last_name_input_layout">
 
@@ -88,25 +88,13 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                    android:id="@+id/action_email"
-                    android:layout_width="@dimen/material_quad"
-                    android:layout_height="@dimen/material_double"
-                    android:layout_marginEnd="@dimen/material_double"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_email_black_24dp"
-                    app:layout_constraintBottom_toBottomOf="@id/email_input_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/email_input_layout"
-                    app:layout_constraintTop_toTopOf="@id/email_input_layout" />
-
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/mobile_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/material_double"
                     android:layout_marginEnd="@dimen/material_double"
-                    app:layout_constraintEnd_toStartOf="@id/action_dial"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/first_name_input_layout"
                     app:layout_constraintTop_toBottomOf="@id/email_input_layout">
 
@@ -118,18 +106,6 @@
                         android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                    android:id="@+id/action_dial"
-                    android:layout_width="@dimen/material_quad"
-                    android:layout_height="@dimen/material_double"
-                    android:layout_marginEnd="@dimen/material_double"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_phone_black_24dp"
-                    app:layout_constraintBottom_toBottomOf="@id/mobile_input_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/mobile_input_layout"
-                    app:layout_constraintTop_toTopOf="@id/mobile_input_layout" />
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/social_id_input_layout"

@@ -1,6 +1,5 @@
 package com.generals.zimmerfrei.reservation.viewmodel
 
-import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -303,26 +302,6 @@ class ReservationViewModel @Inject constructor(
             }
 
             currentReservation = result
-        }
-    }
-
-    fun onSendEmailClick(
-            to: String,
-            activity: Activity
-    ) {
-        if (to.isNotBlank()) {
-            navigator.email(to)
-                    .startNewActivity(activity)
-        }
-    }
-
-    fun onDialMobileClick(
-            number: String,
-            activity: Activity
-    ) {
-        if (number.isNotBlank()) {
-            navigator.dial(number)
-                    .startNewActivity(activity)
         }
     }
 

@@ -9,7 +9,7 @@
             android:id="@+id/first_letter_background"
             android:layout_width="@dimen/material_sixth"
             android:layout_height="@dimen/material_sixth"
-            android:layout_marginStart="@dimen/material_quad"
+            android:layout_marginStart="@dimen/material_double"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,6 +40,30 @@
             app:layout_constraintStart_toEndOf="@id/first_letter"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
+
+
+    <ImageView
+            android:id="@+id/action_email"
+            android:layout_width="@dimen/material_quad"
+            android:layout_height="@dimen/material_quad"
+            android:layout_marginEnd="@dimen/material_double"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_email_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/action_dial"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/action_dial"
+            android:layout_width="@dimen/material_quad"
+            android:layout_height="@dimen/material_quad"
+            android:layout_marginEnd="@dimen/material_double"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_phone_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

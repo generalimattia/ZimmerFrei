@@ -10,7 +10,6 @@ import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.common.utils.randomColor
 import com.generals.zimmerfrei.model.ParcelableDay
-import com.generals.zimmerfrei.model.ParcelableRoomDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
@@ -39,7 +38,7 @@ class ReservationViewModel @Inject constructor(
     private var endMonth: Int = 0
     private var endYear: Int = 0
 
-    private var reservation: Reservation? = null
+    private var currentReservation: Reservation? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -55,12 +54,8 @@ class ReservationViewModel @Inject constructor(
     private val _selectedRoom = MutableLiveData<String>()
     private val _startDate = MutableLiveData<ParcelableDay>()
     private val _endDate = MutableLiveData<ParcelableDay>()
-    private val _name = MutableLiveData<String>()
-    private val _adultsCount = MutableLiveData<String>()
-    private val _childrenCount = MutableLiveData<String>()
-    private val _babiesCount = MutableLiveData<String>()
+    private val _reservation = MutableLiveData<Reservation>()
     private val _selectedColor = MutableLiveData<ColorItem>()
-    private val _notes = MutableLiveData<String>()
     private val _result = MutableLiveData<String>()
 
     val pressBack: LiveData<Boolean>
@@ -96,43 +91,29 @@ class ReservationViewModel @Inject constructor(
     val preselectedRoom: LiveData<Int>
         get() = _preselectedRoom
 
-    val name: LiveData<String>
-        get() = _name
-
-    val adultsCount: LiveData<String>
-        get() = _adultsCount
-
-    val childrenCount: LiveData<String>
-        get() = _childrenCount
-
-    val babiesCount: LiveData<String>
-        get() = _babiesCount
+    val reservation: LiveData<Reservation>
+        get() = _reservation
 
     val selectedColor: LiveData<ColorItem>
         get() = _selectedColor
-
-    val notes: LiveData<String>
-        get() = _notes
 
     val result: LiveData<String>
         get() = _result
 
     fun start(
-            reservation: ParcelableRoomDay?
+            selectedDay: ParcelableDay?,
+            selectedRoom: Room?,
+            reservationURL: String?
     ) {
-        reservation?.let {
-            when (it) {
-                is ParcelableRoomDay.Empty -> {
-                    handleNewReservationFromDate(it)
-                    _isEditing.value = false
-                }
-                is ParcelableRoomDay.Reserved -> {
-                    handleExistingReservation(it)
-                    this.reservation = it.reservation
-                    _isEditing.value = true
-                }
+        if (selectedDay != null && selectedRoom != null) {
+            if (reservationURL.isNullOrBlank()) {
+                handleNewReservationFromDate(selectedDay, selectedRoom)
+                _isEditing.value = false
+            } else {
+                handleExistingReservation(selectedRoom, reservationURL)
+                _isEditing.value = true
             }
-        } ?: let {
+        } else {
             handleNewReservation()
             _isEditing.value = false
         }
@@ -144,29 +125,21 @@ class ReservationViewModel @Inject constructor(
         _endDate.value = null
     }
 
-    private fun handleNewReservationFromDate(it: ParcelableRoomDay.Empty) {
-        fetchRooms(it.room)
-        onStartDateSelected(ParcelableDay(it.day.dayOfMonth, it.day.month, it.day.year))
+    private fun handleNewReservationFromDate(
+            day: ParcelableDay,
+            room: Room
+    ) {
+        fetchRooms(room)
+        onStartDateSelected(ParcelableDay(day.dayOfMonth, day.month, day.year))
         _endDate.value = null
     }
 
-    private fun handleExistingReservation(it: ParcelableRoomDay.Reserved) {
-        fetchRooms(it.reservation.room)
-
-        val startDay = ParcelableDay(it.reservation.startDate)
-        val endDay = ParcelableDay(it.reservation.endDate)
-
-        _startDate.value = startDay
-        _endDate.value = endDay
-        onStartDateSelected(startDay)
-        onEndDateSelected(endDay)
-
-        _name.value = it.reservation.name
-        _adultsCount.value = it.reservation.adults.toString()
-        _childrenCount.value = it.reservation.children.toString()
-        _babiesCount.value = it.reservation.babies.toString()
-        _selectedColor.value = ColorItem(hex = it.reservation.color, selected = true)
-        _notes.value = it.reservation.notes
+    private fun handleExistingReservation(
+            room: Room,
+            url: String
+    ) {
+        fetchRooms(room)
+        fetchReservation(url)
     }
 
     fun onRoomSelected(position: Int) {
@@ -227,7 +200,7 @@ class ReservationViewModel @Inject constructor(
                 room.fold(
                         ifEmpty = {},
                         ifSome = { notNullRoom: Room ->
-                            val message: String = reservation?.let { validReservation: Reservation ->
+                            val message: String = currentReservation?.let { validReservation: Reservation ->
                                 useCase.update(
                                         validReservation.copy(
                                                 name = name,
@@ -265,7 +238,7 @@ class ReservationViewModel @Inject constructor(
 
     fun delete() {
         viewModelScope.launch {
-            reservation?.also {
+            currentReservation?.also {
                 useCase.delete(it)
                 _pressBack.value = true
             }
@@ -312,6 +285,24 @@ class ReservationViewModel @Inject constructor(
                     _preselectedRoom.value = allRooms.indexOf(it)
                 }
             }
+        }
+    }
+
+    private fun fetchReservation(url: String) {
+        viewModelScope.launch {
+            val result: Reservation? = useCase.get(url).orNull()
+
+            result?.also { value: Reservation ->
+                val startDay = ParcelableDay(value.startDate)
+                val endDay = ParcelableDay(value.endDate)
+
+                _startDate.value = startDay
+                _endDate.value = endDay
+                onStartDateSelected(startDay)
+                onEndDateSelected(endDay)
+            }
+
+            currentReservation = result
         }
     }
 

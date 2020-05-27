@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.navigator.Navigator
@@ -121,8 +122,13 @@ class OverviewFragment : Fragment() {
                                 roomDays,
                                 syncScroller
                         ) { day: RoomDay ->
+
                             activity?.let {
-                                navigator.reservation(day)
+                                navigator.reservation(
+                                        selectedDay = ParcelableDay(day.day),
+                                        selectedRoom = day.room,
+                                        reservationURL = day.reservationURL
+                                )
                                         .startNewActivity(it)
                             }
                         }
@@ -130,11 +136,16 @@ class OverviewFragment : Fragment() {
                         ObjectAnimator.ofInt(progress, "progress", progress.progress, progress.max).apply {
                             duration = 1000
                             interpolator = AccelerateDecelerateInterpolator()
-                            addListener(onEnd = {
-                                rooms_recycler_view.visibility = View.VISIBLE
-                                plan.visibility = View.VISIBLE
-                                progress.visibility = View.GONE
-                            })
+                            addListener(
+                                    onStart = {
+                                        progress.visibility = View.VISIBLE
+                                    },
+                                    onEnd = {
+                                        rooms_recycler_view.visibility = View.VISIBLE
+                                        plan.visibility = View.VISIBLE
+                                        progress.visibility = View.GONE
+                                        progress.progress = 0
+                                    })
                         }.start()
                     }
                 })
@@ -165,14 +176,7 @@ class OverviewFragment : Fragment() {
             viewModel.onNextMonthClick()
         }
 
-        if (savedInstanceState == null) {
-            viewModel.start()
-        }
-
-        ObjectAnimator.ofInt(progress, "progress", 0, 80).apply {
-            duration = 2000
-            interpolator = AccelerateDecelerateInterpolator()
-        }.start()
+        viewModel.start()
     }
 
     private fun setUpToolbar() {

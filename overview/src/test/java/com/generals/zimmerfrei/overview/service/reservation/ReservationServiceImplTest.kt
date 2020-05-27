@@ -1,12 +1,11 @@
 package com.generals.zimmerfrei.overview.service.reservation
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.generals.roomrepository.RoomRepository
-import com.generals.zimmerfrei.common.extension.offsetDateTimeFromLocalDate
-import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.database.dao.ReservationDAO
 import com.generals.zimmerfrei.database.entities.ReservationEntity
+import com.generals.zimmerfrei.model.Room
+import com.generals.zimmerfrei.model.RoomDay
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -73,8 +72,8 @@ class ReservationServiceImplTest {
                                 ReservationEntity(
                                         id = 0,
                                         name = "White",
-                                        startDate = offsetDateTimeFromLocalDate(now.minusDays(5)),
-                                        endDate = offsetDateTimeFromLocalDate(now.plusDays(1))
+                                        startDate = now.minusDays(5),
+                                        endDate = now.plusDays(1)
                                 )
                         )
                 )
@@ -90,8 +89,8 @@ class ReservationServiceImplTest {
                                 ReservationEntity(
                                         id = 0,
                                         name = "Black",
-                                        startDate = offsetDateTimeFromLocalDate(now.minusDays(7)),
-                                        endDate = offsetDateTimeFromLocalDate(now.plusDays(5))
+                                        startDate = now.minusDays(7),
+                                        endDate = now.plusDays(5)
                                 )
                         )
                 )

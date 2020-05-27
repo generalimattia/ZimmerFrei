@@ -8,13 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 
 interface Navigator {
 
     fun reservation(
-            reservation: RoomDay? = null
+            selectedDay: ParcelableDay? = null,
+            selectedRoom: Room? = null,
+            reservationURL: String? = null
     ): NavigationRequest.ActivityRequest
 
     fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest
@@ -40,7 +43,6 @@ interface Navigator {
 sealed class NavigationRequest {
 
     data class ActivityRequest(private val intent: Intent) : NavigationRequest() {
-
         fun startNewActivity(activity: Activity) = activity.startActivity(intent)
 
     }

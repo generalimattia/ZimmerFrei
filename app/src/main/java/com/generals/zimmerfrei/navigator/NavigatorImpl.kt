@@ -5,13 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import android.transition.Transition
 import androidx.annotation.IdRes
-import com.generals.zimmerfrei.model.ParcelableRoomDay
+import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.view.customer.detail.CustomerDetailFragment
 import com.generals.zimmerfrei.overview.view.customer.list.CustomerListFragment
-import com.generals.zimmerfrei.reservation.view.RESERVATION
+import com.generals.zimmerfrei.reservation.view.RESERVATION_URL_KEY
 import com.generals.zimmerfrei.reservation.view.ReservationActivity
+import com.generals.zimmerfrei.reservation.view.SELECTED_DAY_KEY
+import com.generals.zimmerfrei.reservation.view.SELECTED_ROOM_KEY
 import com.generals.zimmerfrei.room.detail.view.RoomDetailFragment
 import com.generals.zimmerfrei.room.list.view.RoomListFragment
 import javax.inject.Inject
@@ -21,23 +22,18 @@ data class NavigatorImpl @Inject constructor(
 ) : Navigator {
 
     override fun reservation(
-            reservation: RoomDay?
+            selectedDay: ParcelableDay?,
+            selectedRoom: Room?,
+            reservationURL: String?
     ): NavigationRequest.ActivityRequest =
             NavigationRequest.ActivityRequest(
                     Intent(
                             context,
                             ReservationActivity::class.java
                     ).apply {
-                        val parcelableRoomDay: ParcelableRoomDay? = reservation?.let {
-                            when (it) {
-                                is RoomDay.Empty -> ParcelableRoomDay.Empty(it)
-                                is RoomDay.EmptyWeekend -> ParcelableRoomDay.Empty(it)
-                                is RoomDay.Reserved -> ParcelableRoomDay.Reserved(it)
-                                is RoomDay.StartingReservation -> ParcelableRoomDay.Reserved(it)
-                                is RoomDay.EndingReservation -> ParcelableRoomDay.Reserved(it)
-                            }
-                        }
-                        putExtra(RESERVATION, parcelableRoomDay)
+                        putExtra(SELECTED_DAY_KEY, selectedDay)
+                        putExtra(SELECTED_ROOM_KEY, selectedRoom)
+                        putExtra(RESERVATION_URL_KEY, reservationURL)
                     }
             )
 

@@ -3,7 +3,8 @@ package com.generals.zimmerfrei.reservation.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.generals.zimmerfrei.model.ParcelableRoomDay
+import com.generals.zimmerfrei.model.ParcelableDay
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.reservation.R
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -23,14 +24,19 @@ class ReservationActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
         if (savedInstanceState == null) {
 
-            val newReservation: ParcelableRoomDay? = intent.getParcelableExtra(RESERVATION)
+            val selectedDay: ParcelableDay? = intent.getParcelableExtra(SELECTED_DAY_KEY)
+            val selectedRoom: Room? = intent.getParcelableExtra(SELECTED_ROOM_KEY)
+            val reservationURL: String? = intent.getStringExtra(RESERVATION_URL_KEY)
 
             supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    ReservationFragment.newInstance(newReservation)
-                )
-                .commitAllowingStateLoss()
+                    .replace(
+                            R.id.fragment_container,
+                            ReservationFragment.newInstance(
+                                    selectedDay = selectedDay,
+                                    selectedRoom = selectedRoom,
+                                    reservationURL = reservationURL)
+                    )
+                    .commitAllowingStateLoss()
         }
     }
 

@@ -17,7 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.common.utils.availableColors
 import com.generals.zimmerfrei.common.utils.formatDateForTextView
 import com.generals.zimmerfrei.model.ParcelableDay
-import com.generals.zimmerfrei.model.ParcelableRoomDay
+import com.generals.zimmerfrei.model.Reservation
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.view.adapters.ColorItem
@@ -114,45 +115,19 @@ class ReservationFragment : Fragment() {
                         }
                     })
 
-            viewModel.name.observe(viewLifecycleOwner,
-                    Observer { nullableValue: String? ->
-                        nullableValue?.let {
-                            name.setText(it, TextView.BufferType.NORMAL)
-                        }
-                    })
-
-            viewModel.adultsCount.observe(viewLifecycleOwner,
-                    Observer { nullableValue: String? ->
-                        nullableValue?.let {
-                            adult_count.setText(it, TextView.BufferType.NORMAL)
-                        }
-                    })
-
-            viewModel.childrenCount.observe(viewLifecycleOwner,
-                    Observer { nullableValue: String? ->
-                        nullableValue?.let {
-                            children_count.setText(it, TextView.BufferType.NORMAL)
-                        }
-                    })
-
-            viewModel.babiesCount.observe(viewLifecycleOwner,
-                    Observer { nullableValue: String? ->
-                        nullableValue?.let {
-                            babies_count.setText(it, TextView.BufferType.NORMAL)
-                        }
+            viewModel.reservation.observe(viewLifecycleOwner,
+                    Observer { value: Reservation ->
+                        name.setText(value.name, TextView.BufferType.NORMAL)
+                        adult_count.setText(value.adults, TextView.BufferType.NORMAL)
+                        children_count.setText(value.children, TextView.BufferType.NORMAL)
+                        babies_count.setText(value.babies, TextView.BufferType.NORMAL)
+                        notes.setText(value.notes, TextView.BufferType.NORMAL)
                     })
 
             viewModel.selectedColor.observe(viewLifecycleOwner,
                     Observer { colorItem: ColorItem? ->
                         colorItem?.let { selected: ColorItem ->
                             (colors.adapter as ColorsAdapter).update(selected)
-                        }
-                    })
-
-            viewModel.notes.observe(viewLifecycleOwner,
-                    Observer { nullableValue: String? ->
-                        nullableValue?.let {
-                            notes.setText(it, TextView.BufferType.NORMAL)
                         }
                     })
 
@@ -246,7 +221,11 @@ class ReservationFragment : Fragment() {
 
         setupListeners()
 
-        viewModel.start(arguments?.getParcelable(RESERVATION))
+        val selectedDay: ParcelableDay? = arguments?.getParcelable(SELECTED_DAY_KEY)
+        val selectedRoom: Room? = arguments?.getParcelable(SELECTED_ROOM_KEY)
+        val url: String? = arguments?.getString(RESERVATION_URL_KEY)
+
+        viewModel.start(selectedDay, selectedRoom, url)
     }
 
     private fun setUpToolbar() {
@@ -352,9 +331,15 @@ class ReservationFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(reservation: ParcelableRoomDay?) = ReservationFragment().apply {
+        fun newInstance(
+                selectedDay: ParcelableDay?,
+                selectedRoom: Room?,
+                reservationURL: String?
+        ) = ReservationFragment().apply {
             val arguments = Bundle().apply {
-                reservation?.let { putParcelable(RESERVATION, reservation) }
+                selectedDay?.let { putParcelable(SELECTED_DAY_KEY, it) }
+                selectedRoom?.let { putParcelable(SELECTED_ROOM_KEY, it) }
+                reservationURL?.let { putString(RESERVATION_URL_KEY, it) }
             }
             setArguments(arguments)
         }

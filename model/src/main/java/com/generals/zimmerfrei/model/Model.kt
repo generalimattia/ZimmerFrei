@@ -67,7 +67,8 @@ data class Reservation(
         val babies: Int = 0,
         val color: String = "#546e7a",
         val room: Room = Room(),
-        val notes: String = ""
+        val notes: String = "",
+        val url: String? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -81,7 +82,8 @@ data class Reservation(
             parcel.readInt(),
             parcel.readString().orEmpty(),
             parcel.readParcelable(Room::class.java.classLoader) ?: Room(),
-            parcel.readString().orEmpty()
+            parcel.readString().orEmpty(),
+            parcel.readString()
     )
 
     constructor(
@@ -96,7 +98,8 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = Room(room),
-            notes = reservation.notes
+            notes = reservation.notes,
+            url = null
     )
 
     constructor(
@@ -111,7 +114,8 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = room,
-            notes = reservation.notes
+            notes = reservation.notes,
+            url = null
     )
 
     constructor(
@@ -127,7 +131,8 @@ data class Reservation(
             babies = reservation.babies,
             color = reservation.color,
             room = room,
-            notes = reservation.notes
+            notes = reservation.notes,
+            url = reservation.link?.self?.href
     )
 
     fun toEntity(): ReservationEntity = ReservationEntity(
@@ -153,6 +158,7 @@ data class Reservation(
         parcel.writeString(color)
         parcel.writeParcelable(room, flags)
         parcel.writeString(notes)
+        parcel.writeString(url)
     }
 
     override fun describeContents(): Int = 0
@@ -236,30 +242,53 @@ data class Room(
 
 sealed class RoomDay {
 
+    abstract val day: Day
+    abstract val room: Room
+    abstract val reservationURL: String?
+
     data class Empty(
-            val day: Day,
-            val room: Room
-    ) : RoomDay()
+            override val day: Day,
+            override val room: Room
+    ) : RoomDay() {
+        override val reservationURL: String? = null
+    }
 
     data class EmptyWeekend(
-            val day: Day,
-            val room: Room
-    ) : RoomDay()
+            override val day: Day,
+            override val room: Room
+    ) : RoomDay() {
+        override val reservationURL: String? = null
+    }
 
     data class StartingReservation(
-            val day: Day,
+            override val day: Day,
             val reservation: Reservation = Reservation()
-    ) : RoomDay()
+    ) : RoomDay() {
+        override val room: Room
+            get() = reservation.room
+        override val reservationURL: String?
+            get() = reservation.url
+    }
 
     data class Reserved(
-            val day: Day,
+            override val day: Day,
             val reservation: Reservation = Reservation()
-    ) : RoomDay()
+    ) : RoomDay() {
+        override val room: Room
+            get() = reservation.room
+        override val reservationURL: String?
+            get() = reservation.url
+    }
 
     data class EndingReservation(
-            val day: Day,
+            override val day: Day,
             val reservation: Reservation = Reservation()
-    ) : RoomDay()
+    ) : RoomDay() {
+        override val room: Room
+            get() = reservation.room
+        override val reservationURL: String?
+            get() = reservation.url
+    }
 }
 
 sealed class ParcelableRoomDay : Parcelable {

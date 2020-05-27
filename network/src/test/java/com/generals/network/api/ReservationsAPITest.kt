@@ -42,14 +42,25 @@ class ReservationsAPITest {
                 persons = 10,
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusWeeks(2),
+                adults = 2,
+                children = 2,
+                babies = 0,
+                notes = "",
+                color = "#000000",
                 customer = CustomerInbound(
                         firstName = "Jhones",
                         lastName = "Mc Kane",
                         socialId = "423409890223423",
                         mobile = "1230912",
                         email = "jhones@mckane.com",
-                        address = "Jhones street 2nd",
-                        birthDate = LocalDate.now().minusYears(45)
+                        city = "London",
+                        province = "London",
+                        state = "UK",
+                        zip = "234225",
+                        gender = "M",
+                        birthPlace = "London",
+                        birthDate = LocalDate.now().minusYears(45),
+                        address = "Jhones street 2nd"
                 )
         )
         val response: APIResult<Unit> = client.create(newReservation)

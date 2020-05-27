@@ -7,6 +7,9 @@ import com.generals.zimmerfrei.overview.usecase.OverviewUseCaseImpl
 import com.generals.zimmerfrei.overview.view.OverviewActivity
 import com.generals.zimmerfrei.overview.view.OverviewFragment
 import com.generals.zimmerfrei.overview.view.customer.detail.CustomerDetailFragment
+import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionEmitter
+import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionEmitterImpl
+import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionListener
 import com.generals.zimmerfrei.overview.view.customer.list.CustomerListFragment
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCaseImpl
@@ -37,4 +40,10 @@ abstract class OverviewModule {
 
     @Binds
     abstract fun bindCustomerUseCase(useCase: CustomerUseCaseImpl): CustomerUseCase
+
+    @Binds
+    abstract fun bindCustomerActionEmitter(impl: CustomerActionEmitterImpl): CustomerActionEmitter
+
+    @Binds
+    abstract fun bindCustomerActionListener(impl: CustomerActionEmitterImpl): CustomerActionListener
 }

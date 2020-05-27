@@ -14,9 +14,9 @@ import javax.inject.Inject
 interface CustomerUseCase {
     suspend fun getAll(): List<Customer>
     suspend fun get(url: String): Option<Customer>
-    suspend fun save(customer: Customer): String
-    suspend fun update(customer: Customer): String
-    suspend fun delete(url: String): String
+    suspend fun save(customer: Customer): ActionResult
+    suspend fun update(customer: Customer): ActionResult
+    suspend fun delete(url: String): ActionResult
 }
 
 class CustomerUseCaseImpl @Inject constructor(
@@ -50,39 +50,51 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun save(customer: Customer): String = withContext(Dispatchers.IO) {
+    override suspend fun save(customer: Customer): ActionResult = withContext(Dispatchers.IO) {
         api.create(customer.toInbound()).fold(
-                ifSuccess = { "Cliente creato!" },
-                ifFailure = { "Errore" },
+                ifSuccess = { ActionResult.Success("Cliente creato!") },
+                ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
-                    "Errore"
+                    ActionResult.Error("Errore")
                 }
         )
     }
 
-    override suspend fun update(customer: Customer): String = withContext(Dispatchers.IO) {
+    override suspend fun update(customer: Customer): ActionResult = withContext(Dispatchers.IO) {
         api.update(customer.id, customer.toInbound()).fold(
-                ifSuccess = { "Cliente aggiornato!" },
-                ifFailure = { "Errore" },
+                ifSuccess = { ActionResult.Success("Cliente aggiornato!") },
+                ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
-                    "Errore"
+                    ActionResult.Error("Errore")
                 }
         )
     }
 
-    override suspend fun delete(url: String): String = withContext(Dispatchers.IO) {
+    override suspend fun delete(url: String): ActionResult = withContext(Dispatchers.IO) {
         api.delete(url).fold(
-                ifSuccess = { "Cliente rimosso!" },
-                ifFailure = { "Errore" },
+                ifSuccess = { ActionResult.Success("Cliente rimosso!") },
+                ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
-                    "Errore"
+                    ActionResult.Error("Errore")
                 }
         )
     }
 
+}
+
+sealed class ActionResult {
+    abstract val message: String
+
+    data class Success(
+            override val message: String
+    ) : ActionResult()
+
+    data class Error(
+            override val message: String
+    ) : ActionResult()
 }
 
 fun Customer.toInbound(): CustomerInbound =

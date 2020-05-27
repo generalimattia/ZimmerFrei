@@ -5,12 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.generals.zimmerfrei.model.Customer
+import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionListener
+import com.generals.zimmerfrei.overview.view.customer.usecase.ActionResult
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class CustomerListViewModel @Inject constructor(
-        private val useCase: CustomerUseCase
+        private val useCase: CustomerUseCase,
+        private val customerActionListener: CustomerActionListener
 ) : ViewModel() {
 
     val customers: LiveData<List<Customer>>
@@ -21,7 +26,28 @@ class CustomerListViewModel @Inject constructor(
         get() = _selected
     private val _selected: MutableLiveData<String?> = MutableLiveData()
 
+    val message: LiveData<String>
+        get() = _message
+    private val _message: MutableLiveData<String> = MutableLiveData()
+
+    private val compositeDisposable = CompositeDisposable()
+
     fun start() {
+        fetchCustomers()
+
+        customerActionListener.observable.subscribe(
+                { result: ActionResult ->
+                    if (result is ActionResult.Success) {
+                        fetchCustomers()
+                        _message.value = result.message
+                    }
+                },
+                Timber::e,
+                {}
+        ).also { compositeDisposable.add(it) }
+    }
+
+    private fun fetchCustomers() {
         viewModelScope.launch {
             val allCustomers: List<Customer> = useCase.getAll()
             _customers.value = allCustomers
@@ -30,5 +56,10 @@ class CustomerListViewModel @Inject constructor(
 
     fun onCustomerClick(customer: Customer) {
         _selected.value = customer.link
+    }
+
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
     }
 }

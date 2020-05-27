@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Option
 import com.generals.zimmerfrei.model.Customer
+import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionEmitter
+import com.generals.zimmerfrei.overview.view.customer.usecase.ActionResult
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class CustomerDetailViewModel @Inject constructor(
-        private val useCase: CustomerUseCase
+        private val useCase: CustomerUseCase,
+        private val customerActionEmitter: CustomerActionEmitter
 ) : ViewModel() {
 
     val customer: LiveData<Customer>
@@ -26,6 +29,14 @@ class CustomerDetailViewModel @Inject constructor(
     val isEditing: LiveData<Boolean>
         get() = _isEditing
     private val _isEditing: MutableLiveData<Boolean> = MutableLiveData()
+
+    val message: LiveData<String>
+        get() = _message
+    private val _message: MutableLiveData<String> = MutableLiveData()
+
+    val pressBack: LiveData<Boolean>
+        get() = _pressBack
+    private val _pressBack: MutableLiveData<Boolean> = MutableLiveData()
 
     private var url: String? = null
     private var currentCustomer: Option<Customer> = Option.empty()
@@ -68,7 +79,7 @@ class CustomerDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val birthDate: LocalDate = currentBirthDate ?: LocalDate.now()
-            val message: String = currentCustomer.fold(
+            val result: ActionResult = currentCustomer.fold(
                     ifSome = { customer: Customer ->
                         useCase.update(customer.copy(
                                 firstName = firstName,
@@ -105,12 +116,22 @@ class CustomerDetailViewModel @Inject constructor(
                         ))
                     }
             )
+            handleResult(result)
         }
     }
 
     fun delete() {
         viewModelScope.launch {
-            val message: String? = url?.let { useCase.delete(it) }
+            url?.let { useCase.delete(it) }?.also(this@CustomerDetailViewModel::handleResult)
+        }
+    }
+
+    private fun handleResult(result: ActionResult) {
+        if (result is ActionResult.Error) {
+            _message.value = result.message
+        } else {
+            customerActionEmitter.emit(result)
+            _pressBack.value = true
         }
     }
 }

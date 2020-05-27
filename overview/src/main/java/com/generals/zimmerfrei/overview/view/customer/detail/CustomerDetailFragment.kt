@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.common.utils.formatDateForTextView
 import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.overview.R
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_customer_detail.*
 import org.threeten.bp.LocalDate
@@ -62,6 +63,17 @@ class CustomerDetailFragment : Fragment() {
 
             viewModel.isEditing.observe(viewLifecycleOwner, Observer { value: Boolean ->
                 toolbar.menu.findItem(R.id.delete).isVisible = value
+            })
+
+            viewModel.message.observe(viewLifecycleOwner, Observer { value: String ->
+                Snackbar.make(root_view, value, Snackbar.LENGTH_LONG)
+                        .show()
+            })
+
+            viewModel.pressBack.observe(viewLifecycleOwner, Observer { value: Boolean ->
+                if (value) {
+                    pressBack()
+                }
             })
         }
 
@@ -114,7 +126,7 @@ class CustomerDetailFragment : Fragment() {
         toolbar.inflateMenu(R.menu.menu_save_delete)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            pressBack()
         }
         toolbar.menu.findItem(R.id.save)
                 .setOnMenuItemClickListener { _: MenuItem? ->
@@ -126,6 +138,10 @@ class CustomerDetailFragment : Fragment() {
                     viewModel.delete()
                     true
                 }
+    }
+
+    private fun pressBack() {
+        activity?.onBackPressed()
     }
 
     private fun setUpListeners() {

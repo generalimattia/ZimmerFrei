@@ -14,6 +14,7 @@ import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.overview.R
 import com.generals.zimmerfrei.overview.view.customer.CustomerListAdapter
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_customer_list.*
 import javax.inject.Inject
@@ -56,6 +57,11 @@ class CustomerListFragment : Fragment() {
             })
 
             viewModel.selected.observe(viewLifecycleOwner, Observer(this@CustomerListFragment::navigateToCustomerDetail))
+
+            viewModel.message.observe(viewLifecycleOwner, Observer { value: String ->
+                Snackbar.make(root_view, value, Snackbar.LENGTH_LONG)
+                        .show()
+            })
         }
 
         add_fab.setOnClickListener {

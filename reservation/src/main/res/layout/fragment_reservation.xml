@@ -29,6 +29,30 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/material_quad">
 
+            <TextView
+                    android:id="@+id/reservation_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:text="@string/reservation_details"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Dettagli Prenotazione" />
+
+            <View
+                    android:id="@+id/reservation_details_header"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="@color/primary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/reservation_details"
+                    app:layout_constraintTop_toBottomOf="@id/reservation_details" />
+
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/room_input_layout"
                     android:layout_width="200dp"
@@ -37,7 +61,7 @@
                     android:layout_marginTop="@dimen/material_double"
                     android:layout_marginEnd="@dimen/material_double"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/reservation_details">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/room"
@@ -58,7 +82,7 @@
                     android:background="@android:color/transparent"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/reservation_details"
                     tools:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,67 +141,6 @@
                         android:hint="@string/name" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/email_input_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
-                    app:layout_constraintEnd_toStartOf="@id/action_email"
-                    app:layout_constraintStart_toStartOf="@id/name_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/name_input_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/email"
-                        android:inputType="textEmailAddress"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                    android:id="@+id/action_email"
-                    android:layout_width="@dimen/material_quad"
-                    android:layout_height="@dimen/material_quad"
-                    android:src="@drawable/ic_email_black_24dp"
-                    app:layout_constraintStart_toEndOf="@id/email_input_layout"
-                    android:layout_marginEnd="@dimen/material_double"
-                    app:layout_constraintBottom_toBottomOf="@id/email_input_layout"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/mobile_input_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_double"
-                    android:layout_marginTop="@dimen/material_quad"
-                    app:layout_constraintEnd_toStartOf="@id/action_dial"
-                    app:layout_constraintStart_toStartOf="@id/name_input_layout"
-                    app:layout_constraintTop_toBottomOf="@id/email_input_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mobile"
-                        android:inputType="phone"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                    android:id="@+id/action_dial"
-                    android:layout_width="@dimen/material_quad"
-                    android:layout_height="@dimen/material_quad"
-                    android:src="@drawable/ic_phone_black_24dp"
-                    app:layout_constraintStart_toEndOf="@id/mobile_input_layout"
-                    android:layout_marginEnd="@dimen/material_double"
-                    app:layout_constraintBottom_toBottomOf="@id/mobile_input_layout"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-                    -->
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/adult_count_input_layout"
@@ -262,40 +225,6 @@
                     app:layout_constraintTop_toBottomOf="@id/choose_color"
                     tools:listitem="@layout/item_color" />
 
-            <!--<androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/color_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/material_double"
-                    android:background="@drawable/background_color_selectable"
-                    android:elevation="2dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_double"
-                    android:stateListAnimator="@drawable/translation_z_animator"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/adult_count_input_layout">
-
-                <ImageView
-                        android:id="@+id/color_view"
-                        android:layout_width="@dimen/material_quad"
-                        android:layout_height="@dimen/material_quad"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:background="@color/accent" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/material_double"
-                        android:text="@string/change"
-                        app:layout_constraintBottom_toBottomOf="@id/color_view"
-                        app:layout_constraintStart_toEndOf="@id/color_view"
-                        app:layout_constraintTop_toTopOf="@id/color_view" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout> -->
-
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_input_layout"
                     android:layout_width="match_parent"
@@ -322,10 +251,134 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="@dimen/material_quad"
                     android:layout_marginBottom="@dimen/material_quad"
-                    android:text="@string/add_contact"
+                    android:text="@string/add_customer"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notes_input_layout" />
+
+            <TextView
+                    android:id="@+id/customer_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:text="@string/customer_details"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="@id/reservation_details"
+                    app:layout_constraintTop_toBottomOf="@id/notes_input_layout"
+                    tools:text="Dettagli Cliente" />
+
+            <View
+                    android:id="@+id/customer_details_header"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:background="@color/primary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/reservation_details"
+                    app:layout_constraintTop_toBottomOf="@id/customer_details" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/customer_name_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_double"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/room_input_layout"
+                    app:layout_constraintTop_toBottomOf="@id/customer_details_header">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/customer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:hint="@string/name" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintEnd_toStartOf="@id/action_email"
+                    app:layout_constraintStart_toStartOf="@id/room_input_layout"
+                    app:layout_constraintTop_toBottomOf="@id/customer_name_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                    android:id="@+id/action_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/material_single"
+                    android:src="@drawable/ic_email_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@id/email_input_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/email_input_layout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/mobile_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/material_double"
+                    android:layout_marginEnd="@dimen/material_double"
+                    app:layout_constraintEnd_toStartOf="@id/action_dial"
+                    app:layout_constraintStart_toStartOf="@id/room_input_layout"
+                    app:layout_constraintTop_toBottomOf="@id/email_input_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:hint="@string/mobile"
+                        android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                    android:id="@+id/action_dial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/material_double"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/material_single"
+                    android:src="@drawable/ic_phone_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@id/mobile_input_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/mobile_input_layout" />
+
+            <Button
+                    android:id="@+id/edit_customer"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="200dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="@dimen/material_quad"
+                    android:layout_marginBottom="@dimen/material_quad"
+                    android:text="@string/edit_customer"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mobile_input_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

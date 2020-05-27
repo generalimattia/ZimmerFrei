@@ -68,23 +68,9 @@ data class Reservation(
         val color: String = "#546e7a",
         val room: Room = Room(),
         val notes: String = "",
-        val url: String? = null
-) : Parcelable {
-
-    constructor(parcel: Parcel) : this(
-            parcel.readLong(),
-            parcel.readString().orEmpty(),
-            parcel.readSerializable() as LocalDate,
-            parcel.readSerializable() as LocalDate,
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readString().orEmpty(),
-            parcel.readParcelable(Room::class.java.classLoader) ?: Room(),
-            parcel.readString().orEmpty(),
-            parcel.readString()
-    )
+        val url: String? = null,
+        val customer: Customer? = null
+) {
 
     constructor(
             reservation: ReservationEntity, room: RoomEntity
@@ -99,7 +85,8 @@ data class Reservation(
             color = reservation.color,
             room = Room(room),
             notes = reservation.notes,
-            url = null
+            url = null,
+            customer = null
     )
 
     constructor(
@@ -115,7 +102,8 @@ data class Reservation(
             color = reservation.color,
             room = room,
             notes = reservation.notes,
-            url = null
+            url = null,
+            customer = null
     )
 
     constructor(
@@ -132,7 +120,8 @@ data class Reservation(
             color = reservation.color,
             room = room,
             notes = reservation.notes,
-            url = reservation.link?.self?.href
+            url = reservation.link?.self?.href,
+            customer = reservation.customer?.let { Customer(it) }
     )
 
     fun toEntity(): ReservationEntity = ReservationEntity(
@@ -147,27 +136,6 @@ data class Reservation(
             roomId = room.id,
             notes = notes
     )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
-        parcel.writeString(name)
-        parcel.writeInt(persons)
-        parcel.writeInt(adults)
-        parcel.writeInt(children)
-        parcel.writeInt(babies)
-        parcel.writeString(color)
-        parcel.writeParcelable(room, flags)
-        parcel.writeString(notes)
-        parcel.writeString(url)
-    }
-
-    override fun describeContents(): Int = 0
-
-    companion object CREATOR : Parcelable.Creator<Reservation> {
-        override fun createFromParcel(parcel: Parcel): Reservation = Reservation(parcel)
-
-        override fun newArray(size: Int): Array<Reservation?> = arrayOfNulls(size)
-    }
 }
 
 data class Room(
@@ -288,88 +256,6 @@ sealed class RoomDay {
             get() = reservation.room
         override val reservationURL: String?
             get() = reservation.url
-    }
-}
-
-sealed class ParcelableRoomDay : Parcelable {
-
-    abstract val day: ParcelableDay
-
-    data class Empty(
-            override val day: ParcelableDay,
-            val room: Room
-    ) : ParcelableRoomDay(), Parcelable {
-
-        constructor(input: RoomDay.Empty) : this(
-                ParcelableDay(input.day),
-                input.room
-        )
-
-        constructor(input: RoomDay.EmptyWeekend) : this(
-                ParcelableDay(input.day),
-                input.room
-        )
-
-        constructor(source: Parcel) : this(
-                source.readParcelable<ParcelableDay>(ParcelableDay::class.java.classLoader),
-                source.readParcelable<Room>(Room::class.java.classLoader)
-        )
-
-        override fun describeContents() = 0
-
-        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-            writeParcelable(day, 0)
-            writeParcelable(room, 0)
-        }
-
-        companion object {
-            @JvmField
-            val CREATOR: Parcelable.Creator<Empty> = object : Parcelable.Creator<Empty> {
-                override fun createFromParcel(source: Parcel): Empty = Empty(source)
-                override fun newArray(size: Int): Array<Empty?> = arrayOfNulls(size)
-            }
-        }
-    }
-
-    data class Reserved(
-            override val day: ParcelableDay,
-            val reservation: Reservation
-    ) : ParcelableRoomDay(), Parcelable {
-
-        constructor(input: RoomDay.Reserved) : this(
-                ParcelableDay(input.day),
-                input.reservation
-        )
-
-        constructor(input: RoomDay.StartingReservation) : this(
-                ParcelableDay(input.day),
-                input.reservation
-        )
-
-        constructor(input: RoomDay.EndingReservation) : this(
-                ParcelableDay(input.day),
-                input.reservation
-        )
-
-        constructor(source: Parcel) : this(
-                source.readParcelable<ParcelableDay>(ParcelableDay::class.java.classLoader),
-                source.readParcelable<Reservation>(Reservation::class.java.classLoader)
-        )
-
-        override fun describeContents() = 0
-
-        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-            writeParcelable(day, 0)
-            writeParcelable(reservation, 0)
-        }
-
-        companion object {
-            @JvmField
-            val CREATOR: Parcelable.Creator<Reserved> = object : Parcelable.Creator<Reserved> {
-                override fun createFromParcel(source: Parcel): Reserved = Reserved(source)
-                override fun newArray(size: Int): Array<Reserved?> = arrayOfNulls(size)
-            }
-        }
     }
 }
 

@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.generals.zimmerfrei.common.utils.availableColors
 import com.generals.zimmerfrei.common.utils.formatDateForTextView
+import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
@@ -217,6 +218,15 @@ class ReservationFragment : Fragment() {
                                     .show()
                         }
                     })
+
+            viewModel.customer.observe(viewLifecycleOwner,
+                    Observer { value: Customer? ->
+                        if (value != null) {
+                            showCustomerDetails(value)
+                        } else {
+                            hideCustomerDetails()
+                        }
+                    })
         }
 
         setupListeners()
@@ -226,6 +236,34 @@ class ReservationFragment : Fragment() {
         val url: String? = arguments?.getString(RESERVATION_URL_KEY)
 
         viewModel.start(selectedDay, selectedRoom, url)
+    }
+
+    private fun showCustomerDetails(value: Customer) {
+        add_customer.visibility = View.GONE
+        customer_details.visibility = View.VISIBLE
+        customer_details_header.visibility = View.VISIBLE
+        customer_name_input_layout.visibility = View.VISIBLE
+        email_input_layout.visibility = View.VISIBLE
+        action_email.visibility = View.VISIBLE
+        mobile_input_layout.visibility = View.VISIBLE
+        action_dial.visibility = View.VISIBLE
+        edit_customer.visibility = View.VISIBLE
+
+        customer_name.setText("${value.firstName} ${value.lastName}")
+        email.setText(value.email)
+        mobile.setText(value.mobile)
+    }
+
+    private fun hideCustomerDetails() {
+        add_customer.visibility = View.VISIBLE
+        customer_details.visibility = View.GONE
+        customer_details_header.visibility = View.GONE
+        customer_name_input_layout.visibility = View.GONE
+        email_input_layout.visibility = View.GONE
+        action_email.visibility = View.GONE
+        mobile_input_layout.visibility = View.GONE
+        action_dial.visibility = View.GONE
+        edit_customer.visibility = View.GONE
     }
 
     private fun setUpToolbar() {

@@ -8,23 +8,26 @@ import arrow.core.Option
 import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.common.utils.randomColor
+import com.generals.zimmerfrei.listeners.ActionResult
+import com.generals.zimmerfrei.listeners.CustomerActionListener
+import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
-import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.reservation.R
 import com.generals.zimmerfrei.reservation.usecase.ReservationUseCase
 import com.generals.zimmerfrei.reservation.view.adapters.ColorItem
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 
 class ReservationViewModel @Inject constructor(
         private val useCase: ReservationUseCase,
         private val stringProvider: StringResourcesProvider,
         private val updateOverviewEmitter: UpdateOverviewEmitter,
-        private val navigator: Navigator
+        private val customerActionListener: CustomerActionListener
 ) : ViewModel() {
 
     private var roomPosition = 0
@@ -53,9 +56,11 @@ class ReservationViewModel @Inject constructor(
     private val _selectedRoom = MutableLiveData<String>()
     private val _startDate = MutableLiveData<ParcelableDay>()
     private val _endDate = MutableLiveData<ParcelableDay>()
-    private val _reservation = MutableLiveData<Reservation>()
     private val _selectedColor = MutableLiveData<ColorItem>()
     private val _result = MutableLiveData<String>()
+
+    private val _reservation = MutableLiveData<Reservation>()
+    private val _customer = MutableLiveData<Customer?>()
 
     val pressBack: LiveData<Boolean>
         get() = _pressBack
@@ -90,14 +95,17 @@ class ReservationViewModel @Inject constructor(
     val preselectedRoom: LiveData<Int>
         get() = _preselectedRoom
 
-    val reservation: LiveData<Reservation>
-        get() = _reservation
-
     val selectedColor: LiveData<ColorItem>
         get() = _selectedColor
 
     val result: LiveData<String>
         get() = _result
+
+    val reservation: LiveData<Reservation>
+        get() = _reservation
+
+    val customer: LiveData<Customer?>
+        get() = _customer
 
     fun start(
             selectedDay: ParcelableDay?,
@@ -116,6 +124,16 @@ class ReservationViewModel @Inject constructor(
             handleNewReservation()
             _isEditing.value = false
         }
+
+        customerActionListener.observable.subscribe(
+                { result: ActionResult<Customer> ->
+                    if (result is ActionResult.Success) {
+                        _customer.value = result.data
+                    }
+                },
+                Timber::e,
+                {}
+        ).also { compositeDisposable.add(it) }
     }
 
     private fun handleNewReservation() {
@@ -131,6 +149,7 @@ class ReservationViewModel @Inject constructor(
         fetchRooms(room)
         onStartDateSelected(ParcelableDay(day.dayOfMonth, day.month, day.year))
         _endDate.value = null
+        _customer.value = null
     }
 
     private fun handleExistingReservation(
@@ -302,6 +321,7 @@ class ReservationViewModel @Inject constructor(
             }
 
             currentReservation = result
+            _customer.value = result?.customer
         }
     }
 

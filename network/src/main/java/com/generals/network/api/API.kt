@@ -56,10 +56,10 @@ interface ReservationsAPI {
 interface CustomersAPI {
 
     @POST("customers")
-    suspend fun create(@Body customer: CustomerInbound): APIResult<Unit>
+    suspend fun create(@Body customer: CustomerInbound): APIResult<CustomerInbound>
 
     @PUT("customers/{id}")
-    suspend fun update(@Path("id") id: Int, @Body customer: CustomerInbound): APIResult<Unit>
+    suspend fun update(@Path("id") id: Int, @Body customer: CustomerInbound): APIResult<CustomerInbound>
 
     @GET("customers")
     suspend fun fetchAll(): APIResult<Inbound<CustomerListInbound>>

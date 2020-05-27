@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Option
+import com.generals.zimmerfrei.listeners.ActionResult
 import com.generals.zimmerfrei.model.Customer
-import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionEmitter
-import com.generals.zimmerfrei.overview.view.customer.usecase.ActionResult
+import com.generals.zimmerfrei.listeners.CustomerActionEmitter
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
@@ -79,7 +79,7 @@ class CustomerDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val birthDate: LocalDate = currentBirthDate ?: LocalDate.now()
-            val result: ActionResult = currentCustomer.fold(
+            val result: ActionResult<Customer> = currentCustomer.fold(
                     ifSome = { customer: Customer ->
                         useCase.update(customer.copy(
                                 firstName = firstName,
@@ -126,7 +126,7 @@ class CustomerDetailViewModel @Inject constructor(
         }
     }
 
-    private fun handleResult(result: ActionResult) {
+    private fun handleResult(result: ActionResult<Customer>) {
         if (result is ActionResult.Error) {
             _message.value = result.message
         } else {

@@ -5,6 +5,7 @@ import com.generals.network.api.CustomersAPI
 import com.generals.network.model.CustomerInbound
 import com.generals.network.model.CustomerListInbound
 import com.generals.network.model.Inbound
+import com.generals.zimmerfrei.listeners.ActionResult
 import com.generals.zimmerfrei.model.Customer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,9 +15,9 @@ import javax.inject.Inject
 interface CustomerUseCase {
     suspend fun getAll(): List<Customer>
     suspend fun get(url: String): Option<Customer>
-    suspend fun save(customer: Customer): ActionResult
-    suspend fun update(customer: Customer): ActionResult
-    suspend fun delete(url: String): ActionResult
+    suspend fun save(customer: Customer): ActionResult<Customer>
+    suspend fun update(customer: Customer): ActionResult<Customer>
+    suspend fun delete(url: String): ActionResult<Customer>
 }
 
 class CustomerUseCaseImpl @Inject constructor(
@@ -50,9 +51,13 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun save(customer: Customer): ActionResult = withContext(Dispatchers.IO) {
+    override suspend fun save(customer: Customer): ActionResult<Customer> = withContext(Dispatchers.IO) {
         api.create(customer.toInbound()).fold(
-                ifSuccess = { ActionResult.Success("Cliente creato!") },
+                ifSuccess = { result: Option<CustomerInbound> ->
+                    result.fold(
+                            ifSome = { ActionResult.Success("Cliente creato!", Customer(it)) },
+                            ifEmpty = { ActionResult.Error("Errore") })
+                },
                 ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
@@ -61,9 +66,13 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun update(customer: Customer): ActionResult = withContext(Dispatchers.IO) {
+    override suspend fun update(customer: Customer): ActionResult<Customer> = withContext(Dispatchers.IO) {
         api.update(customer.id, customer.toInbound()).fold(
-                ifSuccess = { ActionResult.Success("Cliente aggiornato!") },
+                ifSuccess = { result: Option<CustomerInbound> ->
+                    result.fold(
+                            ifSome = { ActionResult.Success("Cliente aggiornato!", Customer(it)) },
+                            ifEmpty = { ActionResult.Error("Errore") })
+                },
                 ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
@@ -72,9 +81,9 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun delete(url: String): ActionResult = withContext(Dispatchers.IO) {
+    override suspend fun delete(url: String): ActionResult<Customer> = withContext(Dispatchers.IO) {
         api.delete(url).fold(
-                ifSuccess = { ActionResult.Success("Cliente rimosso!") },
+                ifSuccess = { ActionResult.Success("Cliente rimosso!", null) },
                 ifFailure = { ActionResult.Error("Errore") },
                 ifError = {
                     Timber.e(it)
@@ -83,18 +92,6 @@ class CustomerUseCaseImpl @Inject constructor(
         )
     }
 
-}
-
-sealed class ActionResult {
-    abstract val message: String
-
-    data class Success(
-            override val message: String
-    ) : ActionResult()
-
-    data class Error(
-            override val message: String
-    ) : ActionResult()
 }
 
 fun Customer.toInbound(): CustomerInbound =

@@ -41,13 +41,13 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
 
-
     <ImageView
             android:id="@+id/action_email"
-            android:layout_width="@dimen/material_quad"
-            android:layout_height="@dimen/material_quad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/material_double"
             android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/material_single"
             android:src="@drawable/ic_email_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,10 +56,11 @@
 
     <ImageView
             android:id="@+id/action_dial"
-            android:layout_width="@dimen/material_quad"
-            android:layout_height="@dimen/material_quad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/material_double"
             android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/material_single"
             android:src="@drawable/ic_phone_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

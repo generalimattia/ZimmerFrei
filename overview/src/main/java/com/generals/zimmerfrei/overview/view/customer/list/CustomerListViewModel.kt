@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.generals.zimmerfrei.listeners.ActionResult
+import com.generals.zimmerfrei.listeners.CustomerActionListener
 import com.generals.zimmerfrei.model.Customer
-import com.generals.zimmerfrei.overview.view.customer.eventhandler.CustomerActionListener
-import com.generals.zimmerfrei.overview.view.customer.usecase.ActionResult
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ class CustomerListViewModel @Inject constructor(
         fetchCustomers()
 
         customerActionListener.observable.subscribe(
-                { result: ActionResult ->
+                { result: ActionResult<Customer> ->
                     if (result is ActionResult.Success) {
                         fetchCustomers()
                         _message.value = result.message

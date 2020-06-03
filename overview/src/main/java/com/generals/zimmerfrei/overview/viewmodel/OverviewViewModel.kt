@@ -4,27 +4,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.generals.zimmerfrei.common.UpdateOverviewEmitter
+import com.generals.zimmerfrei.listeners.ActionListener
+import com.generals.zimmerfrei.listeners.ActionResult
 import com.generals.zimmerfrei.model.Day
+import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.model.RoomDay
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
 class OverviewViewModel @Inject constructor(
         private val useCase: OverviewUseCase,
-        private val updateOverviewEmitter: UpdateOverviewEmitter
-) : ViewModel(), UpdateOverviewEmitter.Observer {
+        private val reservationActionListener: ActionListener<Reservation>
+) : ViewModel() {
+
+    private val compositeDisposable = CompositeDisposable()
 
     private val _month = MutableLiveData<String>()
     private val _days = MutableLiveData<List<Day>>()
     private val _rooms = MutableLiveData<List<Room>>()
     private val _selectedDate = MutableLiveData<LocalDate>()
     private val _reservations = MutableLiveData<List<Pair<Room, List<RoomDay>>>>()
+    private val _result: MutableLiveData<String> = MutableLiveData()
 
     private var date: LocalDate by Delegates.observable(LocalDate.now()) { _: KProperty<*>, _: LocalDate?, newValue: LocalDate? ->
         newValue?.let {
@@ -49,8 +56,20 @@ class OverviewViewModel @Inject constructor(
     val reservations: LiveData<List<Pair<Room, List<RoomDay>>>>
         get() = _reservations
 
+    val result: LiveData<String>
+        get() = _result
+
     fun start() {
-        updateOverviewEmitter.subscribe(this)
+        reservationActionListener.observable.subscribe(
+                { actionResult: ActionResult<Reservation> ->
+                    if (actionResult is ActionResult.Success) {
+                        loadReservations(date)
+                        _result.value = actionResult.message
+                    }
+                },
+                Timber::e,
+                {}
+        ).also { compositeDisposable.add(it) }
 
         _selectedDate.value = date
 
@@ -100,11 +119,7 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    override fun onOverviewUpdated() {
-        loadReservations(date)
-    }
-
     override fun onCleared() {
-        updateOverviewEmitter.unsubscribe(this)
+        compositeDisposable.clear()
     }
 }

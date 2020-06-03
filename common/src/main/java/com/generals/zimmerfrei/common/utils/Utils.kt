@@ -46,3 +46,10 @@ fun formatDateForTextView(day: Int, month: Int, year: Int): String =
         )
 
 private const val DATE_FORMAT = "%s/%s/%s"
+
+fun String.safeToInt(): Int =
+        try {
+            toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }

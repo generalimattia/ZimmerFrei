@@ -3,10 +3,9 @@ package com.generals.zimmerfrei.reservation.usecase
 import arrow.core.Option
 import com.generals.network.api.ReservationsAPI
 import com.generals.network.api.RoomsAPI
-import com.generals.network.model.Inbound
-import com.generals.network.model.ReservationInbound
-import com.generals.network.model.RoomInbound
-import com.generals.network.model.RoomListInbound
+import com.generals.network.model.*
+import com.generals.zimmerfrei.listeners.ActionResult
+import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.model.Room
 import kotlinx.coroutines.Dispatchers
@@ -16,11 +15,11 @@ import javax.inject.Inject
 
 interface ReservationUseCase {
     suspend fun get(url: String): Option<Reservation>
-    suspend fun save(reservation: Reservation): String
+    suspend fun save(reservation: Reservation): ActionResult<Reservation>
     suspend fun getAllRooms(): List<Room>
     suspend fun getRoomByListPosition(position: Int): Option<Room>
-    suspend fun update(reservation: Reservation): String
-    suspend fun delete(reservation: Reservation): String
+    suspend fun update(reservation: Reservation): ActionResult<Reservation>
+    suspend fun delete(reservation: Reservation): ActionResult<Reservation>
 }
 
 class ReservationUseCaseImpl @Inject constructor(
@@ -46,12 +45,19 @@ class ReservationUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun save(reservation: Reservation): String = withContext(Dispatchers.IO) {
+    override suspend fun save(reservation: Reservation): ActionResult<Reservation> = withContext(Dispatchers.IO) {
         reservationsAPI.create(reservation.toInbound())
                 .fold(
-                        ifSuccess = { "Prenotazione creata!" },
-                        ifFailure = { "Errore" },
-                        ifError = { "Errore" }
+                        ifSuccess = { result: Option<ReservationInbound> ->
+                            result.fold(ifSome = {
+                                ActionResult.Success(message = "Prenotazione creata!", data = Reservation(it, it.room?.let { Room(it) }
+                                        ?: Room()))
+                            },
+                                    ifEmpty = { ActionResult.Error("Errore") }
+                            )
+                        },
+                        ifFailure = { ActionResult.Error("Errore") },
+                        ifError = { ActionResult.Error("Errore") }
                 )
     }
 
@@ -87,21 +93,35 @@ class ReservationUseCaseImpl @Inject constructor(
         )
     }
 
-    override suspend fun update(reservation: Reservation): String = withContext(Dispatchers.IO) {
+    override suspend fun update(reservation: Reservation): ActionResult<Reservation> = withContext(Dispatchers.IO) {
         reservationsAPI.update(reservation.id.toInt(), reservation.toInbound())
                 .fold(
-                        ifSuccess = { "Prenotazione aggiornata! " },
-                        ifFailure = { "" },
-                        ifError = { "" }
+                        ifSuccess = { result: Option<ReservationInbound> ->
+                            result.fold(ifSome = {
+                                ActionResult.Success(message = "Prenotazione aggiornata!", data = Reservation(it, it.room?.let { Room(it) }
+                                        ?: Room()))
+                            },
+                                    ifEmpty = { ActionResult.Error("Errore") }
+                            )
+                        },
+                        ifFailure = { ActionResult.Error("Errore") },
+                        ifError = { ActionResult.Error("Errore") }
                 )
     }
 
-    override suspend fun delete(reservation: Reservation): String = withContext(Dispatchers.IO) {
+    override suspend fun delete(reservation: Reservation): ActionResult<Reservation> = withContext(Dispatchers.IO) {
         reservationsAPI.delete(reservation.id.toInt())
                 .fold(
-                        ifSuccess = { "Prenotazione cancellata!" },
-                        ifFailure = { "Errore" },
-                        ifError = { "Errore" }
+                        ifSuccess = {
+                            it.fold(
+                                    ifSome = {
+                                        ActionResult.Success(message = "Prenotazione cancellata!", data = null)
+                                    },
+                                    ifEmpty = { ActionResult.Error("Errore") }
+                            )
+                        },
+                        ifFailure = { ActionResult.Error("Errore") },
+                        ifError = { ActionResult.Error("Errore") }
                 )
     }
 }
@@ -118,11 +138,28 @@ fun Reservation.toInbound(): ReservationInbound = ReservationInbound(
         notes = notes,
         color = color,
         room = room.toInbound(),
-        customer = null
+        customer = customer?.toInbound()
 )
 
 fun Room.toInbound(): RoomInbound = RoomInbound(
         id = id.toInt(),
         name = name,
         maxPersons = personsCount
+)
+
+fun Customer.toInbound(): CustomerInbound = CustomerInbound(
+        id = id,
+        firstName = firstName,
+        lastName = lastName,
+        socialId = socialId,
+        mobile = mobile,
+        email = email,
+        address = address,
+        city = city,
+        province = province,
+        state = state,
+        zip = zip,
+        gender = gender,
+        birthDate = birthDate,
+        birthPlace = birthPlace
 )

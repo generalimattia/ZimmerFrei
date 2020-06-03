@@ -1,5 +1,10 @@
 package com.generals.zimmerfrei.overview.inject
 
+import com.generals.zimmerfrei.listeners.ActionEmitter
+import com.generals.zimmerfrei.listeners.ActionEmitterImpl
+import com.generals.zimmerfrei.listeners.ActionListener
+import com.generals.zimmerfrei.model.Customer
+import com.generals.zimmerfrei.model.Reservation
 import com.generals.zimmerfrei.overview.service.reservation.ReservationService
 import com.generals.zimmerfrei.overview.service.reservation.ReservationServiceImpl
 import com.generals.zimmerfrei.overview.usecase.OverviewUseCase
@@ -7,9 +12,6 @@ import com.generals.zimmerfrei.overview.usecase.OverviewUseCaseImpl
 import com.generals.zimmerfrei.overview.view.OverviewActivity
 import com.generals.zimmerfrei.overview.view.OverviewFragment
 import com.generals.zimmerfrei.overview.view.customer.detail.CustomerDetailFragment
-import com.generals.zimmerfrei.listeners.CustomerActionEmitter
-import com.generals.zimmerfrei.listeners.CustomerActionEmitterImpl
-import com.generals.zimmerfrei.listeners.CustomerActionListener
 import com.generals.zimmerfrei.overview.view.customer.list.CustomerListFragment
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCaseImpl
@@ -42,8 +44,14 @@ abstract class OverviewModule {
     abstract fun bindCustomerUseCase(useCase: CustomerUseCaseImpl): CustomerUseCase
 
     @Binds
-    abstract fun bindCustomerActionEmitter(impl: CustomerActionEmitterImpl): CustomerActionEmitter
+    abstract fun bindCustomerActionEmitter(impl: ActionEmitterImpl<Customer>): ActionEmitter<Customer>
 
     @Binds
-    abstract fun bindCustomerActionListener(impl: CustomerActionEmitterImpl): CustomerActionListener
+    abstract fun bindCustomerActionListener(impl: ActionEmitterImpl<Customer>): ActionListener<Customer>
+
+    @Binds
+    abstract fun bindReservationActionEmitter(impl: ActionEmitterImpl<Reservation>): ActionEmitter<Reservation>
+
+    @Binds
+    abstract fun bindReservationActionListener(impl: ActionEmitterImpl<Reservation>): ActionListener<Reservation>
 }

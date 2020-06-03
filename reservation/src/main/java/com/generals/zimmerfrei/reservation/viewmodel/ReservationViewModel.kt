@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Option
-import com.generals.zimmerfrei.common.UpdateOverviewEmitter
 import com.generals.zimmerfrei.common.resources.StringResourcesProvider
 import com.generals.zimmerfrei.common.utils.randomColor
+import com.generals.zimmerfrei.common.utils.safeToInt
+import com.generals.zimmerfrei.listeners.ActionEmitter
+import com.generals.zimmerfrei.listeners.ActionListener
 import com.generals.zimmerfrei.listeners.ActionResult
-import com.generals.zimmerfrei.listeners.CustomerActionListener
 import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.model.ParcelableDay
 import com.generals.zimmerfrei.model.Reservation
@@ -26,8 +27,8 @@ import javax.inject.Inject
 class ReservationViewModel @Inject constructor(
         private val useCase: ReservationUseCase,
         private val stringProvider: StringResourcesProvider,
-        private val updateOverviewEmitter: UpdateOverviewEmitter,
-        private val customerActionListener: CustomerActionListener
+        private val customerActionListener: ActionListener<Customer>,
+        private val reservationActionEmitter: ActionEmitter<Reservation>
 ) : ViewModel() {
 
     private var roomPosition = 0
@@ -41,6 +42,7 @@ class ReservationViewModel @Inject constructor(
     private var endYear: Int = 0
 
     private var currentReservation: Reservation? = null
+    private var currentCustomer: Customer? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -129,6 +131,7 @@ class ReservationViewModel @Inject constructor(
                 { result: ActionResult<Customer> ->
                     if (result is ActionResult.Success) {
                         _customer.value = result.data
+                        currentCustomer = result.data
                     }
                 },
                 Timber::e,
@@ -195,70 +198,59 @@ class ReservationViewModel @Inject constructor(
 
         if (isValid) {
 
-            val adultsNumber: Int = try {
-                adults.toInt()
-            } catch (e: NumberFormatException) {
-                0
-            }
-
-            val childrenNumber: Int = try {
-                children.toInt()
-            } catch (e: NumberFormatException) {
-                0
-            }
-
-            val babiesNumber: Int = try {
-                babies.toInt()
-            } catch (e: NumberFormatException) {
-                0
-            }
-
             viewModelScope.launch {
                 val room: Option<Room> = useCase.getRoomByListPosition(roomPosition)
                 room.fold(
                         ifEmpty = {},
                         ifSome = { notNullRoom: Room ->
-                            val message: String = currentReservation?.let { validReservation: Reservation ->
+                            val result: ActionResult<Reservation> = currentReservation?.let { validReservation: Reservation ->
                                 useCase.update(
                                         validReservation.copy(
                                                 name = name,
                                                 startDate = LocalDate.of(startYear, startMonth, startDay),
                                                 endDate = LocalDate.of(endYear, endMonth, endDay),
-                                                adults = adultsNumber,
-                                                children = childrenNumber,
-                                                babies = babiesNumber,
-                                                color = _selectedColor.value?.hex
-                                                        ?: randomColor(),
+                                                adults = adults.safeToInt(),
+                                                children = children.safeToInt(),
+                                                babies = babies.safeToInt(),
+                                                color = _selectedColor.value?.hex ?: randomColor(),
                                                 notes = notes,
-                                                room = notNullRoom
+                                                room = notNullRoom,
+                                                customer = currentCustomer
                                         ))
                             } ?: useCase.save(
                                     Reservation(
                                             name = name,
                                             startDate = LocalDate.of(startYear, startMonth, startDay),
                                             endDate = LocalDate.of(endYear, endMonth, endDay),
-                                            adults = adultsNumber,
-                                            children = childrenNumber,
-                                            babies = babiesNumber,
+                                            adults = adults.safeToInt(),
+                                            children = children.safeToInt(),
+                                            babies = babies.safeToInt(),
                                             color = _selectedColor.value?.hex ?: randomColor(),
                                             notes = notes,
-                                            room = notNullRoom
+                                            room = notNullRoom,
+                                            customer = currentCustomer
                                     ))
 
-                            _result.value = message
-
-                            updateOverviewEmitter.emit()
+                            handleResult(result)
                         }
                 )
             }
         }
     }
 
+    private fun handleResult(result: ActionResult<Reservation>) {
+        if (result is ActionResult.Error) {
+            _result.value = result.message
+        } else {
+            reservationActionEmitter.emit(result)
+            _pressBack.value = true
+        }
+    }
+
     fun delete() {
         viewModelScope.launch {
             currentReservation?.also {
-                useCase.delete(it)
-                _pressBack.value = true
+                handleResult(useCase.delete(it))
             }
         }
     }

@@ -1,28 +1,27 @@
 package com.generals.zimmerfrei.listeners
 
-import com.generals.zimmerfrei.model.Customer
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface CustomerActionEmitter {
-    fun emit(result: ActionResult<Customer>)
+interface ActionEmitter<T> {
+    fun emit(result: ActionResult<T>)
 }
 
-interface CustomerActionListener {
-    val observable: Observable<ActionResult<Customer>>
+interface ActionListener<T> {
+    val observable: Observable<ActionResult<T>>
 }
 
 @Singleton
-class CustomerActionEmitterImpl @Inject constructor() : CustomerActionListener, CustomerActionEmitter {
+class ActionEmitterImpl<T> @Inject constructor() : ActionListener<T>, ActionEmitter<T> {
 
-    private val _observable: PublishSubject<ActionResult<Customer>> = PublishSubject.create()
+    private val _observable: PublishSubject<ActionResult<T>> = PublishSubject.create()
 
-    override val observable: Observable<ActionResult<Customer>>
+    override val observable: Observable<ActionResult<T>>
         get() = _observable
 
-    override fun emit(result: ActionResult<Customer>) {
+    override fun emit(result: ActionResult<T>) {
         _observable.onNext(result)
     }
 }

@@ -25,6 +25,7 @@ import com.generals.zimmerfrei.overview.view.adapter.ReservationsAdapter
 import com.generals.zimmerfrei.overview.view.adapter.RoomsAdapter
 import com.generals.zimmerfrei.overview.view.layout.SyncScroller
 import com.generals.zimmerfrei.overview.viewmodel.OverviewViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_overview.*
 import org.threeten.bp.LocalDate
@@ -156,6 +157,14 @@ class OverviewFragment : Fragment() {
                         month_and_year.text = it.capitalize()
                     }
                 })
+
+        viewModel.result.observe(viewLifecycleOwner, Observer { value: String? ->
+            value?.also {
+                Snackbar.make(root_view, it, Snackbar.LENGTH_LONG)
+                        .show()
+            }
+
+        })
 
         add_fab.setOnClickListener {
             activity?.also {

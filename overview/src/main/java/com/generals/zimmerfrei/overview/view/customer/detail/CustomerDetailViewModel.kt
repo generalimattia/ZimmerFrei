@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Option
 import com.generals.zimmerfrei.listeners.ActionResult
 import com.generals.zimmerfrei.model.Customer
-import com.generals.zimmerfrei.listeners.CustomerActionEmitter
+import com.generals.zimmerfrei.listeners.ActionEmitter
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class CustomerDetailViewModel @Inject constructor(
         private val useCase: CustomerUseCase,
-        private val customerActionEmitter: CustomerActionEmitter
+        private val customerActionEmitter: ActionEmitter<Customer>
 ) : ViewModel() {
 
     val customer: LiveData<Customer>

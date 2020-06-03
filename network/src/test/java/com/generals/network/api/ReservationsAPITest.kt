@@ -63,7 +63,7 @@ class ReservationsAPITest {
                         address = "Jhones street 2nd"
                 )
         )
-        val response: APIResult<Unit> = client.create(newReservation)
+        val response: APIResult<ReservationInbound> = client.create(newReservation)
         assertTrue(response is APIResult.Success<*>)
         response as APIResult.Success
 
@@ -93,7 +93,7 @@ class ReservationsAPITest {
         assertNotNull(reservationResponse.body)
 
         val updatedReservation: ReservationInbound = reservationResponse.body.orNull()!!.copy(persons = 35)
-        val response: APIResult<Unit> = client.update(4, updatedReservation)
+        val response: APIResult<ReservationInbound> = client.update(4, updatedReservation)
         assertTrue(response is APIResult.Success<*>)
 
         val reservationsResponse: APIResult<Inbound<ReservationListInbound>> = client.fetchAll()

@@ -25,10 +25,10 @@ interface RoomsAPI {
 interface ReservationsAPI {
 
     @POST("reservations")
-    suspend fun create(@Body reservation: ReservationInbound): APIResult<Unit>
+    suspend fun create(@Body reservation: ReservationInbound): APIResult<ReservationInbound>
 
     @PUT("reservations/{id}")
-    suspend fun update(@Path("id") id: Int, @Body reservation: ReservationInbound): APIResult<Unit>
+    suspend fun update(@Path("id") id: Int, @Body reservation: ReservationInbound): APIResult<ReservationInbound>
 
     @DELETE("reservations/{id}")
     suspend fun delete(@Path("id") id: Int): APIResult<Unit>

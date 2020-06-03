@@ -79,7 +79,7 @@ class ReservationFragment : Fragment() {
                         startDatePickerDialog = buildDatePicker(nullableDate) {
                             viewModel.onStartDateSelected(it)
                             start_date.setText(
-                                    formatDateForTextView(it.dayOfMonth, it.month + 1, it.year),
+                                    formatDateForTextView(it.dayOfMonth, it.month, it.year),
                                     TextView.BufferType.NORMAL
                             )
                         }
@@ -100,7 +100,7 @@ class ReservationFragment : Fragment() {
                         endDatePickerDialog = buildDatePicker(nullableDate) {
                             viewModel.onEndDateSelected(it)
                             end_date.setText(
-                                    formatDateForTextView(it.dayOfMonth, it.month + 1, it.year),
+                                    formatDateForTextView(it.dayOfMonth, it.month, it.year),
                                     TextView.BufferType.NORMAL
                             )
                         }
@@ -227,6 +227,12 @@ class ReservationFragment : Fragment() {
                             hideCustomerDetails()
                         }
                     })
+
+            viewModel.pressBack.observe(viewLifecycleOwner, Observer { value: Boolean ->
+                if (value) {
+                    pressBack()
+                }
+            })
         }
 
         setupListeners()
@@ -354,6 +360,10 @@ class ReservationFragment : Fragment() {
                 notes = notes.text.toString(),
                 roomName = room.text.toString()
         )
+    }
+
+    private fun pressBack() {
+        activity?.also { it.onBackPressed() }
     }
 
     companion object {

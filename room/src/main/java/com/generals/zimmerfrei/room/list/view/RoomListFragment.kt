@@ -14,6 +14,7 @@ import com.generals.zimmerfrei.navigator.Navigator
 import com.generals.zimmerfrei.room.R
 import com.generals.zimmerfrei.room.list.view.adapter.RoomsAdapter
 import com.generals.zimmerfrei.room.list.viewmodel.RoomListViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
@@ -78,6 +79,13 @@ class RoomListFragment : Fragment() {
                     }
                 })
 
+        viewModel.result.observe(viewLifecycleOwner, Observer { value: String? ->
+            value?.also {
+                Snackbar.make(root_view, it, Snackbar.LENGTH_LONG)
+                        .show()
+            }
+        })
+
         add_fab.setOnClickListener {
             activity?.let {
                 navigator.roomDetail()
@@ -89,9 +97,7 @@ class RoomListFragment : Fragment() {
             }
         }
 
-        if (savedInstanceState == null) {
-            viewModel.start()
-        }
+        viewModel.start()
     }
 
     private fun setUpToolbar() {

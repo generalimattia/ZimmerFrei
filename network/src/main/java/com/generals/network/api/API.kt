@@ -7,10 +7,10 @@ import retrofit2.http.*
 interface RoomsAPI {
 
     @POST("rooms")
-    suspend fun create(@Body room: RoomInbound): APIResult<Unit>
+    suspend fun create(@Body room: RoomInbound): APIResult<RoomInbound>
 
     @PUT("rooms/{id}")
-    suspend fun update(@Path("id") id: Int, @Body room: RoomInbound): APIResult<Unit>
+    suspend fun update(@Path("id") id: Int, @Body room: RoomInbound): APIResult<RoomInbound>
 
     @DELETE("rooms/{id}")
     suspend fun delete(@Path("id") id: Int): APIResult<Unit>

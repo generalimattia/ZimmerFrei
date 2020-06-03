@@ -38,11 +38,11 @@ data class NavigatorImpl @Inject constructor(
             )
 
     override fun roomList(@IdRes containerViewId: Int): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest.Replace(RoomListFragment.newInstance(containerViewId))
+            NavigationRequest.FragmentRequest.Add(RoomListFragment.newInstance(containerViewId))
 
     override fun roomDetail(
             room: Room?): NavigationRequest.FragmentRequest =
-            NavigationRequest.FragmentRequest.Replace(RoomDetailFragment.newInstance(room))
+            NavigationRequest.FragmentRequest.Add(RoomDetailFragment.newInstance(room))
 
     override fun customerList(
             enterTransition: Transition?,

@@ -1,5 +1,9 @@
 package com.generals.zimmerfrei.room.inject
 
+import com.generals.zimmerfrei.listeners.ActionEmitter
+import com.generals.zimmerfrei.listeners.ActionEmitterImpl
+import com.generals.zimmerfrei.listeners.ActionListener
+import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.detail.view.RoomDetailFragment
 import com.generals.zimmerfrei.room.list.view.RoomListFragment
 import com.generals.zimmerfrei.room.usecase.RoomUseCase
@@ -19,4 +23,10 @@ abstract class RoomModule {
 
     @Binds
     abstract fun bindRoomUseCase(useCase: RoomUseCaseImpl): RoomUseCase
+
+    @Binds
+    abstract fun bindRoomActionEmitter(impl: ActionEmitterImpl<Room>): ActionEmitter<Room>
+
+    @Binds
+    abstract fun bindRoomActionListener(impl: ActionEmitterImpl<Room>): ActionListener<Room>
 }

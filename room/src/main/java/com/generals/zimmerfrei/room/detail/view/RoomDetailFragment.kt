@@ -14,6 +14,7 @@ import com.generals.zimmerfrei.common.extension.hideKeyboard
 import com.generals.zimmerfrei.model.Room
 import com.generals.zimmerfrei.room.R
 import com.generals.zimmerfrei.room.detail.viewmodel.RoomDetailViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import javax.inject.Inject
@@ -93,6 +94,14 @@ class RoomDetailFragment : Fragment() {
                 Observer { title: String? ->
                     title?.let {
                         toolbar.title = it
+                    }
+                })
+
+        viewModel.message.observe(viewLifecycleOwner,
+                Observer { value: String? ->
+                    value?.also {
+                        Snackbar.make(root_view, it, Snackbar.LENGTH_LONG)
+                                .show()
                     }
                 })
 

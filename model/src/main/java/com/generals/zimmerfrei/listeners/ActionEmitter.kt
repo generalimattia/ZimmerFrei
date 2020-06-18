@@ -28,14 +28,21 @@ class ActionEmitterImpl<T> @Inject constructor() : ActionListener<T>, ActionEmit
 
 sealed class ActionResult<out T> {
     abstract val message: String
+    abstract val data: T?
 
     data class Success<out T>(
             override val message: String,
-            val data: T?
+            override val data: T?
     ) : ActionResult<T>()
 
-    data class Error(
-            override val message: String
-    ) : ActionResult<Nothing>()
+    data class Selected<out T>(
+            override val message: String,
+            override val data: T?
+    ) : ActionResult<T>()
+
+    data class Error<T>(
+            override val message: String,
+            override val data: T? = null
+    ) : ActionResult<T>()
 }
 

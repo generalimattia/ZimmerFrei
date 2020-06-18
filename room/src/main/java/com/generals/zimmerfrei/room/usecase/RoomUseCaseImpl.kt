@@ -28,13 +28,13 @@ class RoomUseCaseImpl @Inject constructor(
                 ifSuccess = { result: Option<RoomInbound> ->
                     result.fold(
                             ifSome = { room: RoomInbound -> ActionResult.Success(data = Room(room), message = "Camera creata!") },
-                            ifEmpty = { ActionResult.Error(message = "Errore!") }
+                            ifEmpty = { ActionResult.Error<Room>(message = "Errore!") }
                     )
                 },
-                ifFailure = { ActionResult.Error(message = "Errore!") },
+                ifFailure = { ActionResult.Error<Room>(message = "Errore!") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error(message = "Errore!")
+                    ActionResult.Error<Room>(message = "Errore!")
                 }
         )
     }
@@ -44,13 +44,13 @@ class RoomUseCaseImpl @Inject constructor(
                 ifSuccess = { result: Option<RoomInbound> ->
                     result.fold(
                             ifSome = { room: RoomInbound -> ActionResult.Success(data = Room(room), message = "Camera creata!") },
-                            ifEmpty = { ActionResult.Error(message = "Errore!") }
+                            ifEmpty = { ActionResult.Error<Room>(message = "Errore!") }
                     )
                 },
-                ifFailure = { ActionResult.Error(message = "Errore!") },
+                ifFailure = { ActionResult.Error<Room>(message = "Errore!") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error(message = "Errore!")
+                    ActionResult.Error<Room>(message = "Errore!")
                 }
         )
     }
@@ -60,13 +60,13 @@ class RoomUseCaseImpl @Inject constructor(
                 ifSuccess = { result: Option<Unit> ->
                     result.fold(
                             ifSome = { ActionResult.Success(message = "Camera cancellata!", data = null) },
-                            ifEmpty = { ActionResult.Error(message = "Errore!") }
+                            ifEmpty = { ActionResult.Error<Unit>(message = "Errore!") }
                     )
                 },
-                ifFailure = { ActionResult.Error(message = "Errore!") },
+                ifFailure = { ActionResult.Error<Unit>(message = "Errore!") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error(message = "Errore!")
+                    ActionResult.Error<Unit>(message = "Errore!")
                 }
         )
     }

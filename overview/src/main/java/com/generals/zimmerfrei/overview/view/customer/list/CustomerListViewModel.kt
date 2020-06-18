@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.generals.zimmerfrei.listeners.ActionResult
+import com.generals.zimmerfrei.listeners.ActionEmitter
 import com.generals.zimmerfrei.listeners.ActionListener
+import com.generals.zimmerfrei.listeners.ActionResult
 import com.generals.zimmerfrei.model.Customer
 import com.generals.zimmerfrei.overview.view.customer.usecase.CustomerUseCase
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 class CustomerListViewModel @Inject constructor(
         private val useCase: CustomerUseCase,
+        private val customerActionEmitter: ActionEmitter<Customer>,
         private val customerActionListener: ActionListener<Customer>
 ) : ViewModel() {
 
@@ -55,6 +57,7 @@ class CustomerListViewModel @Inject constructor(
     }
 
     fun onCustomerClick(customer: Customer) {
+        customerActionEmitter.emit(ActionResult.Selected(message = "", data = customer))
         _selected.value = customer.link
     }
 

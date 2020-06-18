@@ -336,18 +336,22 @@ class ReservationFragment : Fragment() {
 
         colors.adapter = ColorsAdapter(availableColors.map { ColorItem(it, false) }, viewModel::onColorClick)
 
-        add_customer.setOnClickListener {
-            activity?.also {
-                navigator.customerList(
-                        enterTransition = Slide(Gravity.END),
-                        exitTransition = Slide(Gravity.END)
-                )
-                        .start(
-                                it,
-                                R.id.fragment_container,
-                                true
-                        )
-            }
+        add_customer.setOnClickListener { navigateToCustomerList() }
+
+        edit_customer.setOnClickListener { navigateToCustomerList() }
+    }
+
+    private fun navigateToCustomerList() {
+        activity?.also {
+            navigator.customerList(
+                    enterTransition = Slide(Gravity.END),
+                    exitTransition = Slide(Gravity.END)
+            )
+                    .start(
+                            it,
+                            R.id.fragment_container,
+                            true
+                    )
         }
     }
 

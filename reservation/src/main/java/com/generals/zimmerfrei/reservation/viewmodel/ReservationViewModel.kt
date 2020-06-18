@@ -129,7 +129,7 @@ class ReservationViewModel @Inject constructor(
 
         customerActionListener.observable.subscribe(
                 { result: ActionResult<Customer> ->
-                    if (result is ActionResult.Success) {
+                    if (result is ActionResult.Success || result is ActionResult.Selected) {
                         _customer.value = result.data
                         currentCustomer = result.data
                     }

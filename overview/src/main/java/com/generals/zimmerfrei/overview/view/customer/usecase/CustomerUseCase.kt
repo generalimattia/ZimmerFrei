@@ -56,12 +56,12 @@ class CustomerUseCaseImpl @Inject constructor(
                 ifSuccess = { result: Option<CustomerInbound> ->
                     result.fold(
                             ifSome = { ActionResult.Success("Cliente creato!", Customer(it)) },
-                            ifEmpty = { ActionResult.Error("Errore") })
+                            ifEmpty = { ActionResult.Error<Customer>("Errore") })
                 },
-                ifFailure = { ActionResult.Error("Errore") },
+                ifFailure = { ActionResult.Error<Customer>("Errore") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error("Errore")
+                    ActionResult.Error<Customer>("Errore")
                 }
         )
     }
@@ -71,12 +71,12 @@ class CustomerUseCaseImpl @Inject constructor(
                 ifSuccess = { result: Option<CustomerInbound> ->
                     result.fold(
                             ifSome = { ActionResult.Success("Cliente aggiornato!", Customer(it)) },
-                            ifEmpty = { ActionResult.Error("Errore") })
+                            ifEmpty = { ActionResult.Error<Customer>("Errore") })
                 },
-                ifFailure = { ActionResult.Error("Errore") },
+                ifFailure = { ActionResult.Error<Customer>("Errore") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error("Errore")
+                    ActionResult.Error<Customer>("Errore")
                 }
         )
     }
@@ -84,10 +84,10 @@ class CustomerUseCaseImpl @Inject constructor(
     override suspend fun delete(url: String): ActionResult<Customer> = withContext(Dispatchers.IO) {
         api.delete(url).fold(
                 ifSuccess = { ActionResult.Success("Cliente rimosso!", null) },
-                ifFailure = { ActionResult.Error("Errore") },
+                ifFailure = { ActionResult.Error<Customer>("Errore") },
                 ifError = {
                     Timber.e(it)
-                    ActionResult.Error("Errore")
+                    ActionResult.Error<Customer>("Errore")
                 }
         )
     }

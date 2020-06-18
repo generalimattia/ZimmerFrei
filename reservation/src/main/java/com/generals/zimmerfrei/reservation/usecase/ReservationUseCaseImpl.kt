@@ -53,11 +53,11 @@ class ReservationUseCaseImpl @Inject constructor(
                                 ActionResult.Success(message = "Prenotazione creata!", data = Reservation(it, it.room?.let { Room(it) }
                                         ?: Room()))
                             },
-                                    ifEmpty = { ActionResult.Error("Errore") }
+                                    ifEmpty = { ActionResult.Error<Reservation>("Errore") }
                             )
                         },
-                        ifFailure = { ActionResult.Error("Errore") },
-                        ifError = { ActionResult.Error("Errore") }
+                        ifFailure = { ActionResult.Error<Reservation>("Errore") },
+                        ifError = { ActionResult.Error<Reservation>("Errore") }
                 )
     }
 
@@ -101,11 +101,11 @@ class ReservationUseCaseImpl @Inject constructor(
                                 ActionResult.Success(message = "Prenotazione aggiornata!", data = Reservation(it, it.room?.let { Room(it) }
                                         ?: Room()))
                             },
-                                    ifEmpty = { ActionResult.Error("Errore") }
+                                    ifEmpty = { ActionResult.Error<Reservation>("Errore") }
                             )
                         },
-                        ifFailure = { ActionResult.Error("Errore") },
-                        ifError = { ActionResult.Error("Errore") }
+                        ifFailure = { ActionResult.Error<Reservation>("Errore") },
+                        ifError = { ActionResult.Error<Reservation>("Errore") }
                 )
     }
 
@@ -117,11 +117,11 @@ class ReservationUseCaseImpl @Inject constructor(
                                     ifSome = {
                                         ActionResult.Success(message = "Prenotazione cancellata!", data = null)
                                     },
-                                    ifEmpty = { ActionResult.Error("Errore") }
+                                    ifEmpty = { ActionResult.Error<Reservation>("Errore") }
                             )
                         },
-                        ifFailure = { ActionResult.Error("Errore") },
-                        ifError = { ActionResult.Error("Errore") }
+                        ifFailure = { ActionResult.Error<Reservation>("Errore") },
+                        ifError = { ActionResult.Error<Reservation>("Errore") }
                 )
     }
 }

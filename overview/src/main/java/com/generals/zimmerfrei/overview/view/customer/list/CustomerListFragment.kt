@@ -71,7 +71,9 @@ class CustomerListFragment : Fragment() {
                 )
             })
 
-            viewModel.selected.observe(viewLifecycleOwner, Observer(this@CustomerListFragment::navigateToCustomerDetail))
+            viewModel.selected.observe(viewLifecycleOwner, Observer { value: String? ->
+                value?.also { activity?.onBackPressed() }
+            })
 
             viewModel.message.observe(viewLifecycleOwner, Observer { value: String ->
                 Snackbar.make(root_view, value, Snackbar.LENGTH_LONG)
